@@ -17,7 +17,7 @@ def onmouse(event, x, y, flags, params): #Funktsioon, mis nupuvajutuse peale uue
             if hsvArr[i] > ballUpperRange[i]:
                 ballUpperRange[i] = hsvArr[i] #Kui väärtus on suurem, uuenda ülemist piiri
 
-def capture(colorScheme):
+def capture(colorScheme):   #Teeb pildi ja tagastab selle etteantud värviskeemis
     # Capture frame-by-frame
     ret, frame = cap.read()
     if(not ret):    #Kontroll, kas kaader eksisteerib
@@ -29,9 +29,9 @@ def capture(colorScheme):
     return img
 
 def blur(img):
-    kernel = np.ones((25,25), np.uint8)  //TODO: Find values to put in the kernel
+    kernel = np.ones((25,25), np.uint8)  #//TODO: Find values to put in the kernel
     dilation = cv2.dilate(img, kernel, 1) #Udusta pilti //TODO: püüda dilationist ja erotionist paremini aru saada
-    kernel = np.ones((8,8), np.uint8)   //TODO: Find values to put in the kernel
+    kernel = np.ones((8,8), np.uint8)   #//TODO: Find values to put in the kernel
     erotion = cv2.erode(dilation, kernel, 1) #Teravda pilti
     return erotion
 
