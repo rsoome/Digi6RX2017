@@ -24,7 +24,8 @@ def capture(colorScheme):   #Teeb pildi ja tagastab selle etteantud värviskeemi
         print("Cannot read the frame")
         return frame
 
-    img = cv2.cvtColor(frame, colorScheme) #Pane pilt etteantud värviskeemi
+    blr = blur(frame) #Pilt udusemaks
+    img = cv2.cvtColor(blr, colorScheme) #Pane pilt etteantud värviskeemi
     return img
 
 def blur(img):
@@ -67,12 +68,9 @@ while(True):
         break
 
     ballMask = cv2.inRange(hsv, ballLowerRange, ballUpperRange) #Filtreeri välja soovitava värviga objekt
-    ballMask = blur(ballMask)
     horizontalBounds, verticalBounds = detect(ballMask)
-    cv2.rectangle(hsv, (verticalBounds[0], horizontalBounds[1]), (verticalBounds[1], horizontalBounds[0]), (255,0,0),5)
     print("Horizontal coordinate edges: " + str(horizontalBounds[0]) + " " + str(horizontalBounds[1]))
     print("Vertical coordinate edges: " + str(verticalBounds[0]) + " " + str(verticalBounds[1]))
-    print("Object size: " + str((horizontalBounds[1]-horizontalBounds[0])*(verticalBounds[1] - verticalBounds[0])))
 
     # Display the resulting frame
     cv2.imshow('filtered', ballMask)
