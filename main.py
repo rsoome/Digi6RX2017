@@ -35,6 +35,24 @@ def blur(img):
     erotion = cv2.erode(dilation, kernel, 1) #Teravda pilti
     return erotion
 
+def detectObjectEdge(object):
+    height, width = object.shape
+    horizontalBounds = np.array([width,0])
+    verticalBounds = np.array([height,0])
+    for i in range(height):
+        for j in range(width):
+            pixelValue = object[i][j]
+            if(object[i][j]!= 0):
+                if(i < horizontalBounds[0]):
+                    horizontalBounds[0] = i
+                if(i > horizontalBounds[1]):
+                    horizontalBounds[1] = i
+                if(j < verticalBounds[0]):
+                    verticalBounds[0] = j
+                if(j > verticalBounds[1]):
+                    verticalBounds[1] = j
+    return horizontalBounds, verticalBounds
+
 cv2.namedWindow('main')
 cv2.namedWindow('filtered')
 cv2.setMouseCallback('main', onmouse)
@@ -47,6 +65,9 @@ while(True):
         break
 
     ballMask = cv2.inRange(hsv, ballLowerRange, ballUpperRange) #Filtreeri välja soovitava värviga objekt
+    horizontalBounds, verticalbounds = detectObjectEdge(ballMask)
+    print(str(horizontalBounds[0]) + " " + str(horizontalBounds[1]))
+#    print(verticalbounds[0] + " " + verticalbounds[1])
 
     # Display the resulting frame
     cv2.imshow('filtered', ballMask)
