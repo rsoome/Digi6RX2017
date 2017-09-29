@@ -34,29 +34,47 @@ def blur(img):
     erotion = cv2.erode(dilation, kernel, 1) #Teravda pilti
     return erotion
 
-def detectObjectEdge(object, height, width):
+def scanPixelsForObject(object, height, width, minSize):
     horizontalBounds = np.array([width,0])
     verticalBounds = np.array([height,0])
     for i in range(height):
         for j in range(width):
-            if(object[i][j]!= 0):
-                if(i < horizontalBounds[0]):
-                    horizontalBounds[0] = i
-                if(i > horizontalBounds[1]):
-                    horizontalBounds[1] = i
-                if(j < verticalBounds[0]):
-                    verticalBounds[0] = j
-                if(j > verticalBounds[1]):
-                    verticalBounds[1] = j
-    return horizontalBounds, verticalBounds
+            if(object[i][j]!= 0 and (i < verticalBounds[0] or i > verticalBounds[1])
+               and (j < horizontalBounds[0] or j > horizontalBounds[1])):
+                findBounds(object, height, width, horizontalBounds, verticalBounds, i, j)
+                objectWidth = (horizontalBounds[1] - horizontalBounds[0])
+                objectHeight = (verticalBounds[1] - verticalBounds[0])
+                if(objectWidth * objectHeight >= minSize):
+                    return True, horizontalBounds, verticalBounds
+
+
+    return False, horizontalBounds, verticalBounds
+
+
+def findBounds(object, height, width, horizontalBounds, verticalBounds, i, j):
+    verticalBounds[0] = i
+    for k in range(i, height):
+        if object[k][j] == 0 or k == height - 1:
+            verticalBounds[1] = k
+            break
+    midpoint = verticalBounds[0] + (verticalBounds[1] - verticalBounds[0]) // 2
+    k = j
+    while (object[midpoint][k] != 0 and k != 0):
+        k -= 1
+    horizontalBounds[0] = k
+    k = j
+    while (object[midpoint][k] != 0 and k != width - 1):
+        k += 1
+    horizontalBounds[1] = k
+
 
 cv2.namedWindow('main')
 cv2.namedWindow('filtered')
 cv2.setMouseCallback('main', onmouse)
 
-def detect(object):
+def detect(object, size):
     height, width = object.shape
-    horizontalBounds, verticalBounds = detectObjectEdge(object, height, width)
+    objectFound, horizontalBounds, verticalBounds = scanPixelsForObject(object, height, width, size)
     return horizontalBounds, verticalBounds
 
 while(True):
@@ -68,10 +86,8 @@ while(True):
 
     ballMask = cv2.inRange(hsv, ballLowerRange, ballUpperRange) #Filtreeri välja soovitava värviga objekt
     ballMask = blur(ballMask)
-    horizontalBounds, verticalBounds = detect(ballMask)
-    cv2.rectangle(hsv, (verticalBounds[0], horizontalBounds[1]), (verticalBounds[1], horizontalBounds[0]), (255,0,0),5)
-    print("Horizontal coordinate edges: " + str(horizontalBounds[0]) + " " + str(horizontalBounds[1]))
-    print("Vertical coordinate edges: " + str(verticalBounds[0]) + " " + str(verticalBounds[1]))
+    horizontalBounds, verticalBounds = detect(ballMask, 1000)
+    cv2.rectangle(hsv, (horizontalBounds[0], verticalBounds[1]), (horizontalBounds[1], verticalBounds[0],), (255,0,0),3)
     print("Object size: " + str((horizontalBounds[1]-horizontalBounds[0])*(verticalBounds[1] - verticalBounds[0])))
 
     # Display the resulting frame
