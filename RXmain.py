@@ -5,17 +5,36 @@ camID = 0   #Kaamera ID
 cap = cv2.VideoCapture(camID)
 ballLowerRange = np.array([255, 255, 255]) #HSV värviruumi alumine piir, hilisemaks filtreerimiseks
 ballUpperRange = np.array([0, 0, 0]) #HSV värviruumi ülemine piir, hilisemaks filtreerimiseks
+yellowBasketLowerRange = np.array([255, 255, 255])
+yellowBasketUpperRange = np.array([0, 0, 0])
+blueBasketLowerRange = np.array([255, 255, 255])
+blueBasketUpperRange = np.array([0, 0, 0])
+
+ballSelected = True
+blueSelected = False
+yellowSelected = False
+
 
 hsv = None
 
 def onmouse(event, x, y, flags, params): #Funktsioon, mis nupuvajutuse peale uuendab värviruumi piire
     if event == cv2.EVENT_LBUTTONUP:
-        hsvArr = (hsv[y][x])
-        for i in range(3):
-            if hsvArr[i] < ballLowerRange[i]:
-                ballLowerRange[i] = hsvArr[i] #Kui väärtus on väiksem ,uuenda alumist piiri
-            if hsvArr[i] > ballUpperRange[i]:
-                ballUpperRange[i] = hsvArr[i] #Kui väärtus on suurem, uuenda ülemist piiri
+        if ballSelected:
+            updateThresholds(x, y, ballLowerRange, ballUpperRange)
+        if blueSelected:
+            updateThresholds(x, y, blueBasketLowerRange, blueBasketUpperRange)
+        if yellowSelected:
+            updateThresholds(x, y, yellowBasketLowerRange, yellowBasketUpperRange)
+
+
+def updateThresholds(x, y, objectLowerRange, objectUpperRange):
+    hsvArr = (hsv[y][x])
+    for i in range(3):
+        if hsvArr[i] < objectLowerRange[i]:
+            objectLowerRange[i] = hsvArr[i]  # Kui väärtus on väiksem ,uuenda alumist piiri
+        if hsvArr[i] > objectUpperRange[i]:
+            objectUpperRange[i] = hsvArr[i]  # Kui väärtus on suurem, uuenda ülemist piiriqq
+
 
 def capture(colorScheme):   #Teeb pildi ja tagastab selle etteantud värviskeemis
     # Capture frame-by-frame
@@ -35,22 +54,23 @@ def blur(img):
     return erotion
 
 # --------------------------------------- verdicalLowerBound=vLB
-# |           |             |           |
-# |     8     |      7      |      9    |
+# |           |             |           |q
+# |     6     |      7      |      8    |
 # |           |             |           |
 # |-----------|-------------|-----------| vLB+(vUB-vLB)/3
 # |           |             |           |
-# |     5     |      4      |      6    |
+# |     3     |      4      |      5    |
 # |           |             |           |
 # |-----------|-------------|-----------| vLB+2*((vUB-vLB)/3)
 # |           |             |           |
-# |     2     |      1      |      3    |
+# |     0     |      1      |      2    |
 # |           |             |           |
 # --------------------------------------- verticalUpperBound=vUB
 # ^hLB+(hUB-hLB)/3   hLB+2*((hUB-hLB)/3)^
 # ^                                     ^
 # horizontalLowerBound=hLB      horizontalUpperBound=hUB
-def findObject(mainImg, img, verticalLowerBound, verticalUpperBound, horizontalLowerBound, horizontalUpperBound, minObjectSize, minImgArea):
+def findObject(mainImg, img, verticalLowerBound, verticalUpperBound, horizontalLowerBound, horizontalUpperBound,
+               minObjectSize, minImgArea, scanOrder):
     horizontalBounds = np.array([horizontalUpperBound, 0])
     verticalBounds = np.array([verticalUpperBound, 0])
     objectFound = False
@@ -61,7 +81,7 @@ def findObject(mainImg, img, verticalLowerBound, verticalUpperBound, horizontalL
     horizontalTwoThirds = (horizontalLowerBound + 2 * (horizontalUpperBound - horizontalLowerBound) // 3)
 
 
-    verticalLowerBounds = [verticalTwoThirds,verticalTwoThirds, verticalTwoThirds,
+    verticalLowerBounds = [verticalTwoThirds, verticalTwoThirds, verticalTwoThirds,
                           verticalThird, verticalThird, verticalThird,
                            verticalLowerBound, verticalLowerBound, verticalLowerBound]
 
@@ -69,27 +89,29 @@ def findObject(mainImg, img, verticalLowerBound, verticalUpperBound, horizontalL
                            verticalTwoThirds, verticalTwoThirds, verticalTwoThirds,
                            verticalThird, verticalThird, verticalThird]
 
-    horizontalLowerBounds = [horizontalThird, horizontalLowerBound, horizontalTwoThirds,
-                             horizontalThird, horizontalLowerBound, horizontalTwoThirds,
-                             horizontalThird, horizontalLowerBound, horizontalTwoThirds]
+    horizontalLowerBounds = [horizontalLowerBound, horizontalThird, horizontalTwoThirds,
+                             horizontalLowerBound, horizontalThird, horizontalTwoThirds,
+                             horizontalLowerBound, horizontalThird, horizontalTwoThirds]
 
-    horizontalUpperBounds = [horizontalTwoThirds, horizontalThird, horizontalUpperBound,
-                             horizontalTwoThirds, horizontalThird, horizontalUpperBound,
-                             horizontalTwoThirds, horizontalThird, horizontalUpperBound]
+    horizontalUpperBounds = [horizontalThird, horizontalTwoThirds, horizontalUpperBound,
+                             horizontalThird, horizontalTwoThirds, horizontalUpperBound,
+                             horizontalThird, horizontalTwoThirds, horizontalUpperBound]
 
     if((verticalUpperBound - verticalLowerBound)*(horizontalUpperBound - horizontalLowerBound) > minImgArea):
         #print("minImgArea: " + str(minImgArea) + " img area: " + str((verticalUpperBound - verticalLowerBound)*(horizontalUpperBound - horizontalLowerBound)))
-        for i in range(len(verticalLowerBounds)):
+        for i in range(len(scanOrder)):
 #            cv2.rectangle(mainImg, (horizontalLowerBounds[i], verticalUpperBounds[i]), (horizontalUpperBounds[i], verticalLowerBounds[i]),
 #                          (0, 0, 255), 1)
-            objectFound, horizontalBounds, verticalBounds = findObject(mainImg, img, verticalLowerBounds[i], verticalUpperBounds[i],
-                                                                       horizontalLowerBounds[i], horizontalUpperBounds[i],
-                                                                       minObjectSize*3, minImgArea)
+            objectFound, horizontalBounds, verticalBounds = findObject(mainImg, img, verticalLowerBounds[scanOrder[i]],
+                                                                       verticalUpperBounds[scanOrder[i]],
+                                                                       horizontalLowerBounds[scanOrder[i]],
+                                                                       horizontalUpperBounds[scanOrder[i]],
+                                                                       minObjectSize*3, minImgArea, scanOrder)
             if(objectFound):
                 return objectFound, horizontalBounds, verticalBounds
     else:
-        objectFound, horizontalBounds, verticalBounds = scanPixelsForObject(img, verticalLowerBound, verticalUpperBound, horizontalLowerBound,
-                                horizontalUpperBound, minObjectSize, horizontalBounds, verticalBounds)
+        objectFound, horizontalBounds, verticalBounds = findObjectCoordinates(img, verticalLowerBound, verticalUpperBound, horizontalLowerBound,
+                                                                              horizontalUpperBound, minObjectSize, horizontalBounds, verticalBounds)
     return objectFound, horizontalBounds, verticalBounds
 
 
@@ -100,8 +122,8 @@ def findObject(mainImg, img, verticalLowerBound, verticalUpperBound, horizontalL
 #width - the upper bound to which the image is scanned horizontally
 #minSize - the minimum size of the object
 #returns whether the object was found, its horizontal and vertical bounds
-def scanPixelsForObject(img, verticalLowerBound, verticalUpperBound, horizontalLowerBound, horizontalUpperBound,
-                        minSize, horizontalBounds, verticalBounds):
+def findObjectCoordinates(img, verticalLowerBound, verticalUpperBound, horizontalLowerBound, horizontalUpperBound,
+                          minSize, horizontalBounds, verticalBounds):
     #scan through the pixels
     for i in range(verticalLowerBound, verticalUpperBound):
         for j in range(horizontalLowerBound, horizontalUpperBound):
@@ -157,15 +179,16 @@ def findBounds(img, height, width, horizontalBounds, verticalBounds, verticalCoo
 
 
 cv2.namedWindow('main')
-cv2.namedWindow('filtered')
+cv2.namedWindow('ball_filtered')
+cv2.namedWindow('gate_filtered')
 cv2.setMouseCallback('main', onmouse)
 
-def detect(mainImg, object, size):
+def detect(mainImg, object, size, scanOrder):
     height, width = object.shape
     #objectFound, horizontalBounds, verticalBounds = scanPixelsForObject(object, 0, height, 0, width, size, np.array([width, 0]), verticalBounds = np.array([height, 0]))
     objectFound, horizontalBounds, verticalBounds = \
         findObject(mainImg, object, 0, height, 0, width,
-                 100, 30000)
+                 100, 30000, scanOrder)
     return horizontalBounds, verticalBounds
 
 while(True):
@@ -177,18 +200,45 @@ while(True):
 
     ballMask = cv2.inRange(hsv, ballLowerRange, ballUpperRange) #Filtreeri välja soovitava värviga objekt
     ballMask = blur(ballMask)
-    horizontalBounds, verticalBounds = detect(frame, ballMask, 1000)
-    cv2.rectangle(frame, (horizontalBounds[0], verticalBounds[1]), (horizontalBounds[1], verticalBounds[0],), (255,0,0),3)
-    print("Object size: " + str((horizontalBounds[1]-horizontalBounds[0])*(verticalBounds[1] - verticalBounds[0])))
+    ###opencv inrange object center point python
+    blueMask = cv2.inRange(hsv, blueBasketLowerRange, blueBasketUpperRange)
+    blueMask = blur(blueMask)
+    yellowMask = cv2.inRange(hsv, yellowBasketLowerRange, yellowBasketUpperRange)
+    yellowMask = blur(yellowMask)
+    ballHorizontalBounds, ballVerticalBounds = detect(frame, ballMask, 1000, [1, 0, 2, 4, 3, 5, 7, 6, 8])
+    yellowHorizontalBounds, yellowVerticalBounds = detect(frame, yellowMask, 1000, [7, 6, 8, 4, 3, 5, 1, 0, 2])
+    cv2.rectangle(frame, (ballHorizontalBounds[0], ballVerticalBounds[1]), (ballHorizontalBounds[1],
+                                                                            ballVerticalBounds[0],), (255, 0, 0), 3)
+    cv2.rectangle(frame, (yellowHorizontalBounds[0], yellowVerticalBounds[1]), (yellowHorizontalBounds[1],
+                                                                            yellowVerticalBounds[0],), (0, 255, 0), 3)
+    #print("Object size: " + str((ballHorizontalBounds[1] - ballHorizontalBounds[0]) * (ballVerticalBounds[1] - ballVerticalBounds[0])))
 
-    # Display the resulting frame
-    cv2.imshow('filtered', ballMask)
+    # Display the resulting frameq
+    cv2.imshow('ball_filtered', ballMask)
     cv2.imshow('main', frame)
+    cv2.imshow('gate_filtered', yellowMask)
     if cv2.waitKey(1) & 0xFF == ord('q'): #Nupu 'q' vajutuse peale välju programmist
         break
     if cv2.waitKey(1) & 0xFF == ord('b'):
+        ballSelected = True
+        yellowSelected = False
+        blueSelected = False
         ballLowerRange = np.array([255, 255, 255])
         ballUpperRange = np.array([0, 0, 0])
+
+    if cv2.waitKey(1) & 0xFF == ord('k'):
+        yellowSelected = True
+        ballSelected = False
+        blueSelected = False
+        yellowBasketLowerRange = np.array([255, 255, 255])
+        yellowBasketUpperRange = np.array([0, 0, 0])
+
+    if cv2.waitKey(1) & 0xFF == ord('s'):
+        blueSelected = True
+        yellowSelected = False
+        ballSelected = False
+        blueBasketLowerRange = np.array([255, 255, 255])
+        blueBasketUpperRange = np.array([0, 0, 0])
 
 # When everything done, release the capture
 cap.release()
