@@ -129,7 +129,11 @@ def scanPixelsForObject(img, verticalLowerBound, verticalUpperBound, horizontalL
 #horizontalCoordinate - the starting horizontal coordinate
 def findBounds(img, height, width, horizontalBounds, verticalBounds, verticalCoordinate, horizontalCoordinate):
     #The given vertical coordinate is expected to be the bottom most coordinate of the object
-    verticalBounds[0] = verticalCoordinate
+    k = verticalCoordinate
+    while (img[k][horizontalCoordinate] != 0 and k != 0):
+        k -= 1
+    verticalBounds[0] = k
+    k = verticalCoordinate
     #Iterate through coordinates starting from the bottom coordinate until a black pixel is found
     #or the edge of the image is reached.
     for k in range(verticalCoordinate, height):
