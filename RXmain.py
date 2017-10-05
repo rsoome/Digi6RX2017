@@ -357,13 +357,13 @@ while True:
     basketMask = cv2.inRange(hsv, basketLowerRange, basketUpperRange)
     basketMask = blur(basketMask)
     ballHorizontalBounds, ballVerticalBounds = detect(frame, ballMask, 1000, 0, [1, 0, 2, 4, 3, 5, 7, 6, 8])
-    #    basketHorizontalBounds, basketVerticalBounds = detect(frame, basketMask, 1000, [7, 6, 8, 4, 3, 5, 1, 0, 2])
+    basketHorizontalBounds, basketVerticalBounds = detect(frame, basketMask, 1000, 0, [7, 6, 8, 4, 3, 5, 1, 0, 2])
     if ballVerticalBounds is not None and ballHorizontalBounds is not None:
         cv2.rectangle(frame, (ballHorizontalBounds[0], ballVerticalBounds[1]), (ballHorizontalBounds[1],
                                                                                 ballVerticalBounds[0],), (255, 0, 0), 3)
-    #    if basketVerticalBounds != None and basketHorizontalBounds != None:
-    #        cv2.rectangle(frame, (basketHorizontalBounds[0], basketVerticalBounds[1]), (basketHorizontalBounds[1],
-    #                                                                                    basketVerticalBounds[0],), (0, 255, 0), 3)
+    if basketVerticalBounds is not None and basketHorizontalBounds is not None:
+        cv2.rectangle(frame, (basketHorizontalBounds[0], basketVerticalBounds[1]), (basketHorizontalBounds[1],
+                                                                                        basketVerticalBounds[0],), (0, 255, 0), 3)
 
     if cv2.waitKey(1) & 0xFF == ord('e'):
         #        time.sleep(1)
