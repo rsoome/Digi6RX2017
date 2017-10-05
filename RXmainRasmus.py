@@ -151,7 +151,7 @@ class MovementLogic:
         self.mb = mb
 
     def drive(self, speed):
-        self.mb.setMotorSpeed(speed*math.cos(1.04719755 ), speed*math.cos(-1.04719755 ) * speed*math.cos(0))
+        self.mb.setMotorSpeed(speed*math.cos(1.04719755 ), speed*math.cos(-1.04719755 ), speed*math.cos(0))
 
     def brake(self):
         speeds = self.mb.getMotorSpeed()
@@ -173,7 +173,7 @@ class GameLogic:
     def __init__(self):
         pass
 
-mbLocation = "/dev/tty.serial"
+mbLocation = "/dev/serial/by-id/usb-mbed.org_CDC_DEVICE_0123456789-if00"
 
 camID = 0  # Kaamera ID TODO: Kirjuta faili
 cap = cv2.VideoCapture(camID)
