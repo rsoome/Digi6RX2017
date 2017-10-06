@@ -211,12 +211,12 @@ mbLocation = "/dev/serial/by-id/usb-mbed.org_CDC_DEVICE_0123456789-if00"
 
 camID = 0  # Kaamera ID TODO: Kirjuta faili
 cap = cv2.VideoCapture(camID)
-cap.set(cv2.CAP_PROP_FPS, 60)
-cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1920)
-cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 1080)
+cap.set(cv2.CAP_PROP_FPS, 120)
+#cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1080)
+#cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
 
 
-multiThreading = False  # TODO: Kirjuta faili
+multiThreading = True  # TODO: Kirjuta faili
 textColor = (0, 0, 255)
 
 selectedTarget = None
@@ -267,11 +267,10 @@ def capture(colorScheme):
 
 # Blurs the image to remove noise
 def blur(img):
-    kernel = np.ones((30, 30), np.uint8)  # //TODO: Find values to put in the kernel
-    dilation = cv2.dilate(img, kernel, 1)  # Udusta pilti //TODO: püüda dilationist ja erotionist paremini aru saada
-    kernel = np.ones((1, 1), np.uint8)  # //TODO: Find values to put in the kernel
-    erotion = cv2.erode(dilation, kernel, 1)  # Teravda pilti
-    return erotion
+    kernel = np.ones((50, 50), np.uint8)  # //TODO: Find values to put in the kernel
+    closing = cv2.morphologyEx(img, cv2.MORPH_CLOSE, kernel)
+    gauss = cv2.GaussianBlur(img, (5, 5), 0)
+    return gauss
 
 
 # Finds object coordinates in the given picture
@@ -429,8 +428,6 @@ def findBounds(img, height, width, horizontalBounds, verticalBounds, verticalCoo
 # in findObjectMultithreaded() description.
 def detect(mainImg, target, objectMinSize, imageMinArea, scanOrder, obj):
     height, width = target.shape
-    print(height)
-    print(width)
     horizontalBounds = None
     verticalBounds = None
 
@@ -465,6 +462,7 @@ while True:
         print("Capture fucntion failed")
         break
 
+    #hsv = blur(hsv)
     ballMask = cv2.inRange(hsv, ball.hsvLowerRange, ball.hsvUpperRange)  # Filtreeri välja soovitava värviga objekt
     ballMask = blur(ballMask)
     basketMask = cv2.inRange(hsv, basket.hsvLowerRange, basket.hsvUpperRange)
