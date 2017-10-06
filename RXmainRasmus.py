@@ -3,6 +3,8 @@ import threading
 import numpy as np
 import cv2
 from datetime import datetime
+import serial
+import math
 import time
 
 
@@ -108,16 +110,59 @@ class Target:
         self.horizontalBounds = hBounds
         self.verticalBounds = vBounds
 
-# For communication with mainboard
-# TODO: Implement
-class MainboardCommunicator:
+class MBcomm:
 
-    def __init__(self):
-        pass
+    def __init__(self, target, baud):
+        self.ser = serial.Serial(target, baud)
+
+    def __sendCommand(self, cmd):
+        self.ser.write(cmd)
+
+    def __readCommand(self):
+        return self.ser.readline()
+
+    def setMotorSpeed(self, speed0, speed1, speed2):
+        self.__sendCommand("sd" + str(speed0) + ":" + str(speed1) + ":" + str(speed2))
+
+    def getMotorSpeed(self):
+        self.__sendCommand("sg")
+        return self.__readCommand()
+
+    def readInfrared(self):
+        self.__sendCommand("i")
+        return self.__readCommand()
+
+    def charge(self):
+        self.__sendCommand("c")
+
+    def kick(self):
+        self.__sendCommand("k")
+
+    def discharge(self):
+        self.__sendCommand("e")
+
+    def enableFailSafe(self):
+        self.__sendCommand("f")
+
+class MovementLogic:
+
+    def __init__(self, mb):
+        self.mb = mb
+
+    def drive(self, speed):
+        self.mb.setMotorSpeed(speed*math.cos(1.04719755 ), speed*math.cos(-1.04719755 ) * speed*math.cos(0))
+
+    def brake(self):
+        speeds = self.mb.getMotorSpeed()
+        speeds = speeds.split(":")
+        self.mb.setMotorSpeed(int(speeds[0]), int(speeds[1]), int(speeds[2]))
+
 
 # For listening to referee signals
 # TODO: Implement
 class RefereeListener:
+
+
     def __init__(self):
         pass
 
@@ -127,16 +172,12 @@ class GameLogic:
     def __init__(self):
         pass
 
-
-
+mbLocation = "dev/Serial"
 
 camID = 0  # Kaamera ID TODO: Kirjuta faili
 cap = cv2.VideoCapture(camID)
-ballLowerRange = np.array(
-    [255, 255, 255])  # HSV värviruumi alumine piir, hilisemaks filtreerimiseks TODO: Kirjuta faili
-ballUpperRange = np.array([0, 0, 0])  # HSV värviruumi ülemine piir, hilisemaks filtreerimiseks TODO: Kirjuta faili
-basketLowerRange = np.array([255, 255, 255])  # TODO: Kirjuta faili
-basketUpperRange = np.array([0, 0, 0])  # TODO: Kirjuta faili
+
+
 multiThreading = True  # TODO: Kirjuta faili
 textColor = (0, 0, 255)
 
@@ -370,8 +411,11 @@ cv2.setMouseCallback('main', onmouse)
 ball = Target(None, None, "ball")
 basket = Target(None, None, "basket")
 selectedTarget = ball
+mb = MBcomm(mbLocation, 115200)
+move = MovementLogic(mb)
 
 while True:
+    move.drive(100)
     dt = datetime.now()
     #dt.microsecond
     start = float(str(dt).split()[1].split(":")[2]) * 1000000
