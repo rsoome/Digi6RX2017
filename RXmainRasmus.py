@@ -214,7 +214,7 @@ cap = cv2.VideoCapture(camID)
 cap.set(cv2.CAP_PROP_FPS, 60)
 
 
-multiThreading = True  # TODO: Kirjuta faili
+multiThreading = False  # TODO: Kirjuta faili
 textColor = (0, 0, 255)
 
 selectedTarget = None
@@ -267,7 +267,7 @@ def capture(colorScheme):
 def blur(img):
     kernel = np.ones((30, 30), np.uint8)  # //TODO: Find values to put in the kernel
     dilation = cv2.dilate(img, kernel, 1)  # Udusta pilti //TODO: püüda dilationist ja erotionist paremini aru saada
-    kernel = np.ones((10, 10), np.uint8)  # //TODO: Find values to put in the kernel
+    kernel = np.ones((1, 1), np.uint8)  # //TODO: Find values to put in the kernel
     erotion = cv2.erode(dilation, kernel, 1)  # Teravda pilti
     return erotion
 
@@ -427,6 +427,8 @@ def findBounds(img, height, width, horizontalBounds, verticalBounds, verticalCoo
 # in findObjectMultithreaded() description.
 def detect(mainImg, target, objectMinSize, imageMinArea, scanOrder, obj):
     height, width = target.shape
+    print(height)
+    print(width)
     horizontalBounds = None
     verticalBounds = None
 
