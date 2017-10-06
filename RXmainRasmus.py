@@ -116,34 +116,35 @@ class MBcomm:
     def __init__(self, target, baud):
         self.ser = serial.Serial(target, baud)
 
-    def __sendCommand(self, cmd):
-        self.ser.write(cmd)
+    def __sendByte(self, cmd):
+        for i in range(len(cmd)):
+            self.ser.write(cmd[i])
 
     def __readCommand(self):
         return self.ser.readline()
 
     def setMotorSpeed(self, speed0, speed1, speed2):
-        self.__sendCommand("sd" + str(speed0) + ":" + str(speed1) + ":" + str(speed2))
+        self.__sendByte("sd" + str(speed0) + ":" + str(speed1) + ":" + str(speed2))
 
     def getMotorSpeed(self):
-        self.__sendCommand("sg")
+        self.__sendByte("sg")
         return self.__readCommand()
 
     def readInfrared(self):
-        self.__sendCommand("i")
+        self.__sendByte("i")
         return self.__readCommand()
 
     def charge(self):
-        self.__sendCommand("c")
+        self.__sendByte("c")
 
     def kick(self):
-        self.__sendCommand("k")
+        self.__sendByte("k")
 
     def discharge(self):
-        self.__sendCommand("e")
+        self.__sendByte("e")
 
     def enableFailSafe(self):
-        self.__sendCommand("f")
+        self.__sendByte("f")
 
 class MovementLogic:
 
@@ -151,13 +152,35 @@ class MovementLogic:
         self.mb = mb
 
     def drive(self, speed):
-        self.mb.setMotorSpeed(speed*math.cos(1.04719755 ), speed*math.cos(-1.04719755 ), speed*math.cos(0))
+        self.mb.setMotorSpeed(speed*math.cos(1.04719755 ), speed*math.cos(-1.04719755 ), speed*math.cos(0)) #60deg in rad
 
     def brake(self):
         speeds = self.mb.getMotorSpeed()
         speeds = speeds.split(":")
         self.mb.setMotorSpeed(int(speeds[0]), int(speeds[1]), int(speeds[2]))
 
+    def rotate(self, speed):
+        self.mb.setMotorSpeed(speed, speed, speed)
+
+class ManualDrive:
+
+    def __init__(self, move):
+        self.move = move
+        keyStroke = None
+        while not keyStroke & 0xFF == ord('q'):
+
+            keyStroke = cv2.waitKey(10)
+            if keyStroke & 0xFF == ord('w'):
+                move.drive(50)
+
+            if keyStroke & 0xFF == ord('a'):
+                move.rotate(-50)
+
+            if keyStroke & 0xFF == ord('d'):
+                move.rotate(50)
+
+            if keyStroke & 0xFF == ord(' '):
+                move.brake()
 
 # For listening to referee signals
 # TODO: Implement
