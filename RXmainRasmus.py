@@ -8,7 +8,9 @@ import serial
 import math
 import curses
 import time
+import sys
 
+print("Running on Python " + sys.version)
 
 # A token for indicating whether a thread should cancel it's job or not.
 class CancellationToken:
