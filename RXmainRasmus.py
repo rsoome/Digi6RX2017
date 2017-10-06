@@ -166,6 +166,7 @@ class MovementLogic:
 class ManualDrive:
 
     def __init__(self, move):
+        print("Manual driving activated.")
         self.move = move
 
     def run(self):
@@ -447,11 +448,11 @@ mb = MBcomm(mbLocation, 115200)
 move = MovementLogic(mb)
 
 while True:
-    move.drive(100)
+    #move.drive(100)
     dt = datetime.now()
     #dt.microsecond
     start = float(str(dt).split()[1].split(":")[2]) * 1000000
-    frame, hsv = capture(cv2.COLOR_BGR2HSV)  # Võta kaamerast pilt
+    '''frame, hsv = capture(cv2.COLOR_BGR2HSV)  # Võta kaamerast pilt
     if frame is None:  # Kontroll, kas pilt on olemas
         print("Capture fucntion failed")
         break
@@ -468,7 +469,7 @@ while True:
                                                                                 ball.verticalBounds[0]), (255, 0, 0), 3)
     if basket.horizontalBounds is not None and basket.verticalBounds is not None:
         cv2.rectangle(frame, (basket.horizontalBounds[0], basket.verticalBounds[1]), (basket.horizontalBounds[1],
-                                                                                        basket.verticalBounds[0]), (0, 255, 0), 3)
+                                                                                        basket.verticalBounds[0]), (0, 255, 0), 3)'''
 
     if cv2.waitKey(1) & 0xFF == ord('e'):
         #        time.sleep(1)
