@@ -173,7 +173,7 @@ class GameLogic:
     def __init__(self):
         pass
 
-mbLocation = "dev/Serial"
+mbLocation = "/dev/tty.serial"
 
 camID = 0  # Kaamera ID TODO: Kirjuta faili
 cap = cv2.VideoCapture(camID)
