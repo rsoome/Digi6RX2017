@@ -6,6 +6,7 @@ import cv2
 from datetime import datetime
 import serial
 import math
+import curses
 import time
 
 
@@ -166,21 +167,28 @@ class ManualDrive:
 
     def __init__(self, move):
         self.move = move
-        keyStroke = None
-        while not keyStroke & 0xFF == ord('q'):
 
-            keyStroke = cv2.waitKey(10)
-            if keyStroke & 0xFF == ord('w'):
-                move.drive(50)
+    def run(self):
+        screen = curses.initscr()
+        curses.cbreak()
+        screen.keypad(1)
 
-            if keyStroke & 0xFF == ord('a'):
-                move.rotate(-50)
+        keyStroke = ''
+        while keyStroke != ord('q'):
 
-            if keyStroke & 0xFF == ord('d'):
-                move.rotate(50)
+            keyStroke = screen.getch()
+            if keyStroke == ord('w'):
+                move.drive(10)
 
-            if keyStroke & 0xFF == ord(' '):
+            if keyStroke == ord('a'):
+                move.rotate(-10)
+
+            if keyStroke == ord('d'):
+                move.rotate(10)
+
+            if keyStroke == ord(' '):
                 move.brake()
+        curses.endwin()
 
 # For listening to referee signals
 # TODO: Implement
@@ -480,6 +488,10 @@ while True:
             selectedTarget = basket
             basket.resetThreshHolds()
             basket.resetBounds()
+
+        if keyStroke & 0xFF == ord('m'):
+            manual = ManualDrive(move)
+            manual.run()
 
     # print("Object size: " + str((ballHorizontalBounds[1] - ballHorizontalBounds[0]) * (ballVerticalBounds[1] - ballVerticalBounds[0])))
     cv2.putText(frame, "FPS: " + str(fps), (30, 30), cv2.FONT_HERSHEY_SIMPLEX,
