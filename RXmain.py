@@ -24,14 +24,14 @@ class ImageProcessor:
     # cancelToken - token indicating whether the job should be cancelled
     # obejct - the object into which to write the coordinates found
     # threadID - ID of the thread
-    def __init__(self, img, verticalLowerBound, horizontalLowerBound, minSize, cancelToken, object, threadID):
+    def __init__(self, img, verticalLowerBound, horizontalLowerBound, minSize, cancelToken, target, threadID):
         self.img = img
         self.verticalLowerBound = verticalLowerBound
         self.horizontalLowerBound = horizontalLowerBound
         self.minSize = minSize
         self.cancelToken = cancelToken
         self.cancellationLock = threading.Lock()
-        self.obj = object
+        self.obj = target
         self.threadID = threadID
 
     # Finds from the given mask a blob at least as big as the minSize
@@ -65,20 +65,69 @@ class ImageProcessor:
 
             # Write the found coordinates into the given object and release the cancellation token
             self.obj.horizontalBounds = [self.horizontalLowerBound + x, self.horizontalLowerBound + x + w]
-            # print("HorizontalBounds: " + str(x) + ", " + str(x + w))
+            #print(self.obj.horizontalBounds)
             self.obj.verticalBounds = [self.verticalLowerBound + y, self.verticalLowerBound + y + h]
-            # print("VerticalBounds: " + str(y) + ", " + str(y + h))
+            #print(self.obj.verticalBounds)
             self.cancellationLock.release()
 
 
 # The object class, in which you can hold the coordinates of an instance. For example - a ball or a gate
 class Target:
-    def __init__(self, hBounds, vBounds):
+
+    def __init__(self, hBounds, vBounds, targetID):
         self.horizontalBounds = hBounds
         self.verticalBounds = vBounds
+        self.hsvLowerRange = np.array([255, 255, 255])  # HSV värviruumi alumine piir, hilisemaks filtreerimiseks TODO: Kirjuta faili
+        self.hsvUpperRange = np.array([0, 0, 0])  # HSV värviruumi ülemine piir, hilisemaks filtreerimiseks TODO: Kirjuta faili
+        self.id = targetID
 
     def getBounds(self):
         return self.horizontalBounds, self.verticalBounds
+
+    # Writes new values into the variables containing threshholds of a given object.
+    def updateThresholds(self, values):
+        print("Updating " + str(self.id) + "'s thresholds.")
+        # Check all the received values against current values and update if necessary
+        for i in range(3):
+            if values[i] < self.hsvLowerRange[i]:
+                self.hsvLowerRange[i] = values[i]  # Kui väärtus on väiksem ,uuenda alumist piiri
+            if values[i] > self.hsvUpperRange[i]:
+                self.hsvUpperRange[i] = values[i]  # Kui väärtus on suurem, uuenda ülemist piiri
+
+    def resetThreshHolds(self):
+        self.hsvLowerRange = np.array(
+            [255, 255, 255])
+        self.hsvUpperRange = np.array(
+            [0, 0, 0])
+
+    def resetBounds(self):
+        self.horizontalBounds = None
+        self.verticalBounds = None
+
+    def setBounds(self, hBounds, vBounds):
+        self.horizontalBounds = hBounds
+        self.verticalBounds = vBounds
+
+# For communication with mainboard
+# TODO: Implement
+class MainboardCommunicator:
+
+    def __init__(self):
+        pass
+
+# For listening to referee signals
+# TODO: Implement
+class RefereeListener:
+    def __init__(self):
+        pass
+
+# Contains the game logic
+# TODO: Implement
+class GameLogic:
+    def __init__(self):
+        pass
+
+
 
 
 camID = 0  # Kaamera ID TODO: Kirjuta faili
@@ -91,8 +140,7 @@ basketUpperRange = np.array([0, 0, 0])  # TODO: Kirjuta faili
 multiThreading = True  # TODO: Kirjuta faili
 textColor = (0, 0, 255)
 
-ballSelected = True
-basketSelected = False
+selectedTarget = None
 
 framesCaptured = 0
 totalTimeElapsed = 0
@@ -121,24 +169,8 @@ def createImageProcessor(img, verticalLowerBound, horizontalLowerBound, minSize,
 # If the mouse is clicked, update threshholds of the selected object
 def onmouse(event, x, y, flags, params):  # Funktsioon, mis nupuvajutuse peale uuendab värviruumi piire
     if event == cv2.EVENT_LBUTTONUP:
-        if ballSelected:
-            updateThresholds(x, y, ballLowerRange, ballUpperRange)
-        if basketSelected:
-            updateThresholds(x, y, basketLowerRange, basketUpperRange)
-
-
-# Writes new values into the variables containing threshholds of a given object.
-def updateThresholds(x, y, objectLowerRange, objectUpperRange):
-    # Get hsv values at the given coordinates
-    hsvArr = (hsv[y][x])
-
-    # Check all the received values against current values and update if necessary
-    for i in range(3):
-        if hsvArr[i] < objectLowerRange[i]:
-            objectLowerRange[i] = hsvArr[i]  # Kui väärtus on väiksem ,uuenda alumist piiri
-        if hsvArr[i] > objectUpperRange[i]:
-            objectUpperRange[i] = hsvArr[i]  # Kui väärtus on suurem, uuenda ülemist piiriqq
-
+        if selectedTarget is not None:
+            selectedTarget.updateThresholds(hsv[y][x])
 
 # Captures an image and returns the original frame and a filtered image.
 # colorScheme - the filter to be applied
@@ -167,11 +199,10 @@ def blur(img):
 # img - the mask from which to find the coordinates
 # verticalLowerBound - the image global vertical lower bound
 # horizontalLowerbound - the image global horizontal lower bound
-def findObject(img, verticalLowerBound, horizontalLowerBound):
+def findObject(img, verticalLowerBound, horizontalLowerBound, obj):
+    obj.resetBounds()
     c = CancellationToken()
-    obj = Target(None, None)
     createImageProcessor(img, verticalLowerBound, horizontalLowerBound, 1, c, obj, "0")
-    return obj.getBounds()
 
 
 # Divides the given image into parts recursively. Then feeds the found parts to multiple threads to be processed for
@@ -206,8 +237,8 @@ def findObject(img, verticalLowerBound, horizontalLowerBound):
 # ^                                     ^
 # horizontalLowerBound=hLB      horizontalUpperBound=hUB
 def findObjectMultithreaded(mainImg, img, verticalLowerBound, verticalUpperBound, horizontalLowerBound,
-                            horizontalUpperBound,
-                            minObjectSize, minImgArea, scanOrder):
+                            horizontalUpperBound, minObjectSize, minImgArea, scanOrder, obj):
+    obj.resetBounds()
     # print("*")
 
     horizontalBounds = None
@@ -242,17 +273,18 @@ def findObjectMultithreaded(mainImg, img, verticalLowerBound, verticalUpperBound
             #                          (0, 0, 255), 1)
 
             # By the scan order divide each part of the image recursively
-            horizontalBounds, verticalBounds = findObjectMultithreaded(mainImg, img, verticalLowerBounds[scanOrder[i]],
+            findObjectMultithreaded(mainImg, img, verticalLowerBounds[scanOrder[i]],
                                                                        verticalUpperBounds[scanOrder[i]],
                                                                        horizontalLowerBounds[scanOrder[i]],
                                                                        horizontalUpperBounds[scanOrder[i]],
-                                                                       minObjectSize * 3, minImgArea, scanOrder)
+                                                                       minObjectSize * 3, minImgArea, scanOrder, obj)
+
+            horizontalBounds, verticalBounds = obj.getBounds()
             # If an object was found by the called recursion, return its coordinates
             if horizontalBounds is not None and verticalBounds is not None:
-                return horizontalBounds, verticalBounds
+                return
 
     # Create an object and a cancellation token for image processor
-    obj = Target(None, None)
     cToken = CancellationToken()
 
     # Send each part of the image to a separate thread in the order specified by the caller of the funtion
@@ -261,7 +293,7 @@ def findObjectMultithreaded(mainImg, img, verticalLowerBound, verticalUpperBound
 
         # If an object has been found, return its coordinates
         if horizontalBounds is not None and verticalBounds is not None:
-            return horizontalBounds, verticalBounds
+            return
         t = threading.Thread(target=createImageProcessor(img[
                                                          verticalLowerBounds[scanOrder[i]]:
                                                          verticalUpperBounds[scanOrder[i]],
@@ -272,9 +304,6 @@ def findObjectMultithreaded(mainImg, img, verticalLowerBound, verticalUpperBound
                                                          horizontalLowerBounds[scanOrder[i]],
                                                          minObjectSize, cToken, obj, i))
         t.start()
-        horizontalBounds, verticalBounds = obj.getBounds()
-
-    return obj.getBounds()
 
 
 # Finds the boundary coordinates of an object starting from a given pixel coordinates
@@ -311,13 +340,6 @@ def findBounds(img, height, width, horizontalBounds, verticalBounds, verticalCoo
         k += 1
     horizontalBounds[1] = k
 
-
-cv2.namedWindow('main')
-cv2.namedWindow('ball_filtered')
-cv2.namedWindow('gate_filtered')
-cv2.setMouseCallback('main', onmouse)
-
-
 # Wrapper function to find coordinates of a given object
 # mainImg - the main frame which is showed in the main window
 # object - the mask from which the coordinates are to be detected
@@ -326,7 +348,7 @@ cv2.setMouseCallback('main', onmouse)
 # divided recursively by the multi threaded function. If not specified or less then 0, no no recursive calls shall be done.
 # scanOrder - the order by which the image is fed to threads by multi threaded object finding function. More information
 # in findObjectMultithreaded() description.
-def detect(mainImg, target, objectMinSize, imageMinArea, scanOrder):
+def detect(mainImg, target, objectMinSize, imageMinArea, scanOrder, obj):
     height, width = target.shape
     horizontalBounds = None
     verticalBounds = None
@@ -335,13 +357,19 @@ def detect(mainImg, target, objectMinSize, imageMinArea, scanOrder):
         imageMinArea = height * width + 1
 
     if multiThreading:
-        horizontalBounds, verticalBounds = findObjectMultithreaded(mainImg, target, 0, height, 0, width, objectMinSize,
-                                                                   imageMinArea, scanOrder)
+        findObjectMultithreaded(mainImg, target, 0, height, 0, width, objectMinSize,
+                                                                   imageMinArea, scanOrder, obj)
     else:
-        horizontalBounds, verticalBounds = findObject(target, 0, height, 0, width)
+        findObject(target, 0, 0, obj)
 
-    return horizontalBounds, verticalBounds
+cv2.namedWindow('main')
+cv2.namedWindow('ball_filtered')
+cv2.namedWindow('gate_filtered')
+cv2.setMouseCallback('main', onmouse)
 
+ball = Target(None, None, "ball")
+basket = Target(None, None, "basket")
+selectedTarget = ball
 
 while True:
     dt = datetime.now()
@@ -352,18 +380,19 @@ while True:
         print("Capture fucntion failed")
         break
 
-    ballMask = cv2.inRange(hsv, ballLowerRange, ballUpperRange)  # Filtreeri välja soovitava värviga objekt
+    ballMask = cv2.inRange(hsv, ball.hsvLowerRange, ball.hsvUpperRange)  # Filtreeri välja soovitava värviga objekt
     ballMask = blur(ballMask)
-    basketMask = cv2.inRange(hsv, basketLowerRange, basketUpperRange)
+    basketMask = cv2.inRange(hsv, basket.hsvLowerRange, basket.hsvUpperRange)
     basketMask = blur(basketMask)
-    ballHorizontalBounds, ballVerticalBounds = detect(frame, ballMask, 1000, 0, [1, 0, 2, 4, 3, 5, 7, 6, 8])
-    basketHorizontalBounds, basketVerticalBounds = detect(frame, basketMask, 1000, 0, [7, 6, 8, 4, 3, 5, 1, 0, 2])
-    if ballVerticalBounds is not None and ballHorizontalBounds is not None:
-        cv2.rectangle(frame, (ballHorizontalBounds[0], ballVerticalBounds[1]), (ballHorizontalBounds[1],
-                                                                                ballVerticalBounds[0],), (255, 0, 0), 3)
-    if basketVerticalBounds is not None and basketHorizontalBounds is not None:
-        cv2.rectangle(frame, (basketHorizontalBounds[0], basketVerticalBounds[1]), (basketHorizontalBounds[1],
-                                                                                        basketVerticalBounds[0],), (0, 255, 0), 3)
+    detect(frame, ballMask, 1000, 0, [1, 0, 2, 4, 3, 5, 7, 6, 8], ball)
+    detect(frame, basketMask, 1000, 0, [7, 6, 8, 4, 3, 5, 1, 0, 2], basket)
+
+    if ball.horizontalBounds is not None and ball.verticalBounds is not None:
+        cv2.rectangle(frame, (ball.horizontalBounds[0], ball.verticalBounds[1]), (ball.horizontalBounds[1],
+                                                                                ball.verticalBounds[0]), (255, 0, 0), 3)
+    if basket.horizontalBounds is not None and basket.verticalBounds is not None:
+        cv2.rectangle(frame, (basket.horizontalBounds[0], basket.verticalBounds[1]), (basket.horizontalBounds[1],
+                                                                                        basket.verticalBounds[0]), (0, 255, 0), 3)
 
     if cv2.waitKey(1) & 0xFF == ord('e'):
         #        time.sleep(1)
@@ -373,17 +402,16 @@ while True:
         #        time.sleep(1)
         if keyStroke & 0xFF == ord('b'):
             textColor = (0, 0, 255)
-            ballSelected = True
-            basketSelected = False
-            ballLowerRange = np.array([255, 255, 255])
-            ballUpperRange = np.array([0, 0, 0])
+            selectedTarget = ball
+            ball.resetThreshHolds()
+            ball.resetBounds()
+
         #        time.sleep(1)
         if keyStroke & 0xFF == ord('k'):
             textColor = (255, 255, 0)
-            basketSelected = True
-            ballSelected = False
-            basketLowerRange = np.array([255, 255, 255])
-            basketUpperRange = np.array([0, 0, 0])
+            selectedTarget = basket
+            basket.resetThreshHolds()
+            basket.resetBounds()
 
     # print("Object size: " + str((ballHorizontalBounds[1] - ballHorizontalBounds[0]) * (ballVerticalBounds[1] - ballVerticalBounds[0])))
     cv2.putText(frame, "FPS: " + str(fps), (30, 30), cv2.FONT_HERSHEY_SIMPLEX,
