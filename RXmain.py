@@ -1,10 +1,36 @@
+# coding=utf-8
 import threading
 
 import numpy as np
 import cv2
 from datetime import datetime
+import serial
+import math
+import curses
 import time
+import sys
 
+print("Running on Python " + sys.version)
+
+driveSpeed = 50
+turnSpeed = 50
+camID = 0  # Kaamera ID TODO: Kirjuta faili
+cap = cv2.VideoCapture(camID)
+cap.set(cv2.CAP_PROP_FPS, 120)
+#cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1080)
+#cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
+
+
+multiThreading = True  # TODO: Kirjuta faili
+textColor = (0, 0, 255)
+
+selectedTarget = None
+
+framesCaptured = 0
+totalTimeElapsed = 0
+fps = 0
+
+hsv = None
 
 # A token for indicating whether a thread should cancel it's job or not.
 class CancellationToken:
@@ -108,16 +134,101 @@ class Target:
         self.horizontalBounds = hBounds
         self.verticalBounds = vBounds
 
-# For communication with mainboard
-# TODO: Implement
-class MainboardCommunicator:
+class MBcomm:
 
-    def __init__(self):
-        pass
+    def __init__(self, target, baud):
+        self.ser = serial.Serial(port=target, baudrate=baud, timeout=0.8)
+
+    def __sendByte(self, cmd):
+        if not self.ser.isOpen():
+            self.ser.open()
+        cmd += "\n"
+        print(cmd)
+        self.ser.write(cmd.encode())
+        if self.ser.isOpen():
+            self.ser.close()
+
+    def __readBytes(self):
+        if not self.ser.isOpen():
+            self.ser.open()
+        line = self.ser.readline().decode("ascii")
+        if self.ser.isOpen():
+            self.ser.close()
+        return line
+
+    def setMotorSpeed(self, speed0, speed1, speed2):
+        self.__sendByte("sd" + str(speed0) + ":" + str(speed1) + ":" + str(speed2))
+
+    def getMotorSpeed(self):
+        self.__sendByte("sg")
+        return self.__readBytes()
+
+    def readInfrared(self):
+        self.__sendByte("i")
+        return self.__readBytes()
+
+    def charge(self):
+        self.__sendByte("c")
+
+    def kick(self):
+        self.__sendByte("k")
+
+    def discharge(self):
+        self.__sendByte("e")
+
+    def enableFailSafe(self):
+        self.__sendByte("f")
+
+class MovementLogic:
+
+    def __init__(self, mb):
+        self.mb = mb
+
+    def drive(self, speed):
+        self.mb.setMotorSpeed(speed*(math.cos(1.04719755)), speed*(math.cos(-1.04719755 )), speed*(math.cos(0))) #60deg in rad
+
+    def brake(self):
+        speeds = self.mb.getMotorSpeed()
+        speeds = speeds.split(":")
+        self.mb.setMotorSpeed(int(speeds[0]), int(speeds[1]), int(speeds[2]))
+
+    def rotate(self, speed):
+        self.mb.setMotorSpeed(speed, speed, speed)
+
+class ManualDrive:
+
+    def __init__(self, move):
+        print("Manual driving activated.")
+        self.move = move
+
+    def run(self):
+        screen = curses.initscr()
+        curses.cbreak()
+        screen.keypad(1)
+
+        keyStroke = ''
+        while keyStroke != ord('q'):
+
+            keyStroke = screen.getch()
+            if keyStroke == ord('w'):
+                move.drive(driveSpeed)
+
+            if keyStroke == ord('a'):
+                move.rotate(-turnSpeed)
+
+            if keyStroke == ord('d'):
+                move.rotate(turnSpeed)
+
+            if keyStroke == ord(' '):
+                move.brake()
+        print("Manual driving deactivated.")
+        curses.endwin()
 
 # For listening to referee signals
 # TODO: Implement
 class RefereeListener:
+
+
     def __init__(self):
         pass
 
@@ -127,27 +238,7 @@ class GameLogic:
     def __init__(self):
         pass
 
-
-
-
-camID = 0  # Kaamera ID TODO: Kirjuta faili
-cap = cv2.VideoCapture(camID)
-ballLowerRange = np.array(
-    [255, 255, 255])  # HSV värviruumi alumine piir, hilisemaks filtreerimiseks TODO: Kirjuta faili
-ballUpperRange = np.array([0, 0, 0])  # HSV värviruumi ülemine piir, hilisemaks filtreerimiseks TODO: Kirjuta faili
-basketLowerRange = np.array([255, 255, 255])  # TODO: Kirjuta faili
-basketUpperRange = np.array([0, 0, 0])  # TODO: Kirjuta faili
-multiThreading = True  # TODO: Kirjuta faili
-textColor = (0, 0, 255)
-
-selectedTarget = None
-
-framesCaptured = 0
-totalTimeElapsed = 0
-fps = 0
-
-hsv = None
-
+mbLocation = "/dev/ttyACM0"
 
 # Creates an imageProcessor object and runs it's findObject function.
 # The funtion is meant to be ran on multiple threads processing different parts of a picture but can be used on a single
@@ -188,11 +279,10 @@ def capture(colorScheme):
 
 # Blurs the image to remove noise
 def blur(img):
-    kernel = np.ones((30, 30), np.uint8)  # //TODO: Find values to put in the kernel
-    dilation = cv2.dilate(img, kernel, 1)  # Udusta pilti //TODO: püüda dilationist ja erotionist paremini aru saada
-    kernel = np.ones((10, 10), np.uint8)  # //TODO: Find values to put in the kernel
-    erotion = cv2.erode(dilation, kernel, 1)  # Teravda pilti
-    return erotion
+    kernel = np.ones((50, 50), np.uint8)  # //TODO: Find values to put in the kernel
+    closing = cv2.morphologyEx(img, cv2.MORPH_CLOSE, kernel)
+    gauss = cv2.GaussianBlur(img, (5, 5), 0)
+    return gauss
 
 
 # Finds object coordinates in the given picture
@@ -370,8 +460,12 @@ cv2.setMouseCallback('main', onmouse)
 ball = Target(None, None, "ball")
 basket = Target(None, None, "basket")
 selectedTarget = ball
+mb = MBcomm(mbLocation, 115200)
+#mb = None
+move = MovementLogic(mb)
 
-while True:
+while keyStroke != ord('q'):
+    #move.drive(100)
     dt = datetime.now()
     #dt.microsecond
     start = float(str(dt).split()[1].split(":")[2]) * 1000000
@@ -380,6 +474,7 @@ while True:
         print("Capture fucntion failed")
         break
 
+    #hsv = blur(hsv)
     ballMask = cv2.inRange(hsv, ball.hsvLowerRange, ball.hsvUpperRange)  # Filtreeri välja soovitava värviga objekt
     ballMask = blur(ballMask)
     basketMask = cv2.inRange(hsv, basket.hsvLowerRange, basket.hsvUpperRange)
@@ -412,6 +507,10 @@ while True:
             selectedTarget = basket
             basket.resetThreshHolds()
             basket.resetBounds()
+
+        if keyStroke & 0xFF == ord('m'):
+            manual = ManualDrive(move)
+            manual.run()
 
     # print("Object size: " + str((ballHorizontalBounds[1] - ballHorizontalBounds[0]) * (ballVerticalBounds[1] - ballVerticalBounds[0])))
     cv2.putText(frame, "FPS: " + str(fps), (30, 30), cv2.FONT_HERSHEY_SIMPLEX,
