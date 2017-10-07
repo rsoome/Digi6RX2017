@@ -128,10 +128,10 @@ class MBcomm:
         if self.ser.isOpen():
             self.ser.close()
 
-    def __readCommand(self):
+    def __readBytes(self):
         if not self.ser.isOpen():
             self.ser.open()
-        line = self.ser.readline()
+        line = self.ser.readline().decode("ascii")
         if self.ser.isOpen():
             self.ser.close()
         return line
@@ -141,11 +141,11 @@ class MBcomm:
 
     def getMotorSpeed(self):
         self.__sendByte("sg")
-        return self.__readCommand()
+        return self.__readBytes()
 
     def readInfrared(self):
         self.__sendByte("i")
-        return self.__readCommand()
+        return self.__readBytes()
 
     def charge(self):
         self.__sendByte("c")
