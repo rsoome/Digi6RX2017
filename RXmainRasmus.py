@@ -117,15 +117,20 @@ class Target:
 class MBcomm:
 
     def __init__(self, target, baud):
-        self.ser = serial.Serial(target, baud)
+        self.ser = serial.Serial(target, baud, timeout=0.8)
 
     def __sendByte(self, cmd):
+        self.ser.open()
         cmd += "\n"
         b = cmd.encode('utf-8')
         self.ser.write(b)
+        self.ser.close()
 
     def __readCommand(self):
-        return self.ser.readline()
+        self.ser.open()
+        line = self.ser.readline()
+        self.ser.close()
+        return line
 
     def setMotorSpeed(self, speed0, speed1, speed2):
         self.__sendByte("sd" + str(speed0) + ":" + str(speed1) + ":" + str(speed2))
