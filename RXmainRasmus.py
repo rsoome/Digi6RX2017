@@ -183,8 +183,6 @@ class ManualDrive:
         self.move = move
 
     def run(self):
-        self.move.drive(10)
-        return
         screen = curses.initscr()
         curses.cbreak()
         screen.keypad(1)
