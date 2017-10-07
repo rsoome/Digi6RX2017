@@ -120,6 +120,8 @@ class MBcomm:
         self.ser = serial.Serial(target, baud)
 
     def __sendByte(self, cmd):
+        cmd += "\n"
+        b = cmd.encode('utf-8')
         for i in range(len(cmd)):
             self.ser.write(cmd[i])
 
