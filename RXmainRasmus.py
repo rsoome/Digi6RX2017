@@ -122,8 +122,8 @@ class MBcomm:
     def __sendByte(self, cmd):
         cmd += "\n"
         b = cmd.encode('utf-8')
-        for i in range(len(cmd)):
-            self.ser.write(cmd[i])
+        for i in range(len(b)):
+            self.ser.write(b[i])
 
     def __readCommand(self):
         return self.ser.readline()
