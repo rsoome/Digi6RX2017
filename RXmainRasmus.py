@@ -118,6 +118,7 @@ class MBcomm:
 
     def __init__(self, target, baud):
         self.ser = serial.Serial(target, baud, timeout=0.8)
+        self.ser.close()
 
     def __sendByte(self, cmd):
         self.ser.open()
