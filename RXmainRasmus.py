@@ -174,6 +174,8 @@ class ManualDrive:
         self.move = move
 
     def run(self):
+        move.drive(10)
+        return
         screen = curses.initscr()
         curses.cbreak()
         screen.keypad(1)
@@ -193,8 +195,6 @@ class ManualDrive:
 
             if keyStroke == ord(' '):
                 move.brake()
-            curses.endwin()
-            return
         print("Manual driving deactivated.")
         curses.endwin()
 
