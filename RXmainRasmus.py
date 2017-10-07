@@ -123,6 +123,7 @@ class MBcomm:
         cmd += "\n"
         b = cmd.encode('utf-8')
         for i in range(len(b)):
+            print("*")
             self.ser.write(b[i])
 
     def __readCommand(self):
