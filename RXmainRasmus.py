@@ -209,6 +209,7 @@ mbLocation = "/dev/serial/by-id/usb-mbed.org_CDC_DEVICE_0123456789-if00"
 
 camID = 0  # Kaamera ID TODO: Kirjuta faili
 cap = cv2.VideoCapture(camID)
+cap.set(cv2.CAP_PROP_FPS, 60)
 
 
 multiThreading = True  # TODO: Kirjuta faili
@@ -444,7 +445,8 @@ cv2.setMouseCallback('main', onmouse)
 ball = Target(None, None, "ball")
 basket = Target(None, None, "basket")
 selectedTarget = ball
-mb = MBcomm(mbLocation, 115200)
+#mb = MBcomm(mbLocation, 115200)
+mb = None
 move = MovementLogic(mb)
 
 while True:
