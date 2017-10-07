@@ -211,7 +211,7 @@ class GameLogic:
     def __init__(self):
         pass
 
-mbLocation = "/dev/ttysACM0"
+mbLocation = "/dev/ttyACM0"
 
 camID = 0  # Kaamera ID TODO: Kirjuta faili
 cap = cv2.VideoCapture(camID)
