@@ -124,8 +124,8 @@ class MBcomm:
             self.ser.open()
         time.sleep(1)
         cmd += "\n"
-        b = cmd.encode()
-        self.ser.write(b)
+        print(cmd)
+        self.ser.write(cmd.encode())
         if self.ser.isOpen():
             self.ser.close()
 
@@ -166,7 +166,7 @@ class MovementLogic:
         self.mb = mb
 
     def drive(self, speed):
-        self.mb.setMotorSpeed(speed*math.cos(1.04719755 ), speed*math.cos(-1.04719755 ), speed*math.cos(0)) #60deg in rad
+        self.mb.setMotorSpeed(speed*(math.cos(1.04719755)), speed*(math.cos(-1.04719755 )), speed*(math.cos(0))) #60deg in rad
 
     def brake(self):
         speeds = self.mb.getMotorSpeed()
