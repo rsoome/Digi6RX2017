@@ -193,6 +193,9 @@ class ManualDrive:
 
             if keyStroke == ord(' '):
                 move.brake()
+            curses.endwin()
+            return
+        print("Manual driving deactivated.")
         curses.endwin()
 
 # For listening to referee signals
