@@ -123,8 +123,8 @@ class MBcomm:
         if not self.ser.isOpen():
             self.ser.open()
         cmd += "\n"
-        b = cmd.encode('utf-8')
-        self.ser.write(b)
+        b = cmd.encode()
+        ret = self.ser.write(b)
         if self.ser.isOpen():
             self.ser.close()
 
