@@ -448,8 +448,8 @@ cv2.setMouseCallback('main', onmouse)
 ball = Target(None, None, "ball")
 basket = Target(None, None, "basket")
 selectedTarget = ball
-#mb = MBcomm(mbLocation, 115200)
-mb = None
+mb = MBcomm(mbLocation, 115200)
+#mb = None
 move = MovementLogic(mb)
 
 while True:
