@@ -191,13 +191,13 @@ class ManualDrive:
 
             keyStroke = screen.getch()
             if keyStroke == ord('w'):
-                move.drive(10)
+                move.drive(50)
 
             if keyStroke == ord('a'):
-                move.rotate(-10)
+                move.rotate(-30)
 
             if keyStroke == ord('d'):
-                move.rotate(10)
+                move.rotate(30)
 
             if keyStroke == ord(' '):
                 move.brake()
