@@ -212,6 +212,8 @@ mbLocation = "/dev/serial/by-id/usb-mbed.org_CDC_DEVICE_0123456789-if00"
 camID = 0  # Kaamera ID TODO: Kirjuta faili
 cap = cv2.VideoCapture(camID)
 cap.set(cv2.CAP_PROP_FPS, 60)
+cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1920)
+cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 1080)
 
 
 multiThreading = False  # TODO: Kirjuta faili
