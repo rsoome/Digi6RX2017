@@ -122,7 +122,6 @@ class MBcomm:
     def __sendByte(self, cmd):
         if not self.ser.isOpen():
             self.ser.open()
-        time.sleep(1)
         cmd += "\n"
         print(cmd)
         self.ser.write(cmd.encode())
