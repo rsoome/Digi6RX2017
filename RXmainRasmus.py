@@ -12,16 +12,68 @@ import sys
 
 print("Running on Python " + sys.version)
 
-driveSpeed = 50
-turnSpeed = 50
-camID = 0  # Kaamera ID TODO: Kirjuta faili
-cap = cv2.VideoCapture(camID)
+class SettingsHandler:
+
+    def __init__(self, fileLocation):
+        self.fileLoc = fileLocation
+        self.values = self.readFromFileToDict()
+        self.initializeSettings()
+
+    def readFromFileToDict(self):
+
+        with open(self.fileLoc, "r") as f:
+            d = dict()
+            line = f.readline()
+
+            while line != '':
+                d[line.split(" = ")[0]] = line.split(" = ")[1].strip()
+                line = f.readline()
+
+            return d
+
+    def getValue(self, key):
+        if key in self.values:
+            return self.values[key]
+        return ""
+
+    def setValue(self, key, value):
+        self.values[key] = str(value)
+
+    def writeFromDictToFile(self):
+        newValues = ""
+        for key in self.values:
+            newValues += str(key) + " = " + str(self.values[key]) + "\n"
+
+        with open(self.fileLoc, "w") as f:
+            f.write(newValues)
+
+    def initializeSettings(self):
+
+        if not "driveSpeed" in self.values:
+            self.values["driveSpeed"] = "10"
+        if not "turnSpeed" in self.values:
+            self.values["turnSpeed"] = "10"
+        if not "camID" in self.values:
+            self.values["camID"] = "0"
+        if not "multiThreading" in self.values:
+            self.values["multiThreading"] = "True"
+        if not "ballHSVLower" in self.values:
+            self.values["ballHSVLower"] = "255 255 255"
+        if not "ballHSVHigher" in self.values:
+            self.values["ballHSVUpper"] = "0 0 0"
+        if not "basketHSVLower" in self.values:
+            self.values["basketHSVLower"] = "255 255 255"
+        if not "basketHSVHigher" in self.values:
+            self.values["basketHSVUpper"] = "0 0 0"
+
+
+settings = SettingsHandler("settings")
+
+cap = cv2.VideoCapture(int(settings.getValue("camID")))
 cap.set(cv2.CAP_PROP_FPS, 120)
-#cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1080)
-#cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
+# cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1080)
+# cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
 
-
-multiThreading = True  # TODO: Kirjuta faili
 textColor = (0, 0, 255)
 
 selectedTarget = None
@@ -282,7 +334,7 @@ class ImageHandler:
         if imageMinArea < 1:
             imageMinArea = height * width + 1
 
-        if multiThreading:
+        if bool(settings.getValue("multiThreading")):
             self.findObjectMultithreaded(mainImg, target, 0, height, 0, width, objectMinSize,
                                     imageMinArea, scanOrder, obj)
         else:
@@ -292,11 +344,13 @@ class ImageHandler:
 # The object class, in which you can hold the coordinates of an instance. For example - a ball or a gate
 class Target:
 
-    def __init__(self, hBounds, vBounds, targetID):
+    def __init__(self, hBounds, vBounds, targetID, lowerRange, upperRange):
         self.horizontalBounds = hBounds
         self.verticalBounds = vBounds
-        self.hsvLowerRange = np.array([255, 255, 255])  # HSV värviruumi alumine piir, hilisemaks filtreerimiseks TODO: Kirjuta faili
-        self.hsvUpperRange = np.array([0, 0, 0])  # HSV värviruumi ülemine piir, hilisemaks filtreerimiseks TODO: Kirjuta faili
+        # HSV värviruumi alumine piir, hilisemaks filtreerimiseks TODO: Kirjuta faili
+        self.hsvLowerRange = lowerRange
+        # HSV värviruumi ülemine piir, hilisemaks filtreerimiseks TODO: Kirjuta faili
+        self.hsvUpperRange = upperRange
         self.id = targetID
 
     def getBounds(self):
@@ -389,27 +443,30 @@ class MovementLogic:
 
 class ManualDrive:
 
-    def __init__(self, move):
+    def __init__(self, move, driveSpeed, turnSpeed):
         print("Manual driving activated.")
         self.move = move
+        self.driveSpeed = driveSpeed
+        self.turnSpeed = turnSpeed
 
     def run(self):
         #screen = curses.initscr()
         #curses.cbreak()
         #screen.keypad(1)
+        #curses.noecho()
 
         keyStroke = ''
         while keyStroke != ord('q'):
 
             #keyStroke = screen.getch()
             if keyStroke == ord('w'):
-                move.drive(driveSpeed)
+                move.drive(self.driveSpeed)
 
             if keyStroke == ord('a'):
-                move.rotate(-turnSpeed)
+                move.rotate(-self.turnSpeed)
 
             if keyStroke == ord('d'):
-                move.rotate(turnSpeed)
+                move.rotate(self.turnSpeed)
 
             if keyStroke == ord(' '):
                 move.brake()
@@ -456,8 +513,12 @@ cv2.namedWindow('ball_filtered')
 cv2.namedWindow('gate_filtered')
 cv2.setMouseCallback('main', onmouse)
 
-ball = Target(None, None, "ball")
-basket = Target(None, None, "basket")
+ball = Target(None, None, "ball",
+              np.array([int(x) for x in settings.getValue("ballHSVLower").split()]),
+              np.array([int(x) for x in settings.getValue("ballHSVUpper").split()]))
+basket = Target(None, None, "basket",
+              np.array([int(x) for x in settings.getValue("basketHSVLower").split()]),
+              np.array([int(x) for x in settings.getValue("basketHSVUpper").split()]))
 selectedTarget = ball
 #mb = MBcomm(mbLocation, 115200)
 mb = None
@@ -471,7 +532,6 @@ imgHandler =ImageHandler()
 keyStroke = ''
 #keyStroke = screen.getch()
 while True:
-    #move.drive(100)
     dt = datetime.now()
     #dt.microsecond
     start = float(str(dt).split()[1].split(":")[2]) * 1000000
@@ -515,7 +575,7 @@ while True:
             basket.resetBounds()
 
         if keyStroke & 0xFF == ord('m'):
-            manual = ManualDrive(move)
+            manual = ManualDrive(move, int(settings.getValue("driveSpeed")), int(settings.getValue("turnSpeed")))
             manual.run()
 
     # print("Object size: " + str((ballHorizontalBounds[1] - ballHorizontalBounds[0]) * (ballVerticalBounds[1] - ballVerticalBounds[0])))
@@ -537,6 +597,7 @@ while True:
         framesCaptured = 0
         totalTimeElapsed = 0
 
+settings.writeFromDictToFile()
 # When everything done, release the capture
 cap.release()
 cv2.destroyAllWindows()

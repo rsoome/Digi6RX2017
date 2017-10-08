@@ -12,16 +12,68 @@ import sys
 
 print("Running on Python " + sys.version)
 
-driveSpeed = 50
-turnSpeed = 50
-camID = 0  # Kaamera ID TODO: Kirjuta faili
-cap = cv2.VideoCapture(camID)
+class SettingsHandler:
+
+    def __init__(self, fileLocation):
+        self.fileLoc = fileLocation
+        self.values = self.readFromFileToDict()
+        self.initializeSettings()
+
+    def readFromFileToDict(self):
+
+        with open(self.fileLoc, "r") as f:
+            d = dict()
+            line = f.readline()
+
+            while line != '':
+                d[line.split(" = ")[0]] = line.split(" = ")[1].strip()
+                line = f.readline()
+
+            return d
+
+    def getValue(self, key):
+        if key in self.values:
+            return self.values[key]
+        return ""
+
+    def setValue(self, key, value):
+        self.values[key] = str(value)
+
+    def writeFromDictToFile(self):
+        newValues = ""
+        for key in self.values:
+            newValues += str(key) + " = " + str(self.values[key]) + "\n"
+
+        with open(self.fileLoc, "w") as f:
+            f.write(newValues)
+
+    def initializeSettings(self):
+
+        if not "driveSpeed" in self.values:
+            self.values["driveSpeed"] = "10"
+        if not "turnSpeed" in self.values:
+            self.values["turnSpeed"] = "10"
+        if not "camID" in self.values:
+            self.values["camID"] = "0"
+        if not "multiThreading" in self.values:
+            self.values["multiThreading"] = "True"
+        if not "ballHSVLower" in self.values:
+            self.values["ballHSVLower"] = "255 255 255"
+        if not "ballHSVHigher" in self.values:
+            self.values["ballHSVUpper"] = "0 0 0"
+        if not "basketHSVLower" in self.values:
+            self.values["basketHSVLower"] = "255 255 255"
+        if not "basketHSVHigher" in self.values:
+            self.values["basketHSVUpper"] = "0 0 0"
+
+
+settings = SettingsHandler("settings")
+
+cap = cv2.VideoCapture(int(settings.getValue("camID")))
 cap.set(cv2.CAP_PROP_FPS, 120)
-#cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1080)
-#cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
+# cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1080)
+# cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
 
-
-multiThreading = True  # TODO: Kirjuta faili
 textColor = (0, 0, 255)
 
 selectedTarget = None
@@ -96,15 +148,209 @@ class ImageProcessor:
             #print(self.obj.verticalBounds)
             self.cancellationLock.release()
 
+class ImageHandler:
+
+
+    # Creates an imageP
+    # rocessor object and runs it's findObject function.
+    # The funtion is meant to be ran on multiple threads processing different parts of a picture but can be used on a single
+    # thread with the whole picture.
+    # img - (the part of) the image to be processed
+    # verticalLowerBound - image's vertical (y-axis) global lower bound of the part of the imgae being processed.
+    # In case the whole picture is being processed it is to be assigned the value 0.
+    # horizontalLowerBound - image's horizontal (x-axis) global lower bound of the part of the image being processed.
+    # minSize - The minimum area of the ractangle surrounding the object. Objects smaller than this are not considered valid.
+    # cancellationToken - A token that signals the parallel threads whether the object has been already found.
+    # target - the object into which the found coordinates will be inserted.
+    # threadID - the ID by which the parallel threads will be identified. Can be any value.
+    def createImageProcessor(self, img, verticalLowerBound, horizontalLowerBound, minSize, cancellationToken, target,
+                             threadID):
+        imgProc = ImageProcessor(img, verticalLowerBound, horizontalLowerBound, minSize, cancellationToken, target,
+                                 threadID)
+        imgProc.findObjectCoordinates()
+    # Blurs the image to remove noise
+    def blur(self, img):
+        kernel = np.ones((50, 50), np.uint8)  # //TODO: Find values to put in the kernel
+        closing = cv2.morphologyEx(img, cv2.MORPH_CLOSE, kernel)
+        gauss = cv2.GaussianBlur(img, (5, 5), 0)
+        return gauss
+
+    # Finds object coordinates in the given picture
+    # img - the mask from which to find the coordinates
+    # verticalLowerBound - the image global vertical lower bound
+    # horizontalLowerbound - the image global horizontal lower bound
+    def findObject(self, img, verticalLowerBound, horizontalLowerBound, obj):
+        obj.resetBounds()
+        c = CancellationToken()
+        self.createImageProcessor(img, verticalLowerBound, horizontalLowerBound, 1, c, obj, "0")
+
+    # Divides the given image into parts recursively. Then feeds the found parts to multiple threads to be processed for
+    # object coordinates.
+    # mainImg - The main frame. TODO: REMOVE IF NOT USED ANYMORE
+    # img - A mask of thresholded colors from which the blobs are to be found
+    # verticalLowerBound - The image global vertical lower bound of img. On first iteration it is to be set 0.
+    # verticalUpperBound - The image global vertical lupper bound of img. On first iteration it is to be set image height.
+    # verticalLowerBound - The image global horizontal lower bound of img. On first iteration it is to be set 0.
+    # verticalUpperBound - The image global horizontal lupper bound of img. On first iteration it is to be set image width.
+    # minobjectSize - The minimum object size which is considered a valid object. On each recursive call the minObjectSize is
+    # multiplied by 3 as the img size is divided by three.
+    # minImgArea - the condition to exit the recursion. Image shall not be divided when it's size is smaller than this value.
+    # scanOrder - the order, in which the parts of the image are fed to threads. Below is a diagram of the divison of the image
+    # each divided part has an ID which are given on the diagram. The scanOrder is expected to be an integer array of some
+    # permutation of these IDs.
+    #
+    # (0,0)---------------------------------- verdicalLowerBound=vLB
+    # |           |             |           |
+    # |     6     |      7      |      8    |
+    # |           |             |           |
+    # |-----------|-------------|-----------| vLB+(vUB-vLB)/3
+    # |           |             |           |
+    # |     3     |      4      |      5    |
+    # |           |             |           |
+    # |-----------|-------------|-----------| vLB+2*((vUB-vLB)/3)
+    # |           |             |           |
+    # |     0     |      1      |      2    |
+    # |           |             |           |
+    # --------------------------------------- verticalUpperBound=vUB
+    # ^hLB+(hUB-hLB)/3   hLB+2*((hUB-hLB)/3)^
+    # ^                                     ^
+    # horizontalLowerBound=hLB      horizontalUpperBound=hUB
+    def findObjectMultithreaded(self, mainImg, img, verticalLowerBound, verticalUpperBound, horizontalLowerBound,
+                                horizontalUpperBound, minObjectSize, minImgArea, scanOrder, obj):
+        obj.resetBounds()
+        # print("*")
+
+        horizontalBounds = None
+        verticalBounds = None
+
+        verticalThird = (verticalLowerBound + (verticalUpperBound - verticalLowerBound) // 3)
+        verticalTwoThirds = (verticalLowerBound + 2 * (verticalUpperBound - verticalLowerBound) // 3)
+        horizontalThird = (horizontalLowerBound + (horizontalUpperBound - horizontalLowerBound) // 3)
+        horizontalTwoThirds = (horizontalLowerBound + 2 * (horizontalUpperBound - horizontalLowerBound) // 3)
+
+        # Define the division boundaries
+        verticalLowerBounds = [verticalTwoThirds, verticalTwoThirds, verticalTwoThirds,
+                               verticalThird, verticalThird, verticalThird,
+                               verticalLowerBound, verticalLowerBound, verticalLowerBound]
+
+        verticalUpperBounds = [verticalUpperBound, verticalUpperBound, verticalUpperBound,
+                               verticalTwoThirds, verticalTwoThirds, verticalTwoThirds,
+                               verticalThird, verticalThird, verticalThird]
+
+        horizontalLowerBounds = [horizontalLowerBound, horizontalThird, horizontalTwoThirds,
+                                 horizontalLowerBound, horizontalThird, horizontalTwoThirds,
+                                 horizontalLowerBound, horizontalThird, horizontalTwoThirds]
+
+        horizontalUpperBounds = [horizontalThird, horizontalTwoThirds, horizontalUpperBound,
+                                 horizontalThird, horizontalTwoThirds, horizontalUpperBound,
+                                 horizontalThird, horizontalTwoThirds, horizontalUpperBound]
+
+        # If the image area is bigger than minImgArea, go into recursion to divide the image smaller
+        if ((verticalUpperBound - verticalLowerBound) * (horizontalUpperBound - horizontalLowerBound) > minImgArea):
+            for i in range(len(scanOrder)):
+                #            cv2.rectangle(mainImg, (horizontalLowerBounds[i], verticalUpperBounds[i]), (horizontalUpperBounds[i], verticalLowerBounds[i]),
+                #                          (0, 0, 255), 1)
+
+                # By the scan order divide each part of the image recursively
+                self.findObjectMultithreaded(mainImg, img, verticalLowerBounds[scanOrder[i]],
+                                        verticalUpperBounds[scanOrder[i]],
+                                        horizontalLowerBounds[scanOrder[i]],
+                                        horizontalUpperBounds[scanOrder[i]],
+                                        minObjectSize * 3, minImgArea, scanOrder, obj)
+
+                horizontalBounds, verticalBounds = obj.getBounds()
+                # If an object was found by the called recursion, return its coordinates
+                if horizontalBounds is not None and verticalBounds is not None:
+                    return
+
+        # Create an object and a cancellation token for image processor
+        cToken = CancellationToken()
+
+        # Send each part of the image to a separate thread in the order specified by the caller of the funtion
+        for i in range(len(scanOrder)):
+            # print(i)
+
+            # If an object has been found, return its coordinates
+            if horizontalBounds is not None and verticalBounds is not None:
+                return
+            t = threading.Thread(target=self.createImageProcessor(img[
+                                                             verticalLowerBounds[scanOrder[i]]:
+                                                             verticalUpperBounds[scanOrder[i]],
+                                                             horizontalLowerBounds[scanOrder[i]]:
+                                                             horizontalUpperBounds[scanOrder[i]]
+                                                             ],
+                                                             verticalLowerBounds[scanOrder[i]],
+                                                             horizontalLowerBounds[scanOrder[i]],
+                                                             minObjectSize, cToken, obj, i))
+            t.start()
+
+    # Finds the boundary coordinates of an object starting from a given pixel coordinates
+    # img - the image from which to look for the coordinates
+    # horizontalBounds - the array where horizontal coordinates are saved
+    # verticalBounds - the array where vertical coordinates are saved
+    # verticalCoordinate - the starting vertical coordinate
+    # horizontalCoordinate - the starting horizontal coordinate
+    # TODO: figure out whether the function will be used
+    def findBounds(img, height, width, horizontalBounds, verticalBounds, verticalCoordinate, horizontalCoordinate):
+        # The given vertical coordinate is expected to be the bottom most coordinate of the object
+        k = verticalCoordinate
+        while (img[k][horizontalCoordinate] != 0 and k != 0):
+            k -= 1
+        verticalBounds[0] = k
+        # Iterate through coordinates starting from the bottom coordinate until a black pixel is found
+        # or the edge of the image is reached.
+        for k in range(verticalCoordinate, height):
+            # Black pixel found or image edge reached, this is the upper vertical coordinate of the object
+            if img[k][horizontalCoordinate] == 0 or k == height - 1:
+                verticalBounds[1] = k
+                break
+
+        # The object is expected to be symmetrical from vertical axis so the height of the object
+        # is divided by 2 to find the midpoint. From the midpoint pixels are scanned from both sides of the point
+        # if a black pixel or image edge is reached.
+        midpoint = verticalBounds[0] + (verticalBounds[1] - verticalBounds[0]) // 2
+        k = horizontalCoordinate
+        while (img[midpoint][k] != 0 and k != 0):
+            k -= 1
+        horizontalBounds[0] = k
+        k = horizontalCoordinate
+        while (img[midpoint][k] != 0 and k != width - 1):
+            k += 1
+        horizontalBounds[1] = k
+
+    # Wrapper function to find coordinates of a given object
+    # mainImg - the main frame which is showed in the main window
+    # object - the mask from which the coordinates are to be detected
+    # objectMinSize - the minimum size of the blob starting from which it's considered valid
+    # imageMinArea - while the area of the part of the image being processed is bigger than this value, the image will be
+    # divided recursively by the multi threaded function. If not specified or less then 0, no no recursive calls shall be done.
+    # scanOrder - the order by which the image is fed to threads by multi threaded object finding function. More information
+    # in findObjectMultithreaded() description.
+    def detect(self, mainImg, target, objectMinSize, imageMinArea, scanOrder, obj):
+        height, width = target.shape
+        horizontalBounds = None
+        verticalBounds = None
+
+        if imageMinArea < 1:
+            imageMinArea = height * width + 1
+
+        if bool(settings.getValue("multiThreading")):
+            self.findObjectMultithreaded(mainImg, target, 0, height, 0, width, objectMinSize,
+                                    imageMinArea, scanOrder, obj)
+        else:
+            self.findObject(target, 0, 0, obj)
+
 
 # The object class, in which you can hold the coordinates of an instance. For example - a ball or a gate
 class Target:
 
-    def __init__(self, hBounds, vBounds, targetID):
+    def __init__(self, hBounds, vBounds, targetID, lowerRange, upperRange):
         self.horizontalBounds = hBounds
         self.verticalBounds = vBounds
-        self.hsvLowerRange = np.array([255, 255, 255])  # HSV värviruumi alumine piir, hilisemaks filtreerimiseks TODO: Kirjuta faili
-        self.hsvUpperRange = np.array([0, 0, 0])  # HSV värviruumi ülemine piir, hilisemaks filtreerimiseks TODO: Kirjuta faili
+        # HSV värviruumi alumine piir, hilisemaks filtreerimiseks TODO: Kirjuta faili
+        self.hsvLowerRange = lowerRange
+        # HSV värviruumi ülemine piir, hilisemaks filtreerimiseks TODO: Kirjuta faili
+        self.hsvUpperRange = upperRange
         self.id = targetID
 
     def getBounds(self):
@@ -197,27 +443,30 @@ class MovementLogic:
 
 class ManualDrive:
 
-    def __init__(self, move):
+    def __init__(self, move, driveSpeed, turnSpeed):
         print("Manual driving activated.")
         self.move = move
+        self.driveSpeed = driveSpeed
+        self.turnSpeed = turnSpeed
 
     def run(self):
         screen = curses.initscr()
         curses.cbreak()
         screen.keypad(1)
+        curses.noecho()
 
         keyStroke = ''
         while keyStroke != ord('q'):
 
-            keyStroke = screen.getch()
+            #keyStroke = screen.getch()
             if keyStroke == ord('w'):
-                move.drive(driveSpeed)
+                move.drive(self.driveSpeed)
 
             if keyStroke == ord('a'):
-                move.rotate(-turnSpeed)
+                move.rotate(-self.turnSpeed)
 
             if keyStroke == ord('d'):
-                move.rotate(turnSpeed)
+                move.rotate(self.turnSpeed)
 
             if keyStroke == ord(' '):
                 move.brake()
@@ -240,23 +489,6 @@ class GameLogic:
 
 mbLocation = "/dev/ttyACM0"
 
-# Creates an imageProcessor object and runs it's findObject function.
-# The funtion is meant to be ran on multiple threads processing different parts of a picture but can be used on a single
-# thread with the whole picture.
-# img - (the part of) the image to be processed
-# verticalLowerBound - image's vertical (y-axis) global lower bound of the part of the imgae being processed.
-# In case the whole picture is being processed it is to be assigned the value 0.
-# horizontalLowerBound - image's horizontal (x-axis) global lower bound of the part of the image being processed.
-# minSize - The minimum area of the ractangle surrounding the object. Objects smaller than this are not considered valid.
-# cancellationToken - A token that signals the parallel threads whether the object has been already found.
-# target - the object into which the found coordinates will be inserted.
-# threadID - the ID by which the parallel threads will be identified. Can be any value.
-def createImageProcessor(img, verticalLowerBound, horizontalLowerBound, minSize, cancellationToken, target, threadID):
-    imgProc = ImageProcessor(img, verticalLowerBound, horizontalLowerBound, minSize, cancellationToken, target,
-                             threadID)
-    imgProc.findObjectCoordinates()
-
-
 # If the mouse is clicked, update threshholds of the selected object
 def onmouse(event, x, y, flags, params):  # Funktsioon, mis nupuvajutuse peale uuendab värviruumi piire
     if event == cv2.EVENT_LBUTTONUP:
@@ -276,196 +508,30 @@ def capture(colorScheme):
     img = cv2.cvtColor(capturedFrame, colorScheme)  # Pane pilt etteantud värviskeemi
     return capturedFrame, img
 
-
-# Blurs the image to remove noise
-def blur(img):
-    kernel = np.ones((50, 50), np.uint8)  # //TODO: Find values to put in the kernel
-    closing = cv2.morphologyEx(img, cv2.MORPH_CLOSE, kernel)
-    gauss = cv2.GaussianBlur(img, (5, 5), 0)
-    return gauss
-
-
-# Finds object coordinates in the given picture
-# img - the mask from which to find the coordinates
-# verticalLowerBound - the image global vertical lower bound
-# horizontalLowerbound - the image global horizontal lower bound
-def findObject(img, verticalLowerBound, horizontalLowerBound, obj):
-    obj.resetBounds()
-    c = CancellationToken()
-    createImageProcessor(img, verticalLowerBound, horizontalLowerBound, 1, c, obj, "0")
-
-
-# Divides the given image into parts recursively. Then feeds the found parts to multiple threads to be processed for
-# object coordinates.
-# mainImg - The main frame. TODO: REMOVE IF NOT USED ANYMORE
-# img - A mask of thresholded colors from which the blobs are to be found
-# verticalLowerBound - The image global vertical lower bound of img. On first iteration it is to be set 0.
-# verticalUpperBound - The image global vertical lupper bound of img. On first iteration it is to be set image height.
-# verticalLowerBound - The image global horizontal lower bound of img. On first iteration it is to be set 0.
-# verticalUpperBound - The image global horizontal lupper bound of img. On first iteration it is to be set image width.
-# minobjectSize - The minimum object size which is considered a valid object. On each recursive call the minObjectSize is
-# multiplied by 3 as the img size is divided by three.
-# minImgArea - the condition to exit the recursion. Image shall not be divided when it's size is smaller than this value.
-# scanOrder - the order, in which the parts of the image are fed to threads. Below is a diagram of the divison of the image
-# each divided part has an ID which are given on the diagram. The scanOrder is expected to be an integer array of some
-# permutation of these IDs.
-#
-# (0,0)---------------------------------- verdicalLowerBound=vLB
-# |           |             |           |
-# |     6     |      7      |      8    |
-# |           |             |           |
-# |-----------|-------------|-----------| vLB+(vUB-vLB)/3
-# |           |             |           |
-# |     3     |      4      |      5    |
-# |           |             |           |
-# |-----------|-------------|-----------| vLB+2*((vUB-vLB)/3)
-# |           |             |           |
-# |     0     |      1      |      2    |
-# |           |             |           |
-# --------------------------------------- verticalUpperBound=vUB
-# ^hLB+(hUB-hLB)/3   hLB+2*((hUB-hLB)/3)^
-# ^                                     ^
-# horizontalLowerBound=hLB      horizontalUpperBound=hUB
-def findObjectMultithreaded(mainImg, img, verticalLowerBound, verticalUpperBound, horizontalLowerBound,
-                            horizontalUpperBound, minObjectSize, minImgArea, scanOrder, obj):
-    obj.resetBounds()
-    # print("*")
-
-    horizontalBounds = None
-    verticalBounds = None
-
-    verticalThird = (verticalLowerBound + (verticalUpperBound - verticalLowerBound) // 3)
-    verticalTwoThirds = (verticalLowerBound + 2 * (verticalUpperBound - verticalLowerBound) // 3)
-    horizontalThird = (horizontalLowerBound + (horizontalUpperBound - horizontalLowerBound) // 3)
-    horizontalTwoThirds = (horizontalLowerBound + 2 * (horizontalUpperBound - horizontalLowerBound) // 3)
-
-    # Define the division boundaries
-    verticalLowerBounds = [verticalTwoThirds, verticalTwoThirds, verticalTwoThirds,
-                           verticalThird, verticalThird, verticalThird,
-                           verticalLowerBound, verticalLowerBound, verticalLowerBound]
-
-    verticalUpperBounds = [verticalUpperBound, verticalUpperBound, verticalUpperBound,
-                           verticalTwoThirds, verticalTwoThirds, verticalTwoThirds,
-                           verticalThird, verticalThird, verticalThird]
-
-    horizontalLowerBounds = [horizontalLowerBound, horizontalThird, horizontalTwoThirds,
-                             horizontalLowerBound, horizontalThird, horizontalTwoThirds,
-                             horizontalLowerBound, horizontalThird, horizontalTwoThirds]
-
-    horizontalUpperBounds = [horizontalThird, horizontalTwoThirds, horizontalUpperBound,
-                             horizontalThird, horizontalTwoThirds, horizontalUpperBound,
-                             horizontalThird, horizontalTwoThirds, horizontalUpperBound]
-
-    # If the image area is bigger than minImgArea, go into recursion to divide the image smaller
-    if ((verticalUpperBound - verticalLowerBound) * (horizontalUpperBound - horizontalLowerBound) > minImgArea):
-        for i in range(len(scanOrder)):
-            #            cv2.rectangle(mainImg, (horizontalLowerBounds[i], verticalUpperBounds[i]), (horizontalUpperBounds[i], verticalLowerBounds[i]),
-            #                          (0, 0, 255), 1)
-
-            # By the scan order divide each part of the image recursively
-            findObjectMultithreaded(mainImg, img, verticalLowerBounds[scanOrder[i]],
-                                                                       verticalUpperBounds[scanOrder[i]],
-                                                                       horizontalLowerBounds[scanOrder[i]],
-                                                                       horizontalUpperBounds[scanOrder[i]],
-                                                                       minObjectSize * 3, minImgArea, scanOrder, obj)
-
-            horizontalBounds, verticalBounds = obj.getBounds()
-            # If an object was found by the called recursion, return its coordinates
-            if horizontalBounds is not None and verticalBounds is not None:
-                return
-
-    # Create an object and a cancellation token for image processor
-    cToken = CancellationToken()
-
-    # Send each part of the image to a separate thread in the order specified by the caller of the funtion
-    for i in range(len(scanOrder)):
-        # print(i)
-
-        # If an object has been found, return its coordinates
-        if horizontalBounds is not None and verticalBounds is not None:
-            return
-        t = threading.Thread(target=createImageProcessor(img[
-                                                         verticalLowerBounds[scanOrder[i]]:
-                                                         verticalUpperBounds[scanOrder[i]],
-                                                         horizontalLowerBounds[scanOrder[i]]:
-                                                         horizontalUpperBounds[scanOrder[i]]
-                                                         ],
-                                                         verticalLowerBounds[scanOrder[i]],
-                                                         horizontalLowerBounds[scanOrder[i]],
-                                                         minObjectSize, cToken, obj, i))
-        t.start()
-
-
-# Finds the boundary coordinates of an object starting from a given pixel coordinates
-# img - the image from which to look for the coordinates
-# horizontalBounds - the array where horizontal coordinates are saved
-# verticalBounds - the array where vertical coordinates are saved
-# verticalCoordinate - the starting vertical coordinate
-# horizontalCoordinate - the starting horizontal coordinate
-# TODO: figure out whether the function will be used
-def findBounds(img, height, width, horizontalBounds, verticalBounds, verticalCoordinate, horizontalCoordinate):
-    # The given vertical coordinate is expected to be the bottom most coordinate of the object
-    k = verticalCoordinate
-    while (img[k][horizontalCoordinate] != 0 and k != 0):
-        k -= 1
-    verticalBounds[0] = k
-    # Iterate through coordinates starting from the bottom coordinate until a black pixel is found
-    # or the edge of the image is reached.
-    for k in range(verticalCoordinate, height):
-        # Black pixel found or image edge reached, this is the upper vertical coordinate of the object
-        if img[k][horizontalCoordinate] == 0 or k == height - 1:
-            verticalBounds[1] = k
-            break
-
-    # The object is expected to be symmetrical from vertical axis so the height of the object
-    # is divided by 2 to find the midpoint. From the midpoint pixels are scanned from both sides of the point
-    # if a black pixel or image edge is reached.
-    midpoint = verticalBounds[0] + (verticalBounds[1] - verticalBounds[0]) // 2
-    k = horizontalCoordinate
-    while (img[midpoint][k] != 0 and k != 0):
-        k -= 1
-    horizontalBounds[0] = k
-    k = horizontalCoordinate
-    while (img[midpoint][k] != 0 and k != width - 1):
-        k += 1
-    horizontalBounds[1] = k
-
-# Wrapper function to find coordinates of a given object
-# mainImg - the main frame which is showed in the main window
-# object - the mask from which the coordinates are to be detected
-# objectMinSize - the minimum size of the blob starting from which it's considered valid
-# imageMinArea - while the area of the part of the image being processed is bigger than this value, the image will be
-# divided recursively by the multi threaded function. If not specified or less then 0, no no recursive calls shall be done.
-# scanOrder - the order by which the image is fed to threads by multi threaded object finding function. More information
-# in findObjectMultithreaded() description.
-def detect(mainImg, target, objectMinSize, imageMinArea, scanOrder, obj):
-    height, width = target.shape
-    horizontalBounds = None
-    verticalBounds = None
-
-    if imageMinArea < 1:
-        imageMinArea = height * width + 1
-
-    if multiThreading:
-        findObjectMultithreaded(mainImg, target, 0, height, 0, width, objectMinSize,
-                                                                   imageMinArea, scanOrder, obj)
-    else:
-        findObject(target, 0, 0, obj)
-
 cv2.namedWindow('main')
 cv2.namedWindow('ball_filtered')
 cv2.namedWindow('gate_filtered')
 cv2.setMouseCallback('main', onmouse)
 
-ball = Target(None, None, "ball")
-basket = Target(None, None, "basket")
+ball = Target(None, None, "ball",
+              np.array([int(x) for x in settings.getValue("ballHSVLower").split()]),
+              np.array([int(x) for x in settings.getValue("ballHSVUpper").split()]))
+basket = Target(None, None, "basket",
+              np.array([int(x) for x in settings.getValue("basketHSVLower").split()]),
+              np.array([int(x) for x in settings.getValue("basketHSVUpper").split()]))
 selectedTarget = ball
-mb = MBcomm(mbLocation, 115200)
-#mb = None
+#mb = MBcomm(mbLocation, 115200)
+mb = None
 move = MovementLogic(mb)
+imgHandler =ImageHandler()
 
-while keyStroke != ord('q'):
-    #move.drive(100)
+#screen = curses.initscr()
+#curses.cbreak()
+#screen.keypad(1)
+
+keyStroke = ''
+#keyStroke = screen.getch()
+while True:
     dt = datetime.now()
     #dt.microsecond
     start = float(str(dt).split()[1].split(":")[2]) * 1000000
@@ -476,11 +542,11 @@ while keyStroke != ord('q'):
 
     #hsv = blur(hsv)
     ballMask = cv2.inRange(hsv, ball.hsvLowerRange, ball.hsvUpperRange)  # Filtreeri välja soovitava värviga objekt
-    ballMask = blur(ballMask)
+    ballMask = imgHandler.blur(ballMask)
     basketMask = cv2.inRange(hsv, basket.hsvLowerRange, basket.hsvUpperRange)
-    basketMask = blur(basketMask)
-    detect(frame, ballMask, 1000, 0, [1, 0, 2, 4, 3, 5, 7, 6, 8], ball)
-    detect(frame, basketMask, 1000, 0, [7, 6, 8, 4, 3, 5, 1, 0, 2], basket)
+    basketMask = imgHandler.blur(basketMask)
+    imgHandler.detect(frame, ballMask, 1000, 0, [1, 0, 2, 4, 3, 5, 7, 6, 8], ball)
+    imgHandler.detect(frame, basketMask, 1000, 0, [7, 6, 8, 4, 3, 5, 1, 0, 2], basket)
 
     if ball.horizontalBounds is not None and ball.verticalBounds is not None:
         cv2.rectangle(frame, (ball.horizontalBounds[0], ball.verticalBounds[1]), (ball.horizontalBounds[1],
@@ -509,7 +575,7 @@ while keyStroke != ord('q'):
             basket.resetBounds()
 
         if keyStroke & 0xFF == ord('m'):
-            manual = ManualDrive(move)
+            manual = ManualDrive(move, int(settings.getValue("driveSpeed")), int(settings.getValue("turnSpeed")))
             manual.run()
 
     # print("Object size: " + str((ballHorizontalBounds[1] - ballHorizontalBounds[0]) * (ballVerticalBounds[1] - ballVerticalBounds[0])))
@@ -531,6 +597,7 @@ while keyStroke != ord('q'):
         framesCaptured = 0
         totalTimeElapsed = 0
 
+settings.writeFromDictToFile()
 # When everything done, release the capture
 cap.release()
 cv2.destroyAllWindows()
