@@ -20,7 +20,6 @@ class SettingsHandler:
         self.initializeSettings()
 
     def readFromFileToDict(self):
-
         with open(self.fileLoc, "r") as f:
             d = dict()
             line = f.readline()
@@ -48,6 +47,12 @@ class SettingsHandler:
             f.write(newValues)
 
     def initializeSettings(self):
+
+        try:
+            self.values = self.readFromFileToDict()
+        except FileNotFoundError:
+            with open(self.fileLoc, "w"):
+                pass
 
         if not "driveSpeed" in self.values:
             self.values["driveSpeed"] = "10"

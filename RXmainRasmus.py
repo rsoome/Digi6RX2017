@@ -7,8 +7,8 @@ from datetime import datetime
 import serial
 import math
 #import curses
-import time
 import sys
+import os
 
 print("Running on Python " + sys.version)
 
@@ -20,7 +20,6 @@ class SettingsHandler:
         self.initializeSettings()
 
     def readFromFileToDict(self):
-
         with open(self.fileLoc, "r") as f:
             d = dict()
             line = f.readline()
@@ -49,6 +48,12 @@ class SettingsHandler:
 
     def initializeSettings(self):
 
+        try:
+            self.values = self.readFromFileToDict()
+        except FileNotFoundError:
+            with open(self.fileLoc, "w"):
+                pass
+
         if not "driveSpeed" in self.values:
             self.values["driveSpeed"] = "10"
         if not "turnSpeed" in self.values:
@@ -65,6 +70,8 @@ class SettingsHandler:
             self.values["basketHSVLower"] = "255 255 255"
         if not "basketHSVHigher" in self.values:
             self.values["basketHSVUpper"] = "0 0 0"
+
+        print(self.values["driveSpeed"])
 
 
 settings = SettingsHandler("settings")
