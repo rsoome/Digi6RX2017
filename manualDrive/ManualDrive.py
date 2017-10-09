@@ -18,13 +18,17 @@ class ManualDrive:
         while keyStroke != ord('q'):
 
             keyStroke = screen.getch()
+
             if keyStroke == ord('w'):
+                self.move.drive(self.driveSpeed, 60)
+
+            if keyStroke == ord('2'):
                 self.move.drive(self.driveSpeed, 0)
 
-            if keyStroke == ord('e'):
+            if keyStroke == ord('1'):
                 self.move.drive(self.driveSpeed, 120)
 
-            if keyStroke == ord('r'):
+            if keyStroke == ord('3'):
                 self.move.drive(self.driveSpeed, -120)
 
             if keyStroke == ord('a'):
