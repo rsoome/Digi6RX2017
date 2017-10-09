@@ -1,1 +1,1 @@
-import mbcomm.MBComm
+import mbcomm.MBcomm
