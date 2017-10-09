@@ -1,4 +1,5 @@
 import math
+import re
 
 class MovementLogic:
 
@@ -10,7 +11,7 @@ class MovementLogic:
 
     def brake(self):
         speeds = self.mb.getMotorSpeed()
-        speeds = speeds.split(":")
+        speeds = re.split(":|sd", speeds)
         self.mb.setMotorSpeed(int(speeds[0]), int(speeds[1]), int(speeds[2]))
 
     def rotate(self, speed):
