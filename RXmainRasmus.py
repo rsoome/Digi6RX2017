@@ -9,7 +9,6 @@ from target import Target
 from  movementLogic import MovementLogic
 from imageProcessor import ImageHandler
 from imageProcessor import FrameCapturer
-#from manualDrive import ManualDrive
 from windowHandler import WindowHandler
 
 print("Running on Python " + sys.version)
@@ -59,8 +58,13 @@ while True:
     #hsv = blur(hsv)
     imgHandler.generateMask(ball, hsv)
     imgHandler.generateMask(basket, hsv)
-    imgHandler.detect(frame, ball.mask, 1000, 0, [1, 0, 2, 4, 3, 5, 7, 6, 8], ball)
-    imgHandler.detect(frame, basket.mask, 1000, 0, [7, 6, 8, 4, 3, 5, 1, 0, 2], basket)
+    imgHandler.detect(frame, ball.mask, int(settings.getValue("objectMinSize")),
+                      int(settings.getValue("minImgArea")),
+                      [int(x) for x in settings.getValue("ballScanOrder").split()], ball)
+
+    imgHandler.detect(frame, basket.mask, int(settings.getValue("objectMinSize")),
+                      int(settings.getValue("minImgArea")),
+                      [int(x) for x in settings.getValue("basketScanOrder").split()], basket)
 
     window.showImage()
     if window.halt:
