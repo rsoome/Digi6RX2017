@@ -22,10 +22,10 @@ class ManualDrive:
                 self.move.drive(self.driveSpeed, 0)
 
             if keyStroke == ord('e'):
-                self.move.drive(self.driveSpeed, -90)
+                self.move.drive(self.driveSpeed, 90)
 
-                if keyStroke == ord('z'):
-                    self.move.drive(self.driveSpeed, 90)
+                if keyStroke == ord('r'):
+                    self.move.drive(self.driveSpeed, -90)
 
             if keyStroke == ord('a'):
                 self.move.rotate(-self.turnSpeed)
