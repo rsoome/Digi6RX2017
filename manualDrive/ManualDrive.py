@@ -12,7 +12,7 @@ class ManualDrive:
         screen = curses.initscr()
         curses.cbreak()
         screen.keypad(1)
-        curses.noecho()
+        #curses.noecho()
 
         keyStroke = ''
         while keyStroke != ord('q'):
