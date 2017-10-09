@@ -19,7 +19,7 @@ class ManualDrive:
 
             keyStroke = screen.getch()
 
-            if keyStroke == ord('1'):
+            if keyStroke == ord('w'):
                 self.move.drive(self.driveSpeed, -60)
 
             if keyStroke == ord('2'):
@@ -28,7 +28,7 @@ class ManualDrive:
             if keyStroke == ord('s'):
                 self.move.drive(self.driveSpeed, 120)
 
-            if keyStroke == ord('s'):
+            if keyStroke == ord('1'):
                 self.move.drive(self.driveSpeed, -120)
 
             if keyStroke == ord('a'):
