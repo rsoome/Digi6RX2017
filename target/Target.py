@@ -6,11 +6,14 @@ class Target:
     def __init__(self, hBounds, vBounds, targetID, lowerRange, upperRange):
         self.horizontalBounds = hBounds
         self.verticalBounds = vBounds
+        if hBounds != None:
+            self.midPoint = hBounds[0] + (hBounds[1] - hBounds[0]) // 2
         # HSV värviruumi alumine piir, hilisemaks filtreerimiseks TODO: Kirjuta faili
         self.hsvLowerRange = lowerRange
         # HSV värviruumi ülemine piir, hilisemaks filtreerimiseks TODO: Kirjuta faili
         self.hsvUpperRange = upperRange
         self.id = targetID
+        self.mask = None
 
     def getBounds(self):
         return self.horizontalBounds, self.verticalBounds

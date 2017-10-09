@@ -9,6 +9,9 @@ class ImageHandler:
     def __init__(self, multiThreading):
         self.multiThreading = multiThreading
 
+    def generateMask(self, targetObject, hsv):
+        targetObject.mask = self.blur(cv2.inRange(hsv, targetObject.hsvLowerRange, targetObject.hsvUpperRange))
+
     # Creates an imageP
     # rocessor object and runs it's findObject function.
     # The funtion is meant to be ran on multiple threads processing different parts of a picture but can be used on a single

@@ -1,2 +1,3 @@
 import imageProcessor.ImageProcessor
 import imageProcessor.ImageHandler
+import imageProcessor.FrameCapturer
