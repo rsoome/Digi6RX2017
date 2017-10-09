@@ -7,10 +7,9 @@ class MovementLogic:
         self.mb = mb
 
     def drive(self, speed, angle):
-        self.mb.setMotorSpeed(speed*(math.cos(math.radians(90 - 120 + angle))),
-                              speed*(math.cos(math.radians(90 - 240 + angle))),
-                              speed*(math.cos(math.radians(90 + angle)))) #60deg in rad
-        print(math.cos(math.radians(90 + angle)))
+        self.mb.setMotorSpeed(int(speed*(math.cos(math.radians(90 - 120 + angle)))),
+                              int(speed*(math.cos(math.radians(90 - 240 + angle)))),
+                              int(speed*(math.cos(math.radians(90 + angle))))) #60deg in rad
 
     def brake(self):
         speeds = self.mb.getMotorSpeed()
