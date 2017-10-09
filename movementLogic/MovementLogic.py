@@ -12,6 +12,7 @@ class MovementLogic:
     def brake(self):
         speeds = self.mb.getMotorSpeed()
         speeds = re.split(":|sd", speeds)
+        print(str(speeds[0]) + "," + str(speeds[1]) + "," +str(speeds[1]))
         self.mb.setMotorSpeed(int(speeds[0]), int(speeds[1]), int(speeds[2]))
 
     def rotate(self, speed):
