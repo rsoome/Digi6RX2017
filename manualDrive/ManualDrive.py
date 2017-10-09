@@ -12,12 +12,12 @@ class ManualDrive:
         screen = curses.initscr()
         curses.cbreak()
         screen.keypad(1)
-        #curses.noecho()
+        curses.noecho()
 
         keyStroke = ''
         while keyStroke != ord('q'):
 
-            #keyStroke = screen.getch()
+            keyStroke = screen.getch()
             if keyStroke == ord('w'):
                 self.move.drive(self.driveSpeed)
 
