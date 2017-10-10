@@ -53,5 +53,6 @@ class ImageProcessor:
             self.obj.horizontalBounds = [self.horizontalLowerBound + x, self.horizontalLowerBound + x + w]
             #print(self.obj.horizontalBounds)
             self.obj.verticalBounds = [self.verticalLowerBound + y, self.verticalLowerBound + y + h]
+            self.obj.midPoint = self.horizontalLowerBound + w//2
             #print(self.obj.verticalBounds)
             self.cancellationLock.release()
