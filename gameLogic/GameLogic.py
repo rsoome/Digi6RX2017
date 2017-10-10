@@ -33,4 +33,5 @@ class GameLogic:
     def initializeValues(self):
         self.frame.capture(cv2.COLOR_BGR2HSV)
         self.screenMidpoint = self.frame.width//2
+        print(self.screenMidpoint)
 
