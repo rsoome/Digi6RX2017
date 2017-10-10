@@ -37,7 +37,7 @@ mb = MBcomm.MBcomm(settings.getValue("mbLocation"), 115200)
 move = MovementLogic.MovementLogic(mb)
 imgHandler = ImageHandler.ImageHandler(bool(settings.getValue("multiThreading")))
 frameCapture = FrameCapturer.FrameCapturer(int(settings.getValue("camID")))
-game = GameLogic.GameLogic(move, 0, int(settings.getValue("moveSpeed")),
+game = GameLogic.GameLogic(move, 0, int(settings.getValue("driveSpeed")),
                            int(settings.getValue("turnSpeed")), imgHandler, frameCapture)
 window = WindowHandler.WindowHandler(frameCapture, ball, basket, int(settings.getValue("driveSpeed")),
                                      int(settings.getValue("turnSpeed")), move, game, settings.getValue("ballScanOrder"))
