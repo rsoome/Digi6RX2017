@@ -1,4 +1,5 @@
 import cv2
+import numpy as np
 
 class FrameCapturer:
 
@@ -17,7 +18,7 @@ class FrameCapturer:
     def capture(self, colorScheme):
         # Capture frame-by-frame
         ret, self.capturedFrame = self.cap.read()
-        self.height, self.width = self.capturedFrame.shape
+        self.height, self.width, channels = self.capturedFrame.shape
         # Check whether the frame exists.
         if not ret:
             print("Cannot read the frame")
