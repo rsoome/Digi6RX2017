@@ -14,24 +14,25 @@ class GameLogic:
         self.initializeValues()
 
     def turnToTarget(self, mask, scanOrder, target):
-        if target.midPoint > self.screenMidpoint:
-            while target.midPoint > self.screenMidpoint + self.deltaFromMidPoint:
-                self.frame.capture()
-                self.imgHandler.detect(None, mask, 1000, 0, scanOrder, target)
-                self.move.rotate(self.turnSpeed)
-        else:
-            while target.midPoint < self.screenMidpoint + self.deltaFromMidPoint:
-                self.frame.capture()
-                self.imgHandler.detect(None, mask, 1000, 0, scanOrder, target)
-                self.move.rotate(-self.turnSpeed)
+        if not target.midPoint == None:
+            if target.midPoint > self.screenMidpoint:
+                while target.midPoint > self.screenMidpoint + self.deltaFromMidPoint:
+                    self.frame.capture()
+                    self.imgHandler.detect(None, mask, 1000, 0, scanOrder, target)
+                    self.move.rotate(self.turnSpeed)
+            else:
+                while target.midPoint < self.screenMidpoint + self.deltaFromMidPoint:
+                    self.frame.capture()
+                    self.imgHandler.detect(None, mask, 1000, 0, scanOrder, target)
+                    self.move.rotate(-self.turnSpeed)
 
     def moveToTarget(self, mask, scanOrder, target):
-        self.turnToTarget(mask, scanOrder, target)
-        while target.midPoint != None:
-            self.move.drive(self.moveSpeed, -60)
+        if not target.midPoint == None:
+            self.turnToTarget(mask, scanOrder, target)
+            while target.midPoint != None:
+                self.move.drive(self.moveSpeed, -60)
 
     def initializeValues(self):
         self.frame.capture(cv2.COLOR_BGR2HSV)
         self.screenMidpoint = self.frame.width//2
-        print(self.screenMidpoint)
 
