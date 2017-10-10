@@ -146,40 +146,6 @@ class ImageHandler:
                                                              minObjectSize, cToken, obj, i))
             t.start()
 
-    # Finds the boundary coordinates of an object starting from a given pixel coordinates
-    # img - the image from which to look for the coordinates
-    # horizontalBounds - the array where horizontal coordinates are saved
-    # verticalBounds - the array where vertical coordinates are saved
-    # verticalCoordinate - the starting vertical coordinate
-    # horizontalCoordinate - the starting horizontal coordinate
-    # TODO: figure out whether the function will be used
-    def findBounds(img, height, width, horizontalBounds, verticalBounds, verticalCoordinate, horizontalCoordinate):
-        # The given vertical coordinate is expected to be the bottom most coordinate of the object
-        k = verticalCoordinate
-        while (img[k][horizontalCoordinate] != 0 and k != 0):
-            k -= 1
-        verticalBounds[0] = k
-        # Iterate through coordinates starting from the bottom coordinate until a black pixel is found
-        # or the edge of the image is reached.
-        for k in range(verticalCoordinate, height):
-            # Black pixel found or image edge reached, this is the upper vertical coordinate of the object
-            if img[k][horizontalCoordinate] == 0 or k == height - 1:
-                verticalBounds[1] = k
-                break
-
-        # The object is expected to be symmetrical from vertical axis so the height of the object
-        # is divided by 2 to find the midpoint. From the midpoint pixels are scanned from both sides of the point
-        # if a black pixel or image edge is reached.
-        midpoint = verticalBounds[0] + (verticalBounds[1] - verticalBounds[0]) // 2
-        k = horizontalCoordinate
-        while (img[midpoint][k] != 0 and k != 0):
-            k -= 1
-        horizontalBounds[0] = k
-        k = horizontalCoordinate
-        while (img[midpoint][k] != 0 and k != width - 1):
-            k += 1
-        horizontalBounds[1] = k
-
     # Wrapper function to find coordinates of a given object
     # mainImg - the main frame which is showed in the main window
     # object - the mask from which the coordinates are to be detected
