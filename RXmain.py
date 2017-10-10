@@ -81,6 +81,7 @@ while True:
         fps = (round(framesCaptured / (totalTimeElapsed / 1000000), 0))
         framesCaptured = 0
         totalTimeElapsed = 0
+    window.fps = fps
 
 
 settings.writeFromDictToFile()
