@@ -14,6 +14,7 @@ class GameLogic:
         self.initializeValues()
 
     def turnToTarget(self, mask, scanOrder, target):
+        print(target.midPoint)
         if not target.midPoint == None:
             if target.midPoint > self.screenMidpoint:
                 while target.midPoint > self.screenMidpoint + self.deltaFromMidPoint:
