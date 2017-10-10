@@ -61,6 +61,7 @@ class WindowHandler:
                 manual.run()
 
             if keyStroke & 0xFF == ord('g'):
+                self.game.lookForBall(self.scanOrder, self.ball)
                 self.game.moveToTarget(self.scanOrder, self.ball)
 
         # print("Object size: " + str((ballHorizontalBounds[1] - ballHorizontalBounds[0]) * (ballVerticalBounds[1] - ballVerticalBounds[0])))
