@@ -1,4 +1,4 @@
-
+import cv2
 # Contins the game logic
 # TODO: Implement
 class GameLogic:
@@ -31,6 +31,6 @@ class GameLogic:
             self.move.drive(self.moveSpeed, -60)
 
     def initializeValues(self):
-        self.frame.capture()
+        self.frame.capture(cv2.COLOR_BGR2HSV)
         self.screenMidpoint = self.frame.width//2
 
