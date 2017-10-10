@@ -11,6 +11,7 @@ from imageProcessor import ImageHandler
 from imageProcessor import FrameCapturer
 from windowHandler import WindowHandler
 from mbcomm import MBcomm
+from gameLogic import GameLogic
 
 print("Running on Python " + sys.version)
 
@@ -36,8 +37,10 @@ mb = MBcomm.MBcomm(settings.getValue("mbLocation"), 115200)
 move = MovementLogic.MovementLogic(mb)
 imgHandler = ImageHandler.ImageHandler(bool(settings.getValue("multiThreading")))
 frameCapture = FrameCapturer.FrameCapturer(int(settings.getValue("camID")))
+game = GameLogic.GameLogic(move, 0, int(settings.getValue("moveSpeed")),
+                           int(settings.getValue("turnSpeed")), imgHandler, frameCapture)
 window = WindowHandler.WindowHandler(frameCapture, ball, basket, int(settings.getValue("driveSpeed")),
-                                     int(settings.getValue("turnSpeed")), move)
+                                     int(settings.getValue("turnSpeed")), move, game, settings.getValue("ballScanOrder"))
 
 #screen = curses.initscr()
 #curses.cbreak()
@@ -59,12 +62,10 @@ while True:
     #hsv = blur(hsv)
     imgHandler.generateMask(ball, hsv)
     imgHandler.generateMask(basket, hsv)
-    imgHandler.detect(frame, ball.mask, int(settings.getValue("objectMinSize")),
-                      int(settings.getValue("minImgArea")),
+    imgHandler.detect(frame, ball.mask, int(settings.getValue("objectMinSize")), int(settings.getValue("minImgArea")),
                       [int(x) for x in settings.getValue("ballScanOrder").split()], ball)
 
-    imgHandler.detect(frame, basket.mask, int(settings.getValue("objectMinSize")),
-                      int(settings.getValue("minImgArea")),
+    imgHandler.detect(frame, basket.mask, int(settings.getValue("objectMinSize")), int(settings.getValue("minImgArea")),
                       [int(x) for x in settings.getValue("basketScanOrder").split()], basket)
 
     window.showImage()

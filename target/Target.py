@@ -6,6 +6,7 @@ class Target:
     def __init__(self, hBounds, vBounds, targetID, lowerRange, upperRange):
         self.horizontalBounds = hBounds
         self.verticalBounds = vBounds
+        self.midPoint = None
         if hBounds != None:
             self.midPoint = hBounds[0] + (hBounds[1] - hBounds[0]) // 2
         # HSV värviruumi alumine piir, hilisemaks filtreerimiseks TODO: Kirjuta faili
@@ -37,6 +38,7 @@ class Target:
     def resetBounds(self):
         self.horizontalBounds = None
         self.verticalBounds = None
+        self.midPoint = None
 
     def setBounds(self, hBounds, vBounds):
         self.horizontalBounds = hBounds

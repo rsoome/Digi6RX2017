@@ -3,19 +3,34 @@
 # TODO: Implement
 class GameLogic:
 
-    def __init__(self, target, screenMidpoint, move, deltaFromMidPoint, moveSpeed, turnSpeed, imgHandler):
-
-        #mainImg, target, objectMinSize, imageMinArea, scanOrder, obj
-        self.target = target
-        self.screenMidpoint = screenMidpoint
+    def __init__(self, move, deltaFromMidPoint, moveSpeed, turnSpeed, imgHandler, frame):
+        self.screenMidpoint = None
         self.move = move
         self.deltaFromMidPoint = deltaFromMidPoint
         self.moveSpeed = moveSpeed
         self.turnSpeed = turnSpeed
         self.imgHandler = imgHandler
+        self.frame = frame
+        self.initializeValues()
 
-    def turnToBall(self):
-        if self.target.midPoint > self.screenMidpoint:
-            while self.target.midPoint >= self.screenMidpoint + self.deltaFromMidPoint:
+    def turnToTarget(self, mask, scanOrder, target):
+        if target.midPoint > self.screenMidpoint:
+            while target.midPoint > self.screenMidpoint + self.deltaFromMidPoint:
+                self.frame.capture()
+                self.imgHandler.detect(None, mask, 1000, 0, scanOrder, target)
                 self.move.rotate(self.turnSpeed)
+        else:
+            while target.midPoint < self.screenMidpoint + self.deltaFromMidPoint:
+                self.frame.capture()
+                self.imgHandler.detect(None, mask, 1000, 0, scanOrder, target)
+                self.move.rotate(-self.turnSpeed)
+
+    def moveToTarget(self, mask, scanOrder, target):
+        self.turnToTarget(mask, scanOrder, target)
+        while target.midPoint != None:
+            self.move.drive(self.moveSpeed, -60)
+
+    def initializeValues(self):
+        self.frame.capture()
+        self.screenMidpoint = self.frame.width//2
 

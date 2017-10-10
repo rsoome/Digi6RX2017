@@ -188,8 +188,8 @@ class ImageHandler:
     # divided recursively by the multi threaded function. If not specified or less then 0, no no recursive calls shall be done.
     # scanOrder - the order by which the image is fed to threads by multi threaded object finding function. More information
     # in findObjectMultithreaded() description.
-    def detect(self, mainImg, target, objectMinSize, imageMinArea, scanOrder, obj):
-        height, width = target.shape
+    def detect(self, mainImg, mask, objectMinSize, imageMinArea, scanOrder, target):
+        height, width = mask.shape
         horizontalBounds = None
         verticalBounds = None
 
@@ -197,7 +197,7 @@ class ImageHandler:
             imageMinArea = height * width + 1
 
         if self.multiThreading:
-            self.findObjectMultithreaded(mainImg, target, 0, height, 0, width, objectMinSize,
-                                    imageMinArea, scanOrder, obj)
+            self.findObjectMultithreaded(mainImg, mask, 0, height, 0, width, objectMinSize,
+                                         imageMinArea, scanOrder, target)
         else:
-            self.findObject(target, 0, 0, obj)
+            self.findObject(mask, 0, 0, target)

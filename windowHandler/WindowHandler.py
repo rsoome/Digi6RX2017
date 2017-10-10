@@ -4,7 +4,8 @@ import sys
 
 class WindowHandler:
 
-    def __init__(self, frameCapture, ball, basket, driveSpeed, turnSpeed, move):
+    def __init__(self, frameCapture, ball, basket, driveSpeed, turnSpeed, move, game, scanOrder):
+        self.game = game
         cv2.namedWindow('main')
         cv2.namedWindow('ball_filtered')
         cv2.namedWindow('gate_filtered')
@@ -19,6 +20,7 @@ class WindowHandler:
         self.move = move
         self.textColor = (0, 0, 255)
         self.halt = False
+        self.scanOrder = scanOrder
 
     # If the mouse is clicked, update threshholds of the selected object
     def onmouse(self, event, x, y, flags, params):  # Funktsioon, mis nupuvajutuse peale uuendab värviruumi piire
@@ -57,6 +59,9 @@ class WindowHandler:
             if keyStroke & 0xFF == ord('m'):
                 manual = ManualDrive.ManualDrive(self.move, self.driveSpeed, self.turnSpeed)
                 manual.run()
+
+            if keyStroke & 0xFF == ord('g'):
+                self.game.moveToTarget(self.ball.mask, self.scanOrder, self.ball)
 
         # print("Object size: " + str((ballHorizontalBounds[1] - ballHorizontalBounds[0]) * (ballVerticalBounds[1] - ballVerticalBounds[0])))
         cv2.putText(self.frame.capturedFrame, "FPS: " + str(self.fps), (30, 30), cv2.FONT_HERSHEY_SIMPLEX,
