@@ -40,7 +40,8 @@ frameCapture = FrameCapturer.FrameCapturer(int(settings.getValue("camID")))
 game = GameLogic.GameLogic(move, 0, int(settings.getValue("driveSpeed")),
                            int(settings.getValue("turnSpeed")), imgHandler, frameCapture)
 window = WindowHandler.WindowHandler(frameCapture, ball, basket, int(settings.getValue("driveSpeed")),
-                                     int(settings.getValue("turnSpeed")), move, game, settings.getValue("ballScanOrder"))
+                                     int(settings.getValue("turnSpeed")), move, game,
+                                     [int(x) for x in settings.getValue("ballScanOrder").split()])
 
 #screen = curses.initscr()
 #curses.cbreak()
