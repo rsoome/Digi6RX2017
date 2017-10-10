@@ -61,7 +61,7 @@ class WindowHandler:
                 manual.run()
 
             if keyStroke & 0xFF == ord('g'):
-                self.game.moveToTarget(self.ball.mask, self.scanOrder, self.ball)
+                self.game.moveToTarget(self.scanOrder, self.ball)
 
         # print("Object size: " + str((ballHorizontalBounds[1] - ballHorizontalBounds[0]) * (ballVerticalBounds[1] - ballVerticalBounds[0])))
         cv2.putText(self.frame.capturedFrame, "FPS: " + str(self.fps), (30, 30), cv2.FONT_HERSHEY_SIMPLEX,

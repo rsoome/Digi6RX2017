@@ -17,6 +17,8 @@ class GameLogic:
         if not target.midPoint == None:
             if target.midPoint > self.screenMidpoint:
                 while target.midPoint > self.screenMidpoint + self.deltaFromMidPoint:
+                    print("Target midpoint: " + str(target.midPoint))
+                    print("Screen midpoint: " + str(self.screenMidpoint))
                     self.frame.capture(cv2.COLOR_BGR2HSV)
                     self.imgHandler.detect(None, mask, 1000, 0, scanOrder, target)
                     self.move.rotate(self.turnSpeed)
@@ -26,9 +28,9 @@ class GameLogic:
                     self.imgHandler.detect(None, mask, 1000, 0, scanOrder, target)
                     self.move.rotate(-self.turnSpeed)
 
-    def moveToTarget(self, mask, scanOrder, target):
+    def moveToTarget(self, scanOrder, target):
         if not target.midPoint == None:
-            self.turnToTarget(mask, scanOrder, target)
+            self.turnToTarget(target.mask, scanOrder, target)
             while target.midPoint != None:
                 self.frame.capture(cv2.COLOR_BGR2HSV)
                 self.move.drive(self.moveSpeed, -60)
