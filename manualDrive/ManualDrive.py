@@ -20,16 +20,16 @@ class ManualDrive:
             keyStroke = screen.getch()
 
             if keyStroke == ord('w'):
-                self.move.drive(self.driveSpeed, -60)
-
-            if keyStroke == ord('2'):
                 self.move.drive(self.driveSpeed, 0)
 
+            if keyStroke == ord('2'):
+                self.move.drive(self.driveSpeed, 60)
+
             if keyStroke == ord('s'):
-                self.move.drive(self.driveSpeed, 120)
+                self.move.drive(self.driveSpeed, 180)
 
             if keyStroke == ord('1'):
-                self.move.drive(self.driveSpeed, -120)
+                self.move.drive(self.driveSpeed, -60)
 
             if keyStroke == ord('a'):
                 self.move.rotate(-self.turnSpeed)

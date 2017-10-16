@@ -4,11 +4,11 @@ import numpy as np
 class Target:
 
     def __init__(self, hBounds, vBounds, targetID, lowerRange, upperRange):
-        self.horizontalBounds = hBounds
+        '''self.horizontalBounds = hBounds
         self.verticalBounds = vBounds
-        self.midPoint = None
-        if hBounds != None:
-            self.midPoint = hBounds[0] + (hBounds[1] - hBounds[0]) // 2
+        self.horizontalMidPoint = None
+        self.verticalMidPoint = None'''
+        self.setBounds(hBounds, vBounds)
         # HSV värviruumi alumine piir, hilisemaks filtreerimiseks TODO: Kirjuta faili
         self.hsvLowerRange = lowerRange
         # HSV värviruumi ülemine piir, hilisemaks filtreerimiseks TODO: Kirjuta faili
@@ -38,9 +38,19 @@ class Target:
     def resetBounds(self):
         self.horizontalBounds = None
         self.verticalBounds = None
-        self.midPoint = None
+        self.horizontalMidPoint = None
 
     def setBounds(self, hBounds, vBounds):
         self.horizontalBounds = hBounds
         self.verticalBounds = vBounds
-        self.midPoint = hBounds[0] + (hBounds[1] - hBounds[0])//2
+        self.horizontalMidPoint = hBounds[0] + (hBounds[1] - hBounds[0]) // 2
+
+        if hBounds != None:
+            self.horizontalMidPoint = hBounds[0] + (hBounds[1] - hBounds[0]) // 2
+        else:
+            self.horizontalMidPoint = None
+
+        if vBounds != None:
+            self.verticalMidPoint = vBounds[0] + (vBounds[1] - vBounds[0]) // 2
+        else:
+            self.verticalMidPoint = None

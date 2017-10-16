@@ -14,24 +14,28 @@ class GameLogic:
         self.initializeValues()
 
     def turnToTarget(self, scanOrder, target):
-        if target.midPoint != None:
-            if target.midPoint > self.screenMidpoint:
-                while target.midPoint != None and target.midPoint > self.screenMidpoint + self.deltaFromMidPoint:
-                    print("Target midpoint: " + str(target.midPoint))
-                    print("Screen midpoint: " + str(self.screenMidpoint))
+        if target.horizontalMidPoint != None:
+            if target.horizontalMidPoint > self.screenMidpoint:
+                while (target.horizontalMidPoint != None
+                       and target.horizontalMidPoint > self.screenMidpoint + self.deltaFromMidPoint):
+                    #print("Target midpoint: " + str(target.midPoint))
+                    #print("Screen midpoint: " + str(self.screenMidpoint))
                     self.updateTargetCoordinates(scanOrder, target)
                     self.move.rotate(self.turnSpeed)
             else:
-                while target.midPoint != None and target.midPoint < self.screenMidpoint + self.deltaFromMidPoint:
+                while (target.horizontalMidPoint != None
+                       and target.horizontalMidPoint < self.screenMidpoint + self.deltaFromMidPoint):
                     self.updateTargetCoordinates(scanOrder, target)
                     self.move.rotate(-self.turnSpeed)
 
     def moveToTarget(self, scanOrder, target):
-        if target.midPoint != None:
+        if target.horizontalMidPoint != None:
             self.turnToTarget(scanOrder, target)
-            while target.midPoint != None:
+            while (target.verticalMidPoint != None and target.verticalMidPoint > 10):
                 self.updateTargetCoordinates(scanOrder, target)
-                self.move.drive(self.moveSpeed, -60)
+                self.move.drive(self.moveSpeed, 0)
+            #start ballroller
+            self.move.drive(self.moveSpeed, 0)
 
     def updateTargetCoordinates(self, scanOrder, target):
         self.frame.capture(cv2.COLOR_BGR2HSV)
