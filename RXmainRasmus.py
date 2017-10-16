@@ -10,6 +10,7 @@ from  movementLogic import MovementLogic
 from imageProcessor import ImageHandler
 from imageProcessor import FrameCapturer
 from windowHandler import WindowHandler
+from gameLogic import GameLogic
 
 print("Running on Python " + sys.version)
 
@@ -35,8 +36,11 @@ mb = None
 move = MovementLogic.MovementLogic(mb)
 imgHandler = ImageHandler.ImageHandler(bool(settings.getValue("multiThreading")))
 frameCapture = FrameCapturer.FrameCapturer(int(settings.getValue("camID")))
+game = GameLogic.GameLogic(move, 0, int(settings.getValue("driveSpeed")),
+                           int(settings.getValue("turnSpeed")), imgHandler, frameCapture)
 window = WindowHandler.WindowHandler(frameCapture, ball, basket, int(settings.getValue("driveSpeed")),
-                                     int(settings.getValue("turnSpeed")), move, )
+                                     int(settings.getValue("turnSpeed")), move, game,
+                                     [int(x) for x in settings.getValue("ballScanOrder").split()])
 
 #screen = curses.initscr()
 #curses.cbreak()
