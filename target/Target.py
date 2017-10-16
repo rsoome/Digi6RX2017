@@ -43,7 +43,6 @@ class Target:
     def setBounds(self, hBounds, vBounds):
         self.horizontalBounds = hBounds
         self.verticalBounds = vBounds
-        self.horizontalMidPoint = hBounds[0] + (hBounds[1] - hBounds[0]) // 2
 
         if hBounds != None:
             self.horizontalMidPoint = hBounds[0] + (hBounds[1] - hBounds[0]) // 2
