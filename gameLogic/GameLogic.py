@@ -44,7 +44,7 @@ class GameLogic:
 
     def lookForBall(self, scanOrder, target):
         i = 0
-        while target.midPoint == None or i < 1:
+        while target.horizontalMidPoint == None or i < 1:
             self.updateTargetCoordinates(scanOrder, target)
             self.move.rotate(self.turnSpeed)
             i += 1
