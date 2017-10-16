@@ -30,7 +30,7 @@ class WindowHandler:
 
     def showImage(self):
         if self.ball.horizontalBounds is not None and self.ball.verticalBounds is not None:
-            #print(self.ball.verticalMidPoint)
+            print(self.ball.verticalMidPoint)
             cv2.rectangle(self.frame.capturedFrame, (self.ball.horizontalBounds[0], self.ball.verticalBounds[1]),
                           (self.ball.horizontalBounds[1], self.ball.verticalBounds[0]), (255, 0, 0), 3)
 

@@ -31,7 +31,7 @@ class GameLogic:
     def moveToTarget(self, scanOrder, target):
         if target.horizontalMidPoint != None:
             self.turnToTarget(scanOrder, target)
-            while (target.verticalMidPoint != None and target.verticalMidPoint > 460):
+            while (target.verticalMidPoint != None and target.verticalMidPoint < 460):
                 self.updateTargetCoordinates(scanOrder, target)
                 self.move.drive(self.moveSpeed, 0)
             #start ballroller
