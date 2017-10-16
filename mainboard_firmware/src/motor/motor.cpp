@@ -148,5 +148,5 @@ void Motor::encTick() {
 
     if (enc_dir & 1) ticks++;
     else ticks--;
-    
+
 }

@@ -134,7 +134,7 @@ void parseCommand(char *command) {
   else if (command[0] == 's' && command[1] == 'r') {
     char * sd;
 
-    sd = command + 2
+    sd = command + 2;
     motor3.setSpeed((int16_t) atoi(sd));
   }
 
