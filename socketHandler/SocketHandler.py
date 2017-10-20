@@ -1,6 +1,8 @@
 import socket
 
 import sys
+import traceback
+
 import cv2
 
 import numpy as np
@@ -50,15 +52,11 @@ class SocketHandler:
         if conn == None:
             return None
 
-        conn.settimeout(1)
-        packetsReceived = False
-        readData = None
+        conn.settimeout(60)
 
         data = b""
         try:
             packet = conn.recv(4096)
-            if packet:
-                packetsReceived = True
             while packet:
                 #print(len(packet))
                 data += packet
@@ -71,12 +69,7 @@ class SocketHandler:
             return readData
 
         except socket.timeout:
-            if packetsReceived:
-                if self.socketData.stop:
-                    return None
-                readData = pickle.loads(data)
-                #print(readData)
-                return readData
+            print("Listening timed out")
             return None
 
 
@@ -101,7 +94,6 @@ class SocketHandler:
                     conn, addr = self.servSock.accept()
                     print("Connection established to: " + str(addr))
                 except socket.timeout:
-                    print("Increase stream timeout")
                     conn = None
                     addr = None
 
@@ -148,11 +140,15 @@ class SocketHandler:
         self.clientSock.connect((host, port))
         try:
             self.runClient(self.clientSock)
-        except:
+        except Exception as e:
+            print("Client socket failed. Closing Socket.")
+            print(e)
+            self.sendMessage({"stop":True}, self.clientSock)
+            self.socketData.stop = True
             self.clientSock.close()
 
     def runClient(self, sock):
-        sock.settimeout(2)
+        #sock.settimeout(2)
         while True:
             #print("*")
             try:
@@ -164,13 +160,13 @@ class SocketHandler:
                     self.values["ack"] = True
                     self.sendMessage(self.values, sock)
                 time.sleep(0.03)
-            except:
+            except socket.timeout:
                 print("Increase timeout")
                 pass
         sock.close()
 
     def sendMessage(self, msg, conn):
-        #print(msg)
+        print(len(pickle.dumps(msg)))
         try:
             conn.settimeout(1)
         except:

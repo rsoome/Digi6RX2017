@@ -18,7 +18,6 @@ class WindowHandler:
         cv2.setMouseCallback('main', self.onmouse)
         self.fps = "0"
         self.textColor = (0, 0, 255)
-        self.halt = False
         self.values = dict()
         self.lock = threading.Lock()
         self.updateThresholds = False
@@ -55,7 +54,7 @@ class WindowHandler:
                 self.socketHandler.sendMessage(self.values, self.socketHandler.clientSock)
                 self.socketHandler.waitForAck(self.socketHandler.clientSock)
                 self.closeWindows()
-                self.halt = True
+                self.socketData.stop = True
                 return
 
             if keyStroke & 0xFF == ord('u'):
@@ -124,4 +123,4 @@ class WindowHandler:
 
     def closeWindows(self):
         cv2.destroyAllWindows()
-        self.halt = True
+        self.socketData.stop = True

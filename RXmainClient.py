@@ -47,7 +47,7 @@ while True:
     window.fps = fpsStatus
     window.showImage()
     #print(window.halt)
-    if window.halt:
+    if socketData.stop:
         break
     time.sleep(0.02)
 
