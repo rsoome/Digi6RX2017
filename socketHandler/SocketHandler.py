@@ -81,7 +81,7 @@ class SocketHandler:
 
 
     def initServ(self):
-        host = "127.0.0.1"
+        host = ""
         self.servSock = socket.socket()  # Create a socket object
         self.servHost = socket.gethostname()  # Get local machine name
         self.servPort = 12345  # Reserve a port for your service.

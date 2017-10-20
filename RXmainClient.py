@@ -26,7 +26,7 @@ socketHandler = SocketHandler.SocketHandler(socketData, None, None, None, None)
 window = WindowHandler.WindowHandler(socketData, socketHandler)
 hostname = "Digi6"
 
-host = "127.0.0.1"
+host = "192.168.43.87"
 
 try:
     host = socket.gethostbyname(hostname)
