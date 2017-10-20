@@ -93,6 +93,7 @@ class SocketHandler:
                     self.servSock.settimeout(1)
                     conn, addr = self.servSock.accept()
                     print("Connection established to: " + str(addr))
+                    time.sleep(0.1)
                 except socket.timeout:
                     conn = None
                     addr = None
