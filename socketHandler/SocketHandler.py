@@ -87,7 +87,10 @@ class SocketHandler:
         self.servPort = 12345  # Reserve a port for your service.
         self.servSock.bind((host, self.servPort))  # Bind to the port
         self.servSock.listen(1)  # Now wait for client connection.
-        self.streamData(None, None)
+        try:
+            self.streamData(None, None)
+        except:
+            self.servSock.close()
 
     def streamData(self, conn, addr):
         while True:
@@ -142,7 +145,10 @@ class SocketHandler:
     def initClient(self, host, port):
         self.clientSock = socket.socket()
         self.clientSock.connect((host, port))
-        self.runClient(self.clientSock)
+        try:
+            self.runClient(self.clientSock)
+        except:
+            self.clientSock.close()
 
     def runClient(self, sock):
         sock.settimeout(0.5)
