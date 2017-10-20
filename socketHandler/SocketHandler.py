@@ -46,13 +46,13 @@ class SocketHandler:
         self.values["ballDimensions"] = self.socketData.ballDimensions
         self.values["fps"] = self.socketData.fps
 
-    def listen(self, conn):
+    def listen(self, conn, timeout):
 
         #print("**")
         if conn == None:
             return None
 
-        conn.settimeout(60)
+        conn.settimeout(timeout)
 
         data = b""
         try:
@@ -97,7 +97,7 @@ class SocketHandler:
                     conn = None
                     addr = None
 
-            messages = self.listen(conn)
+            messages = self.listen(conn, 0.1)
 
             if messages != None:
                 print("Received messages.")
@@ -151,7 +151,7 @@ class SocketHandler:
             try:
                 if self.socketData.stop:
                     break
-                messages = self.listen(sock)
+                messages = self.listen(sock, 60)
                 if messages != None:
                     self.handleMessages(messages)
                     self.values["ack"] = True
