@@ -97,6 +97,12 @@ class SocketHandler:
                     conn = None
                     addr = None
 
+
+            if conn != None:
+                #print(self.values)
+                self.sendMessage(self.values, conn)
+                self.waitForAck(conn)
+
             messages = self.listen(conn, 0.1)
 
             if messages != None:
@@ -110,12 +116,6 @@ class SocketHandler:
 
             self.updateValues()
             #print(self.values["img"])
-
-            if conn != None:
-                #print(self.values)
-                self.sendMessage(self.values, conn)
-                self.waitForAck(conn)
-
 
             time.sleep(0.03)
 
