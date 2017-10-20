@@ -63,7 +63,7 @@ class SocketHandler:
                 packet = conn.recv(4096)
 
             #print(data)
-            if self.socketData.stop:
+            if self.socketData.stop or len(data) < 1:
                 return None
             readData = pickle.loads(data)
             return readData
@@ -111,7 +111,6 @@ class SocketHandler:
             self.updateValues()
             #print(self.values["img"])
 
-            print(conn)
             if conn != None:
                 #print(self.values)
                 self.sendMessage(self.values, conn)
