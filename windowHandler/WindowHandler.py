@@ -52,8 +52,11 @@ class WindowHandler:
             keyStroke = cv2.waitKey(100)
             if keyStroke & 0xFF == ord('q'):  # Nupu 'q' vajutuse peale välju programmist
                 self.values["stop"] = True
+                self.socketHandler.sendMessage(self.values, self.socketHandler.clientSock)
+                self.socketHandler.waitForAck(self.socketHandler.clientSock)
                 self.closeWindows()
                 self.halt = True
+                return
 
             if keyStroke & 0xFF == ord('u'):
                 self.values["updateThresholds"] = self.updateThresholds

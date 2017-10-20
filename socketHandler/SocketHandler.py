@@ -50,7 +50,7 @@ class SocketHandler:
         if conn == None:
             return None
 
-        conn.settimeout(0.05)
+        conn.settimeout(1)
         packetsReceived = False
         readData = None
 
@@ -97,10 +97,11 @@ class SocketHandler:
             self.updateData()
             if conn == None:
                 try:
-                    self.servSock.settimeout(0.5)
+                    self.servSock.settimeout(1)
                     conn, addr = self.servSock.accept()
                     print("Connection established to: " + str(addr))
                 except socket.timeout:
+                    print("Increase stream timeout")
                     conn = None
                     addr = None
 
@@ -151,22 +152,29 @@ class SocketHandler:
             self.clientSock.close()
 
     def runClient(self, sock):
-        sock.settimeout(0.5)
+        sock.settimeout(2)
         while True:
             #print("*")
-            if self.socketData.stop:
-                break
-            messages = self.listen(sock)
-            if messages != None:
-                self.handleMessages(messages)
-                self.values["ack"] = True
-                self.sendMessage(self.values, sock)
-            time.sleep(0.03)
+            try:
+                if self.socketData.stop:
+                    break
+                messages = self.listen(sock)
+                if messages != None:
+                    self.handleMessages(messages)
+                    self.values["ack"] = True
+                    self.sendMessage(self.values, sock)
+                time.sleep(0.03)
+            except:
+                print("Increase timeout")
+                pass
         sock.close()
 
     def sendMessage(self, msg, conn):
         #print(msg)
-        conn.settimeout(1)
+        try:
+            conn.settimeout(1)
+        except:
+            pass
         conn.sendall(pickle.dumps(msg))
 
 
