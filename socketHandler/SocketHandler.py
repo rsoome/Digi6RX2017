@@ -130,9 +130,9 @@ class SocketHandler:
             else:
                 timeOutCounter += 1
 
-            if timeOutCounter >= 50:
+            if timeOutCounter >= 10:
                 break
-                
+
         self.acknowledged = False
 
     #def createNumpyArrayFromString(self, s):
@@ -171,7 +171,7 @@ class SocketHandler:
     def sendMessage(self, msg, conn):
         pickled = pickle.dumps(msg)
         #print(len(pickled))
-        print(msg)
+        #print(msg)
         try:
             conn.settimeout(60)
         except Exception as e:
