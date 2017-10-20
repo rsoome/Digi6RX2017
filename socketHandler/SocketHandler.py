@@ -122,7 +122,7 @@ class SocketHandler:
     def waitForAck(self, conn):
 
         while  not self.acknowledged:
-            ret = self.listen(conn)
+            ret = self.listen(conn, 1)
             #print(ret)
             if ret is not None:
                 self.handleMessages(ret)
@@ -163,7 +163,8 @@ class SocketHandler:
 
     def sendMessage(self, msg, conn):
         pickled = pickle.dumps(msg)
-        print(len(pickled))
+        #print(len(pickled))
+        print(msg)
         try:
             conn.settimeout(60)
         except Exception as e:
