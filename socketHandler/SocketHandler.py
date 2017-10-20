@@ -160,7 +160,7 @@ class SocketHandler:
 
     def sendMessage(self, msg, conn):
         #print(msg)
-        conn.timeout(1)
+        conn.settimeout(1)
         conn.sendall(pickle.dumps(msg))
 
 
