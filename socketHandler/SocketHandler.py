@@ -93,7 +93,7 @@ class SocketHandler:
                     self.servSock.settimeout(1)
                     conn, addr = self.servSock.accept()
                     print("Connection established to: " + str(addr))
-                    time.sleep(0.1)
+                    #time.sleep(0.1)
                 except socket.timeout:
                     conn = None
                     addr = None
@@ -173,10 +173,7 @@ class SocketHandler:
         pickled = pickle.dumps(msg)
         #print(len(pickled))
         #print(msg)
-        try:
-            conn.settimeout(60)
-        except Exception as e:
-            print(e)
+        conn.settimeout(60)
         conn.sendall(pickled)
 
 
@@ -202,6 +199,7 @@ class SocketHandler:
                 self.socketData.gameStarted = messages[key]
 
             if key == "img":
+                print("Img received")
                 #print(messages[key])
                 self.socketData.img = messages[key]
 
