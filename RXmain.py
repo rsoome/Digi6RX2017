@@ -14,7 +14,7 @@ from gameLogic import GameLogic
 from socketHandler import SocketHandler
 from socketHandler import SocketData
 import threading
-#from manualDrive import ManualDrive
+from manualDrive import ManualDrive
 
 print("Running on Python " + sys.version)
 
@@ -33,10 +33,9 @@ basket = Target.Target(None, None, "basket",
 
 hsv = None
 
-#mb = MBcomm.MBcomm(settings.getValue("mbLocation"), 115200)
-mb = None
+mb = MBcomm.MBcomm(settings.getValue("mbLocation"), 115200)
+#mb = None
 move = MovementLogic.MovementLogic(mb)
-#manualDrive = ManualDrive.ManualDrive(move, int(settings.getValue("driveSpeed")), int(settings.getValue("turnSpeed")))
 imgHandler = ImageHandler.ImageHandler(bool(settings.getValue("multiThreading")))
 frameCapture = FrameCapturer.FrameCapturer(int(settings.getValue("camID")))
 game = GameLogic.GameLogic(move, 0, int(settings.getValue("driveSpeed")),
@@ -93,6 +92,7 @@ while True:
         socketData.resetBasket = False
 
     if socketData.manualDrive:
+        manualDrive = ManualDrive.ManualDrive(move, int(settings.getValue("driveSpeed")), int(settings.getValue("turnSpeed")))
         manualDrive.run()
         socketData.manualDrive = False
 
