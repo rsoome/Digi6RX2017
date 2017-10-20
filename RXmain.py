@@ -33,8 +33,8 @@ basket = Target.Target(None, None, "basket",
 
 hsv = None
 
-mb = MBcomm.MBcomm(settings.getValue("mbLocation"), 115200)
-#mb = None
+#mb = MBcomm.MBcomm(settings.getValue("mbLocation"), 115200)
+mb = None
 move = MovementLogic.MovementLogic(mb)
 imgHandler = ImageHandler.ImageHandler(bool(settings.getValue("multiThreading")))
 frameCapture = FrameCapturer.FrameCapturer(int(settings.getValue("camID")))

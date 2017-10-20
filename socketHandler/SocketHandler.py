@@ -100,16 +100,18 @@ class SocketHandler:
             messages = self.listen(conn)
 
             if messages != None:
-                #print("Received messages.")
+                print("Received messages.")
                 self.handleMessages(messages)
 
             if self.socketData.stop:
+                conn.close()
                 self.socketData.socketClosed = True
-                break
+                return
 
             self.updateValues()
             #print(self.values["img"])
 
+            print(conn)
             if conn != None:
                 #print(self.values)
                 self.sendMessage(self.values, conn)
@@ -117,11 +119,6 @@ class SocketHandler:
 
 
             time.sleep(0.03)
-
-        try:
-            conn.close
-        except:
-            print("Cannot close conn if conn is None.")
 
     def waitForAck(self, conn):
 
