@@ -29,6 +29,7 @@ class GameLogic:
                     self.move.rotate(-self.turnSpeed)
 
     def moveToTarget(self, scanOrder, target):
+
         if target.horizontalMidPoint != None:
             self.turnToTarget(scanOrder, target)
             while (target.verticalMidPoint != None and target.verticalMidPoint < 460):
@@ -48,6 +49,11 @@ class GameLogic:
             self.updateTargetCoordinates(scanOrder, target)
             self.move.rotate(self.turnSpeed)
             i += 1
+
+    def run(self, scanOrder, target):
+        self.lookForBall(scanOrder, target)
+        self.turnToTarget(scanOrder, target)
+        self.moveToTarget(scanOrder, target)
 
     def initializeValues(self):
         self.frame.capture(cv2.COLOR_BGR2HSV)

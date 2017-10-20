@@ -1,78 +1,123 @@
+import threading
+
 import cv2
 #from manualDrive import ManualDrive
 import sys
+import re
+import numpy as np
+
 
 class WindowHandler:
 
-    def __init__(self, frameCapture, ball, basket, driveSpeed, turnSpeed, move, game, scanOrder):
-        self.game = game
+    def __init__(self, socketData, socketHandler):
+        self.socketHandler = socketHandler
+        self.socketData = socketData
         cv2.namedWindow('main')
         cv2.namedWindow('ball_filtered')
         cv2.namedWindow('gate_filtered')
         cv2.setMouseCallback('main', self.onmouse)
-        self.selectedTarget = ball
-        self.frame = frameCapture
-        self.fps = 0
-        self.ball = ball
-        self.basket = basket
-        self.driveSpeed = driveSpeed
-        self.turnSpeed = turnSpeed
-        self.move = move
+        self.fps = "0"
         self.textColor = (0, 0, 255)
         self.halt = False
-        self.scanOrder = scanOrder
+        self.values = dict()
+        self.lock = threading.Lock()
+        self.updateThresholds = False
+        self.mouseX = -1
+        self.mouseY = -1
 
     # If the mouse is clicked, update threshholds of the selected object
     def onmouse(self, event, x, y, flags, params):  # Funktsioon, mis nupuvajutuse peale uuendab värviruumi piire
+        self.lock.acquire()
         if event == cv2.EVENT_LBUTTONUP:
-            if self.selectedTarget is not None:
-                self.selectedTarget.updateThresholds(self.frame.filteredImg[y][x])
+            self.updateThresholds = True
+            self.mouseX = x
+            self.mouseY = y
+        self.lock.release()
 
     def showImage(self):
-        if self.ball.horizontalBounds is not None and self.ball.verticalBounds is not None:
-            print(self.ball.verticalMidPoint)
-            cv2.rectangle(self.frame.capturedFrame, (self.ball.horizontalBounds[0], self.ball.verticalBounds[1]),
-                          (self.ball.horizontalBounds[1], self.ball.verticalBounds[0]), (255, 0, 0), 3)
+        if self.socketData.ballHorizontalBounds != None and self.socketData.ballVerticalBounds != None:
+            cv2.rectangle(self.socketData.img, (self.socketData.ballHorizontalBounds[0],
+                                                self.socketData.ballVerticalBounds[1]),
+                          (self.socketData.ballHorizontalBounds[1], self.socketData.ballVerticalBounds[0]),
+                          (255, 0, 0), 3)
 
-        if self.basket.horizontalBounds is not None and self.basket.verticalBounds is not None:
-            cv2.rectangle(self.frame.capturedFrame, (self.basket.horizontalBounds[0], self.basket.verticalBounds[1]),
-                          (self.basket.horizontalBounds[1], self.basket.verticalBounds[0]), (0, 255, 0), 3)
+        if self.socketData.basketHorizontalBounds != None and self.socketData.basketVerticalBounds != None:
+            cv2.rectangle(self.socketData.img, (self.socketData.basketHorizontalBounds[0],
+                                                self.socketData.basketVerticalBounds[1]),
+                          (self.socketData.basketHorizontalBounds[1], self.socketDatabasketVerticalBounds[0]),
+                          (0, 255, 0), 3)
 
         if cv2.waitKey(1) & 0xFF == ord('e'):
             #        time.sleep(1)
             keyStroke = cv2.waitKey(100)
             if keyStroke & 0xFF == ord('q'):  # Nupu 'q' vajutuse peale välju programmist
+                self.values["stop"] = True
                 self.closeWindows()
-            # time.sleep(1)
+                self.halt = True
+
+            if keyStroke & 0xFF == ord('u'):
+                self.values["updateThresholds"] = self.updateThresholds
+                self.values["mouseX"] = self.mouseX
+                self.values["mouseY"] = self.mouseY
+
             if keyStroke & 0xFF == ord('b'):
                 self.textColor = (0, 0, 255)
-                self.selectedTarget = self.ball
-                self.ball.resetThreshHolds()
-                self.ball.resetBounds()
+                self.values["ballSelected"] = True
+                self.values["resetBall"] = True
 
-            # time.sleep(1)
             if keyStroke & 0xFF == ord('k'):
                 self.textColor = (255, 255, 0)
-                self.selectedTarget = self.basket
-                self.basket.resetThreshHolds()
-                self.basket.resetBounds()
+                self.values["basketSelected"] = True
+                self.values["resetBasket"] = True
 
             if keyStroke & 0xFF == ord('m'):
-                manual = ManualDrive.ManualDrive(self.move, self.driveSpeed, self.turnSpeed)
-                manual.run()
+                self.values["manualDrive"] = True
 
             if keyStroke & 0xFF == ord('g'):
-                self.game.lookForBall(self.scanOrder, self.ball)
-                self.game.moveToTarget(self.scanOrder, self.ball)
+                self.values["gameStarted"] = True
 
-        # print("Object size: " + str((ballHorizontalBounds[1] - ballHorizontalBounds[0]) * (ballVerticalBounds[1] - ballVerticalBounds[0])))
-        cv2.putText(self.frame.capturedFrame, "FPS: " + str(self.fps), (30, 30), cv2.FONT_HERSHEY_SIMPLEX,
+            self.socketHandler.sendMessage(self.values, self.socketHandler.clientSock)
+
+        frame = None
+        ballMask = None
+        basketMask = None
+
+        if self.socketData.img is not None:
+            #print("--------")
+            #print(self.socketData.img)
+            frame = self.socketData.img
+
+        if self.socketData.ballMask is not None:
+            ballMask = self.socketData.ballMask
+
+        if self.socketData.basketMask is not None:
+            basketMask = self.socketData.basketMask
+
+        if frame is None:
+            frame = np.zeros((480, 640, 3), np.uint8)
+
+        if ballMask is None:
+            ballMask = np.zeros((480, 640, 3), np.uint8)
+
+        if basketMask is None:
+            basketMask = np.zeros((480, 640, 3), np.uint8)
+
+        cv2.putText(frame, "FPS: " + str(self.fps), (30, 30), cv2.FONT_HERSHEY_SIMPLEX,
                     1, self.textColor, 1)
 
+
         # Display the resulting frame
-        cv2.imshow('ball_filtered', self.ball.mask)
-        cv2.imshow('main', self.frame.capturedFrame)
-        cv2.imshow('gate_filtered', self.basket.mask)
+        cv2.imshow('ball_filtered', ballMask)
+        cv2.imshow('main', frame)
+        cv2.imshow('gate_filtered', basketMask)
+
+    def createImageFromString(self, imgAsString):
+        print(imgAsString)
+        #imgDimensions = imgAsString.split("##")
+        #print(imgDimensions[1])
+        #dimensions = imgDimensions[0][1:len(imgDimensions[0])-1].split(", ")
+        frame = imgAsString
+        return frame
 
     def closeWindows(self):
         cv2.destroyAllWindows()
