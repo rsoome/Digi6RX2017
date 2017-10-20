@@ -166,12 +166,13 @@ class SocketHandler:
         sock.close()
 
     def sendMessage(self, msg, conn):
-        print(len(pickle.dumps(msg)))
+        pickled = pickle.dumps(msg)
+        print(len(pickled))
         try:
-            conn.settimeout(1)
-        except:
-            pass
-        conn.sendall(pickle.dumps(msg))
+            conn.settimeout(60)
+        except Exception as e:
+            print(e)
+        conn.sendall(pickled)
 
 
     def handleMessages(self, messages):
