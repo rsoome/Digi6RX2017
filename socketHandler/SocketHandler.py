@@ -120,12 +120,19 @@ class SocketHandler:
             time.sleep(0.03)
 
     def waitForAck(self, conn):
-
+        timeOutCounter = 0
         while  not self.acknowledged:
+            time.sleep(0.1)
             ret = self.listen(conn, 1)
             #print(ret)
             if ret is not None:
                 self.handleMessages(ret)
+            else:
+                timeOutCounter += 1
+
+            if timeOutCounter >= 50:
+                break
+                
         self.acknowledged = False
 
     #def createNumpyArrayFromString(self, s):
