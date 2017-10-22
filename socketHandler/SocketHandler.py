@@ -9,6 +9,7 @@ import errno
 import numpy as np
 import time
 import pickle
+import zlib
 
 
 class SocketHandler:
@@ -70,7 +71,8 @@ class SocketHandler:
             #print(data)
             if self.socketData.stop or len(data) < 1:
                 return None
-            readData = pickle.loads(data)
+            decompressed = zlib.decompress(data, 0)
+            readData = pickle.loads(decompressed)
             return readData
 
         except socket.timeout:
@@ -193,10 +195,11 @@ class SocketHandler:
 
         try:
             pickled = pickle.dumps(msg)
+            compressed = zlib.compress(pickled, 9)
             #print(len(pickled))
             #print(msg)
             conn.settimeout(timeout)
-            conn.sendall(pickled)
+            conn.sendall(compressed)
             return True
 
         except socket.timeout as e:

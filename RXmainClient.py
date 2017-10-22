@@ -48,6 +48,6 @@ while True:
     #print(window.halt)
     if socketData.stop:
         break
-    time.sleep(0.02)
+    time.sleep(0.1)
 
 settings.writeFromDictToFile()
