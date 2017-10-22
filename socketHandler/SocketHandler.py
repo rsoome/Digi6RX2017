@@ -64,7 +64,7 @@ class SocketHandler:
                     data += packet
                     packet = conn.recv(4096)
                 except socket.timeout:
-                    conn.settimeout(timeout)
+                    print("Listening timed out")
                     break
 
             #print(data)
@@ -106,13 +106,16 @@ class SocketHandler:
                     #time.sleep(0.1)
 
                 else:
+
                     #print(self.values)
-                    messageSent = self.sendMessage(self.values, conn, 4)
+                    messageSent = self.sendMessage({"check": ""}, conn, 0.1)
 
                     if messageSent:
                         self.waitForAck(conn)
                     else:
                         print("Sending message timed out.")
+                        
+                    messageSent = self.sendMessage(self.values, conn, 4)
 
                     messages = self.listen(conn, 0.1)
 
@@ -125,7 +128,6 @@ class SocketHandler:
                         self.socketData.socketClosed = True
                         return
 
-                    messageSent = self.sendMessage({"check": ""}, conn, 0.1)
                     self.updateValues()
 
             except socket.timeout:
@@ -174,7 +176,7 @@ class SocketHandler:
             try:
                 if self.socketData.stop:
                     break
-                messages = self.listen(sock, 0.8)
+                messages = self.listen(sock, 10)
                 if messages != None:
                     self.handleMessages(messages)
                     self.values["ack"] = True
@@ -202,6 +204,8 @@ class SocketHandler:
 
         for key in messages:
 
+            print(key)
+
             if key == "stop":
                 sys.exit(0)
 
@@ -220,7 +224,7 @@ class SocketHandler:
                 self.socketData.gameStarted = messages[key]
 
             if key == "img":
-                print("img")
+                #print("img")
                 #print(messages[key])
                 print("img recv")
                 self.socketData.img = messages[key]
