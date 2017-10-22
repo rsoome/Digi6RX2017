@@ -74,7 +74,7 @@ class SocketHandler:
             return readData
 
         except socket.timeout:
-            print("*")
+            #print("*")
             return None
 
         except pickle.UnpicklingError as e:
@@ -108,7 +108,9 @@ class SocketHandler:
                 else:
                     #print(self.values)
                     self.sendMessage(self.values, conn, 0.1)
+                    print("*")
                     self.waitForAck(conn)
+                    print("**")
 
                     messages = self.listen(conn, 0.1)
 
@@ -143,7 +145,6 @@ class SocketHandler:
     def waitForAck(self, conn):
         timeOutCounter = 0
         while  not self.acknowledged and timeOutCounter <= 10:
-            time.sleep(0.03)
             ret = self.listen(conn, 1)
             print(ret)
             if ret is not None:
@@ -211,6 +212,7 @@ class SocketHandler:
                 self.socketData.gameStarted = messages[key]
 
             if key == "img":
+                print("img")
                 #print(messages[key])
                 print("img recv")
                 self.socketData.img = messages[key]
