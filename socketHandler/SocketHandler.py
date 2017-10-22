@@ -195,11 +195,11 @@ class SocketHandler:
 
         try:
             pickled = pickle.dumps(msg)
-            compressed = zlib.compress(pickled, 1)
-            print(len(compressed))
+            #compressed = zlib.compress(pickled, 1)
+            print(len(pickled))
             #print(msg)
             conn.settimeout(timeout)
-            conn.sendall(compressed)
+            conn.sendall(pickled)
             return True
 
         except socket.timeout as e:
