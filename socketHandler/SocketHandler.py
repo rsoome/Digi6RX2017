@@ -102,9 +102,9 @@ class SocketHandler:
 
     def streamData(self, conn, addr):
         while True:
-            print("Updating data")
+            #print("Updating data")
             self.updateData()
-            print("Data updated")
+            #print("Data updated")
             try:
                 if conn == None:
                     self.servSock.settimeout(0.1)
@@ -114,33 +114,33 @@ class SocketHandler:
                     if messageSent:
                         self.waitForAck(conn)
 
-                    print("Connection established to: " + str(addr))
+                    #print("Connection established to: " + str(addr))
                     #time.sleep(0.1)
 
                 else:
 
                     #print(self.values)
-                    print("Checking connection")
+                    #print("Checking connection")
                     messageSent = self.sendMessage({"check": ""}, conn, 0.001)
 
                     if messageSent:
-                        print("Waiting for confirmation.")
+                        #print("Waiting for confirmation.")
                         self.waitForAck(conn)
-                        print("Connection OK, updating values")
+                        #print("Connection OK, updating values")
                         self.updateValues()
-                        print("Values updated, sending.")
+                        #print("Values updated, sending.")
                         messageSent = self.sendMessage(self.values, conn, 4)
 
-                    else:
-                        print("Sending message timed out.")
+                    #else:
+                        #print("Sending message timed out.")
 
-                    print("Listening for incoming messages")
+                    #print("Listening for incoming messages")
                     messages = self.listen(conn, 0.1)
 
                     if messages != None:
-                        print("Received messages. Handling")
+                        #print("Received messages. Handling")
                         self.handleMessages(messages, conn)
-                        print("Messages handled.")
+                        #print("Messages handled.")
 
                     if self.socketData.stop:
                         conn.close()
