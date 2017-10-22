@@ -100,6 +100,7 @@ class SocketHandler:
             self.updateData()
             try:
                 if conn == None:
+                    print("Waiting for connections")
                     self.servSock.settimeout(1)
                     conn, addr = self.servSock.accept()
                     print("Connection established to: " + str(addr))
@@ -124,16 +125,13 @@ class SocketHandler:
                     self.sendMessage({"check": ""}, conn, 1)
 
             except socket.timeout:
-                try:
+                if conn is not None:
                     conn.close()
-                except:
-                    pass
                 conn = None
                 addr = None
 
             except socket.error as e:
-                print(e.errno)
-                print(errno.EPIPE)
+                print("Client socket closed.")
                 if e.errno != errno.EPIPE:
                     raise
                 conn.close()
@@ -141,8 +139,6 @@ class SocketHandler:
                 addr = None
 
             self.updateValues()
-            #print(self.values["img"])
-
             time.sleep(0.03)
 
     def waitForAck(self, conn):
