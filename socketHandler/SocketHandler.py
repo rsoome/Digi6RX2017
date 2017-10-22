@@ -90,7 +90,9 @@ class SocketHandler:
         self.servSock.listen(1)  # Now wait for client connection.
         try:
             self.streamData(None, None)
-        except:
+        except Exception as e:
+            print("An error occured: ")
+            print(e)
             self.servSock.close()
 
     def streamData(self, conn, addr):
@@ -112,7 +114,7 @@ class SocketHandler:
                 self.sendMessage(self.values, conn, 60)
                 self.waitForAck(conn)
 
-                messages = self.listen(consn, 0.1)
+                messages = self.listen(conn, 0.1)
 
                 if messages != None:
                     print("Received messages.")
