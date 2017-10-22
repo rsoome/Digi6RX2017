@@ -39,6 +39,11 @@ class SocketHandler:
             self.socketData.basketDimensions = self.basket.mask.shape
             self.socketData.basketMask = self.basket.mask
 
+        self.socketData.ballHorizontalBounds = self.ball.horizontalBounds
+        self.socketData.ballVerticalBounds = self.ball.verticalBounds
+        self.socketData.basketHorizontalBounds = self.basket.horizontalBounds
+        self.socketData.basketVerticalBounds = self.basket.verticalBounds
+
     def updateValues(self):
         self.values["imgDimensions"] = self.socketData.imgDimensions
         self.values["img"] = self.socketData.img
