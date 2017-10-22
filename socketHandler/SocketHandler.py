@@ -48,13 +48,13 @@ class SocketHandler:
         self.values["ballDimensions"] = self.socketData.ballDimensions
         self.values["fps"] = self.socketData.fps
 
-    def listen(self, conn, timeout):
+    def listen(self, conn, t):
 
         #print("**")
         if conn == None:
             return None
 
-        conn.settimeout(timeout)
+        conn.settimeout(t)
 
         data = b""
         try:
@@ -71,13 +71,12 @@ class SocketHandler:
             #print(data)
             if self.socketData.stop or len(data) < 1:
                 return None
-            #decompressed = zlib.decompress(data, 0)
-            decompressed = data
+            decompressed = zlib.decompress(data, 0)
             readData = pickle.loads(decompressed)
             return readData
 
         except socket.timeout:
-            #print("*")
+            print("Listening timed out")
             return None
 
         except pickle.UnpicklingError as e:
@@ -184,7 +183,7 @@ class SocketHandler:
             try:
                 if self.socketData.stop:
                     break
-                messages = self.listen(sock, 10)
+                messages = self.listen(sock, 0.01)
                 if messages != None:
                     self.handleMessages(messages, sock)
                 #time.sleep(0.03)
@@ -196,14 +195,15 @@ class SocketHandler:
 
         try:
             pickled = pickle.dumps(msg)
-            #compressed = zlib.compress(pickled, 1)
-            print(len(pickled))
+            compressed = zlib.compress(pickled, 1)
+            #print(len(pickled))
             #print(msg)
             conn.settimeout(timeout)
-            conn.sendall(pickled)
+            conn.sendall(compressed)
             return True
 
         except socket.timeout as e:
+            return ("Sending message timed out.")
             return False
 
 
@@ -270,5 +270,5 @@ class SocketHandler:
                 self.acknowledged = messages[key]
 
             if key == "check":
-                messageSent = self.sendMessage({"ack" : True}, sock, 60)
+                messageSent = self.sendMessage({"ack" : True}, sock, 0.1)
 
