@@ -100,7 +100,6 @@ class SocketHandler:
             self.updateData()
             try:
                 if conn == None:
-                    print("Waiting for connections")
                     self.servSock.settimeout(1)
                     conn, addr = self.servSock.accept()
                     print("Connection established to: " + str(addr))
@@ -220,6 +219,7 @@ class SocketHandler:
 
             if key == "img":
                 #print(messages[key])
+                print("img recv")
                 self.socketData.img = messages[key]
 
             if key == "ballMask":
