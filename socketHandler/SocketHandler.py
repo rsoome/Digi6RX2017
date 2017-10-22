@@ -205,10 +205,10 @@ class SocketHandler:
     def sendMessage(self, msg, conn, timeout):
 
         conn.settimeout(timeout)
+        pickled = pickle.dumps(msg)
+        compressed = zlib.compress(pickled, 1)
 
         try:
-            pickled = pickle.dumps(msg)
-            compressed = zlib.compress(pickled, 1)
             #print(len(pickled))
             #print(msg)
             conn.sendall(compressed)
