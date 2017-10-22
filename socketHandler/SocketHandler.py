@@ -104,34 +104,38 @@ class SocketHandler:
                     conn, addr = self.servSock.accept()
                     print("Connection established to: " + str(addr))
                     #time.sleep(0.1)
-                except socket.timeout:
-                    conn = None
-                    addr = None
 
+                    #print(self.values)
+                    self.sendMessage(self.values, conn, 60)
+                    self.waitForAck(conn)
 
-            if conn != None:
-                #print(self.values)
-                self.sendMessage(self.values, conn, 60)
-                self.waitForAck(conn)
+                    messages = self.listen(conn, 0.1)
 
-                messages = self.listen(conn, 0.1)
+                    if messages != None:
+                        print("Received messages.")
+                        self.handleMessages(messages)
 
-                if messages != None:
-                    print("Received messages.")
-                    self.handleMessages(messages)
+                    if self.socketData.stop:
+                        conn.close()
+                        self.socketData.socketClosed = True
+                        return
 
-                if self.socketData.stop:
-                    conn.close()
-                    self.socketData.socketClosed = True
-                    return
-
-                try:
                     self.sendMessage({"check": ""}, conn, 1)
-                except socket.error as e:
 
+                except socket.error as e:
+                    print(e.errno)
+                    print(errno.EPIPE)
                     if e.errno != errno.EPIPE:
                         raise
                     conn.close()
+                    conn = None
+                    addr = None
+
+                except socket.timeout:
+                    try:
+                        conn.close()
+                    except:
+                        pass
                     conn = None
                     addr = None
 
