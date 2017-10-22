@@ -117,6 +117,7 @@ class SocketHandler:
 
                     if messageSent:
                         self.waitForAck(conn)
+                        self.updateValues()
                         messageSent = self.sendMessage(self.values, conn, 4)
 
                     else:
@@ -132,8 +133,6 @@ class SocketHandler:
                         conn.close()
                         self.socketData.socketClosed = True
                         return
-
-                    self.updateValues()
 
             except socket.timeout:
                 #print("Socket timed out")
