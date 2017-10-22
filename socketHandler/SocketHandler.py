@@ -125,7 +125,7 @@ class SocketHandler:
             self.updateValues()
             #print(self.values["img"])
 
-            self.sendMessage({"check":""})
+            self.sendMessage({"check":""}, conn)
 
             time.sleep(0.03)
 
