@@ -121,6 +121,7 @@ class SocketHandler:
                         return
 
                     self.sendMessage({"check": ""}, conn, 0.1)
+                    self.updateValues()
 
             except socket.timeout:
                 if conn is not None:
@@ -136,7 +137,6 @@ class SocketHandler:
                 conn = None
                 addr = None
 
-                self.updateValues()
             time.sleep(0.03)
 
     def waitForAck(self, conn):
