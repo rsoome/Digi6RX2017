@@ -117,10 +117,10 @@ class SocketHandler:
 
                     if messageSent:
                         self.waitForAck(conn)
+                        messageSent = self.sendMessage(self.values, conn, 4)
+
                     else:
                         print("Sending message timed out.")
-
-                    messageSent = self.sendMessage(self.values, conn, 4)
 
                     messages = self.listen(conn, 0.1)
 
