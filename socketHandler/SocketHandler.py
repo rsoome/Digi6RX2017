@@ -64,7 +64,7 @@ class SocketHandler:
                     data += packet
                     packet = conn.recv(4096)
                 except socket.timeout:
-                    print("Listening timed out")
+                    #print("Listening timed out")
                     break
 
             #print(data)
@@ -102,6 +102,11 @@ class SocketHandler:
                 if conn == None:
                     self.servSock.settimeout(0.1)
                     conn, addr = self.servSock.accept()
+
+                    messageSent = self.sendMessage({"check": ""}, conn, 0.1)
+                    if messageSent:
+                        self.waitForAck(conn)
+
                     print("Connection established to: " + str(addr))
                     #time.sleep(0.1)
 
@@ -114,14 +119,14 @@ class SocketHandler:
                         self.waitForAck(conn)
                     else:
                         print("Sending message timed out.")
-                        
+
                     messageSent = self.sendMessage(self.values, conn, 4)
 
                     messages = self.listen(conn, 0.1)
 
                     if messages != None:
                         print("Received messages.")
-                        self.handleMessages(messages)
+                        self.handleMessages(messages, conn)
 
                     if self.socketData.stop:
                         conn.close()
@@ -131,20 +136,20 @@ class SocketHandler:
                     self.updateValues()
 
             except socket.timeout:
-                if conn is not None:
-                    conn.close()
-                conn = None
-                addr = None
+                print("Socket timed out")
 
             except socket.error as e:
                 print("Client socket closed.")
                 if e.errno != errno.EPIPE:
                     raise
-                conn.close()
+                try:
+                    conn.close()
+                except:
+                    pass
                 conn = None
                 addr = None
 
-            time.sleep(0.03)
+            #time.sleep(0.03)
 
     def waitForAck(self, conn):
         timeOutCounter = 0
@@ -152,7 +157,7 @@ class SocketHandler:
             ret = self.listen(conn, 1)
             #print(ret)
             if ret is not None:
-                self.handleMessages(ret)
+                self.handleMessages(ret, conn)
             else:
                 timeOutCounter += 1
         self.acknowledged = False
@@ -172,16 +177,14 @@ class SocketHandler:
     def runClient(self, sock):
         #sock.settimeout(2)
         while True:
-            #print("*")
+            print("*")
             try:
                 if self.socketData.stop:
                     break
                 messages = self.listen(sock, 10)
                 if messages != None:
-                    self.handleMessages(messages)
-                    self.values["ack"] = True
-                    messageSent = self.sendMessage(self.values, sock, 60)
-                time.sleep(0.03)
+                    self.handleMessages(messages, sock)
+                #time.sleep(0.03)
             except socket.timeout:
                 pass
         sock.close()
@@ -200,11 +203,11 @@ class SocketHandler:
             return False
 
 
-    def handleMessages(self, messages):
+    def handleMessages(self, messages, sock):
 
         for key in messages:
 
-            print(key)
+            #print(key)
 
             if key == "stop":
                 sys.exit(0)
@@ -226,7 +229,7 @@ class SocketHandler:
             if key == "img":
                 #print("img")
                 #print(messages[key])
-                print("img recv")
+                #print("img recv")
                 self.socketData.img = messages[key]
 
             if key == "ballMask":
@@ -261,4 +264,7 @@ class SocketHandler:
 
             if key == "ack":
                 self.acknowledged = messages[key]
+
+            if key == "check":
+                messageSent = self.sendMessage({"ack" : True}, sock, 60)
 

@@ -117,6 +117,6 @@ while True:
     socketData.fps = fps
     socketHandler.updateData()
 
-
+print("Exiting.")
 settings.writeFromDictToFile()
 frameCapture.releaseCapture()
