@@ -111,6 +111,8 @@ class SocketHandler:
 
                     if messageSent:
                         self.waitForAck(conn)
+                    else:
+                        print("Sendimg message timed out.")
 
                     messages = self.listen(conn, 0.1)
 
@@ -123,7 +125,7 @@ class SocketHandler:
                         self.socketData.socketClosed = True
                         return
 
-                    self.sendMessage({"check": ""}, conn, 0.1)
+                    messageSent = self.sendMessage({"check": ""}, conn, 0.1)
                     self.updateValues()
 
             except socket.timeout:
@@ -161,7 +163,7 @@ class SocketHandler:
         except Exception as e:
             print("Client socket failed. Closing Socket.")
             print(e)
-            self.sendMessage({"stop": True}, self.clientSock, 0.05)
+            messageSent = self.sendMessage({"stop": True}, self.clientSock, 0.05)
             self.socketData.stop = True
             self.clientSock.close()
 
@@ -176,7 +178,7 @@ class SocketHandler:
                 if messages != None:
                     self.handleMessages(messages)
                     self.values["ack"] = True
-                    self.sendMessage(self.values, sock, 60)
+                    messageSent = self.sendMessage(self.values, sock, 60)
                 time.sleep(0.03)
             except socket.timeout:
                 pass
