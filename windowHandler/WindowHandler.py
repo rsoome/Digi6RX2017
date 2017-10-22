@@ -51,7 +51,7 @@ class WindowHandler:
             keyStroke = cv2.waitKey(100)
             if keyStroke & 0xFF == ord('q'):  # Nupu 'q' vajutuse peale välju programmist
                 self.values["stop"] = True
-                self.socketHandler.sendMessage(self.values, self.socketHandler.clientSock)
+                self.socketHandler.sendMessage(self.values, self.socketHandler.clientSock, )
                 self.socketHandler.waitForAck(self.socketHandler.clientSock)
                 self.closeWindows()
                 self.socketData.stop = True
@@ -78,7 +78,7 @@ class WindowHandler:
             if keyStroke & 0xFF == ord('g'):
                 self.values["gameStarted"] = True
 
-            self.socketHandler.sendMessage(self.values, self.socketHandler.clientSock)
+            self.socketHandler.sendMessage(self.values, self.socketHandler.clientSock, )
 
         frame = None
         ballMask = None

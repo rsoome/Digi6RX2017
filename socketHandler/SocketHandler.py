@@ -109,10 +109,10 @@ class SocketHandler:
 
             if conn != None:
                 #print(self.values)
-                self.sendMessage(self.values, conn)
+                self.sendMessage(self.values, conn, 60)
                 self.waitForAck(conn)
 
-                messages = self.listen(conn, 0.1)
+                messages = self.listen(consn, 0.1)
 
                 if messages != None:
                     print("Received messages.")
@@ -127,11 +127,12 @@ class SocketHandler:
             #print(self.values["img"])
 
             try:
-                self.sendMessage({"check":""}, conn)
+                self.sendMessage({"check": ""}, conn, 1)
             except socket.error as e:
 
                 if e.errno != errno.EPIPE:
                     raise
+                conn.close()
                 conn = None
                 addr = None
 
@@ -164,7 +165,7 @@ class SocketHandler:
         except Exception as e:
             print("Client socket failed. Closing Socket.")
             print(e)
-            self.sendMessage({"stop":True}, self.clientSock)
+            self.sendMessage({"stop": True}, self.clientSock, 60)
             self.socketData.stop = True
             self.clientSock.close()
 
@@ -179,17 +180,17 @@ class SocketHandler:
                 if messages != None:
                     self.handleMessages(messages)
                     self.values["ack"] = True
-                    self.sendMessage(self.values, sock)
+                    self.sendMessage(self.values, sock, 60)
                 time.sleep(0.03)
             except socket.timeout:
                 pass
         sock.close()
 
-    def sendMessage(self, msg, conn):
+    def sendMessage(self, msg, conn, timeout):
         pickled = pickle.dumps(msg)
         #print(len(pickled))
         #print(msg)
-        conn.settimeout(60)
+        conn.settimeout(timeout)
         conn.sendall(pickled)
 
 
