@@ -107,10 +107,10 @@ class SocketHandler:
 
                 else:
                     #print(self.values)
-                    self.sendMessage(self.values, conn, 0.1)
-                    print("*")
-                    self.waitForAck(conn)
-                    print("**")
+                    messageSent = self.sendMessage(self.values, conn, 0.2)
+
+                    if messageSent:
+                        self.waitForAck(conn)
 
                     messages = self.listen(conn, 0.1)
 
@@ -183,11 +183,17 @@ class SocketHandler:
         sock.close()
 
     def sendMessage(self, msg, conn, timeout):
-        pickled = pickle.dumps(msg)
-        #print(len(pickled))
-        #print(msg)
-        conn.settimeout(timeout)
-        conn.sendall(pickled)
+
+        try:
+            pickled = pickle.dumps(msg)
+            #print(len(pickled))
+            #print(msg)
+            conn.settimeout(timeout)
+            conn.sendall(pickled)
+            return True
+
+        except socket.timeout as e:
+            return False
 
 
     def handleMessages(self, messages):
