@@ -76,7 +76,7 @@ class SocketHandler:
             return readData
 
         except socket.timeout:
-            print("Listening timed out")
+            #print("Listening timed out")
             return None
 
         except pickle.UnpicklingError as e:
@@ -99,7 +99,9 @@ class SocketHandler:
 
     def streamData(self, conn, addr):
         while True:
+            print("Updating data")
             self.updateData()
+            print("Data updated")
             try:
                 if conn == None:
                     self.servSock.settimeout(0.1)
@@ -115,21 +117,26 @@ class SocketHandler:
                 else:
 
                     #print(self.values)
+                    print("Checking connection")
                     messageSent = self.sendMessage({"check": ""}, conn, 0.1)
 
                     if messageSent:
                         self.waitForAck(conn)
+                        print("Connection OK, updating values")
                         self.updateValues()
+                        print("Values updated, sending.")
                         messageSent = self.sendMessage(self.values, conn, 4)
 
                     else:
                         print("Sending message timed out.")
 
+                    print("Listening for incoming messages")
                     messages = self.listen(conn, 0.1)
 
                     if messages != None:
-                        print("Received messages.")
+                        print("Received messages. Handling")
                         self.handleMessages(messages, conn)
+                        print("Messages handled.")
 
                     if self.socketData.stop:
                         conn.close()
@@ -156,7 +163,7 @@ class SocketHandler:
     def waitForAck(self, conn):
         timeOutCounter = 0
         while  not self.acknowledged and timeOutCounter <= 10:
-            ret = self.listen(conn, 1)
+            ret = self.listen(conn, 0.1)
             #print(ret)
             if ret is not None:
                 self.handleMessages(ret, conn)
@@ -183,7 +190,7 @@ class SocketHandler:
             try:
                 if self.socketData.stop:
                     break
-                messages = self.listen(sock, 0.01)
+                messages = self.listen(sock, 8)
                 if messages != None:
                     self.handleMessages(messages, sock)
                 #time.sleep(0.03)
