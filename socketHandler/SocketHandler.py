@@ -29,7 +29,7 @@ class SocketHandler:
         #print(type(self.frame.capturedFrame.shape()))
         if self.frame.capturedFrame is not None:
             self.socketData.imgDimensions = self.frame.capturedFrame.shape
-            self.socketData.img = self.frame.capturedFrame
+            self.socketData.img = self.frame.bw
 
         if self.ball.mask is not None:
             self.socketData.ballDimensions = self.ball.mask.shape

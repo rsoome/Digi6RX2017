@@ -10,6 +10,7 @@ class FrameCapturer:
         self.filteredImg = None
         self.height = None
         self.width = None
+        self.bw = None
         # cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1080)
         # cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
 
@@ -25,6 +26,7 @@ class FrameCapturer:
             return
 
         self.filteredImg = cv2.cvtColor(self.capturedFrame, colorScheme)  # Pane pilt etteantud värviskeemi
+        self.bw = cv2.cvtColor(self.capturedFrame, cv2.COLOR_BGR2GRAY)
 
     def releaseCapture(self):
         # When everything done, release the capture
