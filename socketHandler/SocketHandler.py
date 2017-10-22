@@ -122,20 +122,20 @@ class SocketHandler:
 
                     self.sendMessage({"check": ""}, conn, 1)
 
+                except socket.timeout:
+                    try:
+                        conn.close()
+                    except:
+                        pass
+                    conn = None
+                    addr = None
+
                 except socket.error as e:
                     print(e.errno)
                     print(errno.EPIPE)
                     if e.errno != errno.EPIPE:
                         raise
                     conn.close()
-                    conn = None
-                    addr = None
-
-                except socket.timeout:
-                    try:
-                        conn.close()
-                    except:
-                        pass
                     conn = None
                     addr = None
 
