@@ -74,6 +74,7 @@ class SocketHandler:
             return readData
 
         except socket.timeout:
+            print("*")
             return None
 
         except pickle.UnpicklingError as e:
@@ -141,22 +142,15 @@ class SocketHandler:
 
     def waitForAck(self, conn):
         timeOutCounter = 0
-        while  not self.acknowledged:
-            time.sleep(0.1)
+        while  not self.acknowledged and timeOutCounter <= 10:
+            time.sleep(0.03)
             ret = self.listen(conn, 1)
-            #print(ret)
+            print(ret)
             if ret is not None:
                 self.handleMessages(ret)
             else:
                 timeOutCounter += 1
-
-            if timeOutCounter >= 10:
-                break
-
         self.acknowledged = False
-
-    #def createNumpyArrayFromString(self, s):
-    #    return np.fromstring(s, np.int8) - 48
 
     def initClient(self, host, port):
         self.clientSock = socket.socket()
