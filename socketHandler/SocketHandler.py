@@ -92,8 +92,8 @@ class SocketHandler:
             self.streamData(None, None)
         except Exception as e:
             print("An error occured, closing connections.")
-            print(e)
             self.servSock.close()
+            raise e
 
     def streamData(self, conn, addr):
         while True:

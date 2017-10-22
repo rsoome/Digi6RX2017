@@ -78,7 +78,7 @@ class WindowHandler:
             if keyStroke & 0xFF == ord('g'):
                 self.values["gameStarted"] = True
 
-            self.socketHandler.sendMessage(self.values, self.socketHandler.clientSock, )
+            self.socketHandler.sendMessage(self.values, self.socketHandler.clientSock, 1)
 
         frame = None
         ballMask = None
