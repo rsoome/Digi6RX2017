@@ -48,6 +48,7 @@ class WindowHandler:
 
         if cv2.waitKey(1) & 0xFF == ord('e'):
             #        time.sleep(1)
+            self.values ={}
             keyStroke = cv2.waitKey(100)
             if keyStroke & 0xFF == ord('q'):  # Nupu 'q' vajutuse peale välju programmist
                 self.values["stop"] = True
