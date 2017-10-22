@@ -107,12 +107,12 @@ class SocketHandler:
 
                 else:
                     #print(self.values)
-                    messageSent = self.sendMessage(self.values, conn, 0.2)
+                    messageSent = self.sendMessage(self.values, conn, 4)
 
                     if messageSent:
                         self.waitForAck(conn)
                     else:
-                        print("Sendimg message timed out.")
+                        print("Sending message timed out.")
 
                     messages = self.listen(conn, 0.1)
 
@@ -148,7 +148,7 @@ class SocketHandler:
         timeOutCounter = 0
         while  not self.acknowledged and timeOutCounter <= 10:
             ret = self.listen(conn, 1)
-            print(ret)
+            #print(ret)
             if ret is not None:
                 self.handleMessages(ret)
             else:
