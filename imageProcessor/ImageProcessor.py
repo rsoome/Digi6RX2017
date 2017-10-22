@@ -42,10 +42,14 @@ class ImageProcessor:
             if self.cancelToken.isCanceled:
                 return
 
-            # print(self.threadID)
-
+            print("Updating object coordinates")
             # Lock the cancellation token to cancel all other jobs running
             self.cancellationLock.acquire()
+
+            if self.cancelToken.isCanceled:
+                self.cancellationLock.release()
+                return
+
             self.cancelToken.cancel()
 
             # Write the found coordinates into the given object and release the cancellation token

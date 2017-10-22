@@ -22,14 +22,18 @@ class GameLogic:
                     #print("Screen midpoint: " + str(self.screenMidpoint))
                     self.updateTargetCoordinates(scanOrder, target)
                     self.move.rotate(self.turnSpeed)
+                self.move.rotate(0)
             else:
                 while (target.horizontalMidPoint != None
                        and target.horizontalMidPoint < self.screenMidpoint + self.deltaFromMidPoint):
                     self.updateTargetCoordinates(scanOrder, target)
                     self.move.rotate(-self.turnSpeed)
+                self.move.rotate(0)
 
     def moveToTarget(self, scanOrder, target):
-
+        while target.horizontalMidPoint == None:
+            self.updateTargetCoordinates(scanOrder, target)
+            print(target.horizontalMidPoint)
         if target.horizontalMidPoint != None:
             self.turnToTarget(scanOrder, target)
             while (target.verticalMidPoint != None and target.verticalMidPoint < 460):

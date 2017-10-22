@@ -58,9 +58,14 @@ class SocketHandler:
         try:
             packet = conn.recv(4096)
             while packet:
-                #print(len(packet))
-                data += packet
-                packet = conn.recv(4096)
+                conn.settimeout(0.1)
+                try:
+                    #print(len(packet))
+                    data += packet
+                    packet = conn.recv(4096)
+                except socket.timeout:
+                    conn.settimeout(timeout)
+                    break
 
             #print(data)
             if self.socketData.stop or len(data) < 1:

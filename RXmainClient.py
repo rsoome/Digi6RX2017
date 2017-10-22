@@ -20,7 +20,6 @@ textColor = (0, 0, 255)
 framesCaptured = 0
 totalTimeElapsed = 0
 fpsStatus = "0"
-
 socketData = SocketData.SocketData()
 socketHandler = SocketHandler.SocketHandler(socketData, None, None, None, None)
 window = WindowHandler.WindowHandler(socketData, socketHandler)
