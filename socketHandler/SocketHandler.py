@@ -91,7 +91,7 @@ class SocketHandler:
         try:
             self.streamData(None, None)
         except Exception as e:
-            print("An error occured: ")
+            print("An error occured, closing connections.")
             print(e)
             self.servSock.close()
 
@@ -125,9 +125,6 @@ class SocketHandler:
                 self.socketData.socketClosed = True
                 return
 
-            self.updateValues()
-            #print(self.values["img"])
-
             try:
                 self.sendMessage({"check": ""}, conn, 1)
             except socket.error as e:
@@ -137,6 +134,9 @@ class SocketHandler:
                 conn.close()
                 conn = None
                 addr = None
+
+            self.updateValues()
+            #print(self.values["img"])
 
             time.sleep(0.03)
 
