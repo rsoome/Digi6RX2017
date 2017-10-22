@@ -33,8 +33,8 @@ basket = Target.Target(None, None, "basket",
 
 hsv = None
 
-#mb = MBcomm.MBcomm(settings.getValue("mbLocation"), 115200)
-mb = None
+mb = MBcomm.MBcomm(settings.getValue("mbLocation"), 115200)
+#mb = None
 move = MovementLogic.MovementLogic(mb)
 imgHandler = ImageHandler.ImageHandler(bool(settings.getValue("multiThreading")))
 frameCapture = FrameCapturer.FrameCapturer(int(settings.getValue("camID")))
@@ -98,7 +98,7 @@ while True:
 
     if socketData.gameStarted:
         print("Game mode activated")
-        game.run()
+        game.run([int(x) for x in settings.getValue("ballScanOrder").split()], ball)
         socketData.gameStarted = False
 
     if socketData.stop:

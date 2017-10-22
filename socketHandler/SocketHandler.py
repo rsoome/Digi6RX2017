@@ -203,7 +203,7 @@ class SocketHandler:
             try:
                 if self.socketData.stop:
                     break
-                messages = self.listen(sock, 0.1)
+                messages = self.listen(sock, 0.3)
                 if messages != None:
                     self.handleMessages(messages, sock)
                 #time.sleep(0.03)

@@ -35,8 +35,6 @@ class WindowHandler:
 
     def showImage(self):
         if self.socketData.ballHorizontalBounds != None and self.socketData.ballVerticalBounds != None:
-            print(self.socketData.ballHorizontalBounds)
-            print(self.socketData.ballVerticalBounds)
             cv2.rectangle(self.socketData.img, (self.socketData.ballHorizontalBounds[0],
                                                 self.socketData.ballVerticalBounds[1]),
                           (self.socketData.ballHorizontalBounds[1], self.socketData.ballVerticalBounds[0]),
