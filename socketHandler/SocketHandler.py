@@ -58,7 +58,7 @@ class SocketHandler:
         try:
             packet = conn.recv(4096)
             while packet:
-                conn.settimeout(0.1)
+                conn.settimeout(0.8)
                 try:
                     #print(len(packet))
                     data += packet
@@ -74,8 +74,10 @@ class SocketHandler:
             return readData
 
         except socket.timeout:
-            print("Listening timed out")
             return None
+
+        except pickle.UnpicklingError as e:
+            print(e)
 
 
     def initServ(self):
@@ -109,11 +111,11 @@ class SocketHandler:
                 self.sendMessage(self.values, conn)
                 self.waitForAck(conn)
 
-            messages = self.listen(conn, 0.1)
+                messages = self.listen(conn, 0.1)
 
-            if messages != None:
-                print("Received messages.")
-                self.handleMessages(messages)
+                if messages != None:
+                    print("Received messages.")
+                    self.handleMessages(messages)
 
             if self.socketData.stop:
                 conn.close()
@@ -122,6 +124,8 @@ class SocketHandler:
 
             self.updateValues()
             #print(self.values["img"])
+
+            self.sendMessage({"check":""})
 
             time.sleep(0.03)
 
@@ -170,7 +174,6 @@ class SocketHandler:
                     self.sendMessage(self.values, sock)
                 time.sleep(0.03)
             except socket.timeout:
-                print("Increase timeout")
                 pass
         sock.close()
 
