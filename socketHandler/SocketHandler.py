@@ -98,13 +98,14 @@ class SocketHandler:
     def streamData(self, conn, addr):
         while True:
             self.updateData()
-            if conn == None:
-                try:
+            try:
+                if conn == None:
                     self.servSock.settimeout(1)
                     conn, addr = self.servSock.accept()
                     print("Connection established to: " + str(addr))
                     #time.sleep(0.1)
 
+                else:
                     #print(self.values)
                     self.sendMessage(self.values, conn, 60)
                     self.waitForAck(conn)
