@@ -52,6 +52,10 @@ class SocketHandler:
         self.values["ballMask"] = self.socketData.ballMask
         self.values["ballDimensions"] = self.socketData.ballDimensions
         self.values["fps"] = self.socketData.fps
+        self.values["ballHorizontalBounds"] = self.socketData.ballHorizontalBounds
+        self.values["ballVerticalBounds"] = self.socketData.ballVerticalBounds
+        self.values["basketHorizontalBounds"] = self.socketData.basketHorizontalBounds
+        self.values["basketVerticalBounds"] = self.socketData.basketVerticalBounds
 
     def listen(self, conn, t):
 
@@ -238,9 +242,21 @@ class SocketHandler:
                 self.socketData.ballSelected = messages[key]
                 self.socketData.basketSelected = not messages[key]
 
+            if key == "ballHorizontalBounds":
+                self.socketData.ballHorizontalBounds = messages[key]
+
+            if key == "ballVerticalBounds":
+                self.socketData.ballVerticalBounds = messages[key]
+
             if key == "basketSelected":
                 self.socketData.ballSelected = not messages[key]
                 self.socketData.basketSelected = messages[key]
+
+            if key == "basketHorizontalBounds":
+                self.socketData.basketHorizontalBounds = messages[key]
+
+            if key == "basketVerticalBounds":
+                self.socketData.basketVerticalBounds = messages[key]
 
             if key == "manualDrive":
                 self.socketData.manualDrive = messages[key]
