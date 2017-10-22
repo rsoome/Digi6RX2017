@@ -82,6 +82,9 @@ class SocketHandler:
         except pickle.UnpicklingError as e:
             print(e)
 
+        except zlib.error as e:
+            print(e)
+
 
     def initServ(self):
         host = ""
@@ -118,7 +121,7 @@ class SocketHandler:
 
                     #print(self.values)
                     print("Checking connection")
-                    messageSent = self.sendMessage({"check": ""}, conn, 0.1)
+                    messageSent = self.sendMessage({"check": ""}, conn, 0.001)
 
                     if messageSent:
                         self.waitForAck(conn)
@@ -186,26 +189,28 @@ class SocketHandler:
     def runClient(self, sock):
         #sock.settimeout(2)
         while True:
-            print("*")
+            #print("*")
             try:
                 if self.socketData.stop:
                     break
-                messages = self.listen(sock, 8)
+                messages = self.listen(sock, 0.1)
                 if messages != None:
                     self.handleMessages(messages, sock)
                 #time.sleep(0.03)
             except socket.timeout:
+                print("Listening timed out.")
                 pass
         sock.close()
 
     def sendMessage(self, msg, conn, timeout):
+
+        conn.settimeout(timeout)
 
         try:
             pickled = pickle.dumps(msg)
             compressed = zlib.compress(pickled, 1)
             #print(len(pickled))
             #print(msg)
-            conn.settimeout(timeout)
             conn.sendall(compressed)
             return True
 
