@@ -120,20 +120,20 @@ class SocketHandler:
                     print("Received messages.")
                     self.handleMessages(messages)
 
-            if self.socketData.stop:
-                conn.close()
-                self.socketData.socketClosed = True
-                return
+                if self.socketData.stop:
+                    conn.close()
+                    self.socketData.socketClosed = True
+                    return
 
-            try:
-                self.sendMessage({"check": ""}, conn, 1)
-            except socket.error as e:
+                try:
+                    self.sendMessage({"check": ""}, conn, 1)
+                except socket.error as e:
 
-                if e.errno != errno.EPIPE:
-                    raise
-                conn.close()
-                conn = None
-                addr = None
+                    if e.errno != errno.EPIPE:
+                        raise
+                    conn.close()
+                    conn = None
+                    addr = None
 
             self.updateValues()
             #print(self.values["img"])
