@@ -124,6 +124,7 @@ class SocketHandler:
                     messageSent = self.sendMessage({"check": ""}, conn, 0.001)
 
                     if messageSent:
+                        print("Waiting for confirmation.")
                         self.waitForAck(conn)
                         print("Connection OK, updating values")
                         self.updateValues()
