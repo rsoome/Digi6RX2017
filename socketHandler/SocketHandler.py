@@ -196,7 +196,7 @@ class SocketHandler:
         try:
             pickled = pickle.dumps(msg)
             compressed = zlib.compress(pickled, 9)
-            #print(len(pickled))
+            print(len(compressed))
             #print(msg)
             conn.settimeout(timeout)
             conn.sendall(compressed)
