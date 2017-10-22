@@ -136,7 +136,8 @@ class SocketHandler:
                     self.updateValues()
 
             except socket.timeout:
-                print("Socket timed out")
+                #print("Socket timed out")
+                pass
 
             except socket.error as e:
                 print("Client socket closed.")
