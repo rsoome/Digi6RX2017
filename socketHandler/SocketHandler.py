@@ -4,6 +4,7 @@ import sys
 import traceback
 
 import cv2
+import errno
 
 import numpy as np
 import time
@@ -125,7 +126,14 @@ class SocketHandler:
             self.updateValues()
             #print(self.values["img"])
 
-            self.sendMessage({"check":""}, conn)
+            try:
+                self.sendMessage({"check":""}, conn)
+            except socket.error as e:
+
+                if e.errno != errno.EPIPE:
+                    raise
+                conn = None
+                addr = None
 
             time.sleep(0.03)
 
@@ -207,7 +215,6 @@ class SocketHandler:
                 self.socketData.gameStarted = messages[key]
 
             if key == "img":
-                print("Img received")
                 #print(messages[key])
                 self.socketData.img = messages[key]
 
