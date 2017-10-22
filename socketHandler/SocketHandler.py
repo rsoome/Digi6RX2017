@@ -59,7 +59,6 @@ class SocketHandler:
         try:
             packet = conn.recv(4096)
             while packet:
-                conn.settimeout(0.8)
                 try:
                     #print(len(packet))
                     data += packet
@@ -100,14 +99,14 @@ class SocketHandler:
             self.updateData()
             try:
                 if conn == None:
-                    self.servSock.settimeout(1)
+                    self.servSock.settimeout(0.1)
                     conn, addr = self.servSock.accept()
                     print("Connection established to: " + str(addr))
                     #time.sleep(0.1)
 
                 else:
                     #print(self.values)
-                    self.sendMessage(self.values, conn, 60)
+                    self.sendMessage(self.values, conn, 0.1)
                     self.waitForAck(conn)
 
                     messages = self.listen(conn, 0.1)
@@ -121,7 +120,7 @@ class SocketHandler:
                         self.socketData.socketClosed = True
                         return
 
-                    self.sendMessage({"check": ""}, conn, 1)
+                    self.sendMessage({"check": ""}, conn, 0.1)
 
             except socket.timeout:
                 if conn is not None:
@@ -137,7 +136,7 @@ class SocketHandler:
                 conn = None
                 addr = None
 
-            self.updateValues()
+                self.updateValues()
             time.sleep(0.03)
 
     def waitForAck(self, conn):
@@ -167,7 +166,7 @@ class SocketHandler:
         except Exception as e:
             print("Client socket failed. Closing Socket.")
             print(e)
-            self.sendMessage({"stop": True}, self.clientSock, 60)
+            self.sendMessage({"stop": True}, self.clientSock, 0.05)
             self.socketData.stop = True
             self.clientSock.close()
 
@@ -178,7 +177,7 @@ class SocketHandler:
             try:
                 if self.socketData.stop:
                     break
-                messages = self.listen(sock, 60)
+                messages = self.listen(sock, 0.8)
                 if messages != None:
                     self.handleMessages(messages)
                     self.values["ack"] = True
