@@ -39,5 +39,7 @@ class ManualDrive:
 
             if keyStroke == ord(' '):
                 self.move.brake()
+
+            self.move.rotate(0)
         print("Manual driving deactivated.")
         curses.endwin()

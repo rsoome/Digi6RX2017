@@ -118,6 +118,8 @@ try:
         socketData.fps = fps
         socketHandler.updateData()
 
+        print(ball.verticalMidPoint)
+
     print("Exit.")
     settings.writeFromDictToFile()
     frameCapture.releaseCapture()
