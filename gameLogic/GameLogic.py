@@ -33,8 +33,13 @@ class GameLogic:
         if target.horizontalMidPoint != None:
             self.turnToTarget(scanOrder, target)
             while (not self.checkVerticalAlignment(target)):
+
+                if target.horizontalMidPoint != None and not self.checkHorizontalAlginment(target):
+                    break
+
                 if not self.socketData.gameStarted:
                     break
+                    
                 self.updateTargetCoordinates(scanOrder, target)
                 self.move.drive(self.moveSpeed, 0)
             #start ballroller
