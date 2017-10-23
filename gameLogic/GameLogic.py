@@ -32,7 +32,7 @@ class GameLogic:
 
         if target.horizontalMidPoint != None:
             self.turnToTarget(scanOrder, target)
-            while (not self.checkVerticalAlignment()):
+            while (not self.checkVerticalAlignment(target)):
                 if not self.socketData.gameStarted:
                     break
                 self.updateTargetCoordinates(scanOrder, target)
@@ -56,7 +56,7 @@ class GameLogic:
 
     def run(self, scanOrder, target):
         while(self.socketData.gameStarted):
-            if(not self.checkVerticalAlignment() and self.checkHorizontalAlginment()):
+            if(not self.checkVerticalAlignment(target) and self.checkHorizontalAlginment(target)):
                 self.lookForBall(scanOrder, target)
                 #print(target.horizontalMidPoint)
                 self.turnToTarget(scanOrder, target)
