@@ -17,7 +17,7 @@ class GameLogic:
         if target.horizontalMidPoint != None:
             if target.horizontalMidPoint > self.screenMidpoint:
                 while (target.horizontalMidPoint != None
-                       and target.horizontalMidPoint > self.screenMidpoint + self.deltaFromMidPoint):
+                       and not self.checkHorizontalAlginment(target)):
                     #print("Target midpoint: " + str(target.midPoint))
                     #print("Screen midpoint: " + str(self.screenMidpoint))
                     self.updateTargetCoordinates(scanOrder, target)
@@ -25,15 +25,16 @@ class GameLogic:
                 self.move.rotate(0)
             else:
                 while (target.horizontalMidPoint != None
-                       and target.horizontalMidPoint < self.screenMidpoint + self.deltaFromMidPoint):
+                       and not self.checkHorizontalAlginment(target)):
                     self.updateTargetCoordinates(scanOrder, target)
                     self.move.rotate(-self.turnSpeed)
                 self.move.rotate(0)
 
     def moveToTarget(self, scanOrder, target):
-        while target.horizontalMidPoint == None:
+        '''while target.horizontalMidPoint == None:
             self.updateTargetCoordinates(scanOrder, target)
-            print(target.horizontalMidPoint)
+            print(target.horizontalMidPoint)'''''
+
         if target.horizontalMidPoint != None:
             self.turnToTarget(scanOrder, target)
             while (target.verticalMidPoint != None and target.verticalMidPoint < 460):
@@ -63,4 +64,11 @@ class GameLogic:
         self.frame.capture(cv2.COLOR_BGR2HSV)
         self.screenMidpoint = self.frame.width//2
 
+    def checkHorizontalAlginment(self, target):
+        if (target.horizontalMidPoint > self.screenMidpoint + self.deltaFromMidPoint
+            or target.horizontalMidPoint < self.screenMidpoint - self.deltaFromMidPoint):
+
+            return False
+
+        return True
 
