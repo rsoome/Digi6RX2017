@@ -21,35 +21,39 @@ class ManualDrive:
             keyStroke = screen.getch()
 
             while keyStroke == ord('w'):
-                print(keyStroke)
                 self.move.drive(self.driveSpeed, 0)
-                keyStroke = screen.getch()
+                keyStroke = self.getKeystroke(screen)
 
             while keyStroke == ord('2'):
                 self.move.drive(self.driveSpeed, 60)
-                keyStroke = screen.getch()
+                keyStroke = self.getKeystroke(screen)
 
             while keyStroke == ord('s'):
                 self.move.drive(self.driveSpeed, 180)
-                keyStroke = screen.getch()
+                keyStroke = self.getKeystroke(screen)
 
             while keyStroke == ord('1'):
                 self.move.drive(self.driveSpeed, -60)
-                keyStroke = screen.getch()
+                keyStroke = self.getKeystroke(screen)
 
             while keyStroke == ord('a'):
                 self.move.rotate(-self.turnSpeed)
-                keyStroke = screen.getch()
+                keyStroke = self.getKeystroke(screen)
 
             while keyStroke == ord('d'):
                 self.move.rotate(self.turnSpeed)
-                keyStroke = screen.getch()
+                keyStroke = self.getKeystroke(screen)
 
             while keyStroke == ord(' '):
                 self.move.brake()
-                keyStroke = screen.getch()
+                keyStroke = self.getKeystroke(screen)
 
             self.move.rotate(0)
 
         print("Manual driving deactivated.")
         curses.endwin()
+
+    def getKeystroke(self, screen):
+        keyStroke = ''
+        keyStroke = screen.getch()
+        return keyStroke
