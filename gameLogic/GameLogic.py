@@ -53,7 +53,7 @@ class GameLogic:
 
     def lookForBall(self, scanOrder, target):
         i = 0
-        while i < 500:
+        while i < 400:
             if not self.socketData.gameStarted:
                 break
             self.updateTargetCoordinates(scanOrder, target)
@@ -74,7 +74,7 @@ class GameLogic:
                     if not self.socketData.gameStarted:
                         break
                     print("Relocating")
-                    for i in range(1000):
+                    for i in range(5000):
                         self.move.drive(self.moveSpeed, 0)
                 self.turnToTarget(scanOrder, target)
                 self.moveToTarget(scanOrder, target)
