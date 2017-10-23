@@ -53,7 +53,7 @@ class GameLogic:
 
     def lookForBall(self, scanOrder, target):
         i = 0
-        while i < 1000:
+        while i < 500:
             if not self.socketData.gameStarted:
                 break
             self.updateTargetCoordinates(scanOrder, target)
@@ -71,6 +71,8 @@ class GameLogic:
             if(not (self.checkVerticalAlignment(target) and self.checkHorizontalAlginment(target))):
                 targetFound = self.lookForBall(scanOrder, target)
                 if not targetFound:
+                    if not self.socketData.gameStarted:
+                        break
                     print("Relocating")
                     for i in range(1000):
                         self.move.drive(self.moveSpeed, 0)
