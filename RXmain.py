@@ -39,7 +39,7 @@ mb = MBcomm.MBcomm(settings.getValue("mbLocation"), 115200)
 move = MovementLogic.MovementLogic(mb)
 imgHandler = ImageHandler.ImageHandler(bool(settings.getValue("multiThreading")))
 frameCapture = FrameCapturer.FrameCapturer(int(settings.getValue("camID")))
-game = GameLogic.GameLogic(move, 20, int(settings.getValue("driveSpeed")), int(settings.getValue("turnSpeed")),
+game = GameLogic.GameLogic(move, 40, int(settings.getValue("driveSpeed")), int(settings.getValue("turnSpeed")),
                            imgHandler, frameCapture, socketData)
 
 socketHandler = SocketHandler.SocketHandler(socketData, ball, basket, fps, frameCapture)
