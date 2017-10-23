@@ -78,6 +78,7 @@ class WindowHandler:
 
             if keyStroke & 0xFF == ord('g'):
                 self.socketData.gameStarted = not self.socketData.gameStarted
+                print("Setting game started to: " + str(self.socketData.gameStarted))
                 self.values["gameStarted"] = self.socketData.gameStarted
 
             self.socketHandler.sendMessage(self.values, self.socketHandler.clientSock, 1)

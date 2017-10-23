@@ -67,6 +67,7 @@ class GameLogic:
             self.moveToTarget(scanOrder, target)
             print(target.verticalMidPoint)
             print("---------------------")
+        self.move.rotate(0)
 
 
     def initializeValues(self):
