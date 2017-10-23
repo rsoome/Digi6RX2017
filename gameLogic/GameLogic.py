@@ -32,7 +32,7 @@ class GameLogic:
 
         if target.horizontalMidPoint != None:
             self.turnToTarget(scanOrder, target)
-            while (target.verticalMidPoint != None and target.verticalMidPoint < 460):
+            while (not self.checkVerticalAlignment()):
                 if not self.socketData.gameStarted:
                     break
                 self.updateTargetCoordinates(scanOrder, target)
@@ -56,13 +56,14 @@ class GameLogic:
 
     def run(self, scanOrder, target):
         while(self.socketData.gameStarted):
-            self.lookForBall(scanOrder, target)
-            print(target.horizontalMidPoint)
-            self.turnToTarget(scanOrder, target)
-            print(target.horizontalMidPoint)
-            self.moveToTarget(scanOrder, target)
-            print(target.verticalMidPoint)
-            print("---------------------")
+            if(not self.checkVerticalAlignment() and self.checkHorizontalAlginment()):
+                self.lookForBall(scanOrder, target)
+                #print(target.horizontalMidPoint)
+                self.turnToTarget(scanOrder, target)
+                #print(target.horizontalMidPoint)
+                self.moveToTarget(scanOrder, target)
+                #print(target.verticalMidPoint)
+                #print("---------------------")
         self.move.rotate(0)
 
 
@@ -75,6 +76,16 @@ class GameLogic:
         if (target.horizontalMidPoint != None and (target.horizontalMidPoint > self.screenMidpoint + self.deltaFromMidPoint
             or target.horizontalMidPoint < self.screenMidpoint - self.deltaFromMidPoint)):
 
+            return False
+
+        return True
+
+    def checkVerticalAlignment(self, target):
+
+        if(target.verticalMidPoint == None):
+            return False
+
+        if(target.verticalMidPoint != None and target.verticalMidPoint < 460):
             return False
 
         return True
