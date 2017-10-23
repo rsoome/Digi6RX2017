@@ -121,6 +121,30 @@ try:
     print("Exit.")
     settings.writeFromDictToFile()
     frameCapture.releaseCapture()
+except KeyboardInterrupt:
+    print("Canceled by user with keyboard interrupt")
+
+    try:
+        socketHandler.servSock.close()
+    except Exception as ee:
+        print(ee)
+
+    try:
+        socketHandler.clientSock.close()
+    except Exception as ee:
+        print(ee)
+
+    try:
+        mb.ser.close()
+    except Exception as ee:
+        print(ee)
+
+    try:
+        frameCapture.releaseCapture()
+    except Exception as ee:
+        print(ee)
+
+
 except Exception as e:
     print(e)
     try:
