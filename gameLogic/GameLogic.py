@@ -13,7 +13,7 @@ class GameLogic:
         self.frame = frame
         self.initializeValues()
         self.socketData = socketData
-        self.verticalStopBound = 400
+        self.verticalStopBound = 350
 
     def turnToTarget(self, scanOrder, target):
         if target.horizontalMidPoint != None:
