@@ -53,12 +53,14 @@ class GameLogic:
 
     def lookForBall(self, scanOrder, target):
         i = 0
-        while target.horizontalMidPoint == None or i < 10:
+        while i < 10:
             if not self.socketData.gameStarted:
                 break
             self.updateTargetCoordinates(scanOrder, target)
             self.move.rotate(self.turnSpeed)
             i += 1
+            print("****")
+            print(target.horizontalMidPoint)
             if target.horizontalMidPoint != None:
                 return True
 
@@ -69,6 +71,7 @@ class GameLogic:
             if(not (self.checkVerticalAlignment(target) and self.checkHorizontalAlginment(target))):
                 targetFound = self.lookForBall(scanOrder, target)
                 if not targetFound:
+                    print("Relocating")
                     self.move.drive(self.moveSpeed, 0)
                 self.turnToTarget(scanOrder, target)
                 self.moveToTarget(scanOrder, target)
