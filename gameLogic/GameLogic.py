@@ -70,6 +70,9 @@ class GameLogic:
         self.screenMidpoint = self.frame.width//2
 
     def checkHorizontalAlginment(self, target):
+        if target == None:
+            return False
+        
         if (target.horizontalMidPoint > self.screenMidpoint + self.deltaFromMidPoint
             or target.horizontalMidPoint < self.screenMidpoint - self.deltaFromMidPoint):
 
