@@ -64,6 +64,8 @@ class GameLogic:
                 self.moveToTarget(scanOrder, target)
                 #print(target.verticalMidPoint)
                 #print("---------------------")
+            else:
+                self.updateTargetCoordinates()
         self.move.rotate(0)
 
 
