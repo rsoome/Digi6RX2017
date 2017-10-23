@@ -3,7 +3,7 @@ import cv2
 # TODO: Implement
 class GameLogic:
 
-    def __init__(self, move, deltaFromMidPoint, moveSpeed, turnSpeed, imgHandler, frame):
+    def __init__(self, move, deltaFromMidPoint, moveSpeed, turnSpeed, imgHandler, frame, socketData):
         self.screenMidpoint = None
         self.move = move
         self.deltaFromMidPoint = deltaFromMidPoint
@@ -12,6 +12,7 @@ class GameLogic:
         self.imgHandler = imgHandler
         self.frame = frame
         self.initializeValues()
+        self.socketData = socketData
 
     def turnToTarget(self, scanOrder, target):
         if target.horizontalMidPoint != None:
@@ -36,7 +37,7 @@ class GameLogic:
             print(target.horizontalMidPoint)'''''
 
         self.updateTargetCoordinates(scanOrder, target)
-        
+
         if target.horizontalMidPoint != None:
             self.turnToTarget(scanOrder, target)
             while (target.verticalMidPoint != None and target.verticalMidPoint < 460):
@@ -58,12 +59,14 @@ class GameLogic:
             i += 1
 
     def run(self, scanOrder, target):
-        self.lookForBall(scanOrder, target)
-        print(target.horizontalMidPoint)
-        self.turnToTarget(scanOrder, target)
-        print(target.horizontalMidPoint)
-        self.moveToTarget(scanOrder, target)
-        print(target.verticalMidPoint)
+        while(self.socketData.gameStarted):
+            self.lookForBall(scanOrder, target)
+            print(target.horizontalMidPoint)
+            self.turnToTarget(scanOrder, target)
+            print(target.horizontalMidPoint)
+            self.moveToTarget(scanOrder, target)
+            print(target.verticalMidPoint)
+            print("---------------------")
 
 
     def initializeValues(self):

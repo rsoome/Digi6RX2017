@@ -77,7 +77,8 @@ class WindowHandler:
                 self.values["manualDrive"] = True
 
             if keyStroke & 0xFF == ord('g'):
-                self.values["gameStarted"] = True
+                self.socketData.gameStarted = not self.socketData.gameStarted
+                self.values["gameStarted"] = self.socketData.gameStarted
 
             self.socketHandler.sendMessage(self.values, self.socketHandler.clientSock, 1)
 
