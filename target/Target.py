@@ -50,6 +50,7 @@ class Target:
             self.horizontalMidPoint = None
 
         if vBounds != None:
+            print(self.verticalMidPoint)
             self.verticalMidPoint = vBounds[0] + (vBounds[1] - vBounds[0]) // 2
         else:
             self.verticalMidPoint = None

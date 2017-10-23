@@ -35,6 +35,8 @@ class GameLogic:
             self.updateTargetCoordinates(scanOrder, target)
             print(target.horizontalMidPoint)'''''
 
+        self.updateTargetCoordinates(scanOrder, target)
+        
         if target.horizontalMidPoint != None:
             self.turnToTarget(scanOrder, target)
             while (target.verticalMidPoint != None and target.verticalMidPoint < 460):
@@ -57,8 +59,12 @@ class GameLogic:
 
     def run(self, scanOrder, target):
         self.lookForBall(scanOrder, target)
+        print(target.horizontalMidPoint)
         self.turnToTarget(scanOrder, target)
+        print(target.horizontalMidPoint)
         self.moveToTarget(scanOrder, target)
+        print(target.verticalMidPoint)
+
 
     def initializeValues(self):
         self.frame.capture(cv2.COLOR_BGR2HSV)
