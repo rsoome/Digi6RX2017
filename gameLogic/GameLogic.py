@@ -56,7 +56,7 @@ class GameLogic:
 
     def run(self, scanOrder, target):
         while(self.socketData.gameStarted):
-            if(not (self.checkVerticalAlignment(target) and self.checkHorizontalAlginment(target))SSS):
+            if(not (self.checkVerticalAlignment(target) and self.checkHorizontalAlginment(target))):
                 self.lookForBall(scanOrder, target)
                 #print(target.horizontalMidPoint)
                 self.turnToTarget(scanOrder, target)
