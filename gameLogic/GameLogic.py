@@ -13,7 +13,7 @@ class GameLogic:
         self.frame = frame
         self.initializeValues()
         self.socketData = socketData
-        self.verticalStopBound = 300
+        self.verticalStopBound = 400
 
     def turnToTarget(self, scanOrder, target):
         if target.horizontalMidPoint != None:
@@ -44,7 +44,7 @@ class GameLogic:
                 self.updateTargetCoordinates(scanOrder, target)
                 self.move.drive(self.moveSpeed, 0)
             #start ballroller
-            self.move.rotate(self.moveSpeed, 0)
+            self.move.rotate(0)
 
     def updateTargetCoordinates(self, scanOrder, target):
         self.frame.capture(cv2.COLOR_BGR2HSV)
@@ -52,9 +52,10 @@ class GameLogic:
         self.imgHandler.detect(None, target.mask, 1000, 0, scanOrder, target)
 
     def lookForBall(self, scanOrder, target):
+        self.updateTargetCoordinates(scanOrder, target)
         i = 0
         while i < 400:
-            if not self.socketData.gameStarted:
+            if not self.socketData.gameStarted :
                 break
             self.updateTargetCoordinates(scanOrder, target)
             self.move.rotate(self.turnSpeed)
