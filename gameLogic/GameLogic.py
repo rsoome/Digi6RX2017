@@ -72,7 +72,8 @@ class GameLogic:
                 targetFound = self.lookForBall(scanOrder, target)
                 if not targetFound:
                     print("Relocating")
-                    self.move.drive(self.moveSpeed, 0)
+                    for i in range(20):
+                        self.move.drive(self.moveSpeed, 0)
                 self.turnToTarget(scanOrder, target)
                 self.moveToTarget(scanOrder, target)
 
