@@ -27,21 +27,27 @@ class ManualDrive:
 
             while keyStroke == ord('2'):
                 self.move.drive(self.driveSpeed, 60)
+                keyStroke = screen.getch()
 
             while keyStroke == ord('s'):
                 self.move.drive(self.driveSpeed, 180)
+                keyStroke = screen.getch()
 
             while keyStroke == ord('1'):
                 self.move.drive(self.driveSpeed, -60)
+                keyStroke = screen.getch()
 
             while keyStroke == ord('a'):
                 self.move.rotate(-self.turnSpeed)
+                keyStroke = screen.getch()
 
             while keyStroke == ord('d'):
                 self.move.rotate(self.turnSpeed)
+                keyStroke = screen.getch()
 
             while keyStroke == ord(' '):
                 self.move.brake()
+                keyStroke = screen.getch()
 
             self.move.rotate(0)
 
