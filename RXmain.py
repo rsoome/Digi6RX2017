@@ -142,3 +142,5 @@ except Exception as e:
         frameCapture.releaseCapture()
     except Exception as ee:
         print(ee)
+
+    raise e
