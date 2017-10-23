@@ -104,6 +104,7 @@ class SocketHandler:
         self.servSock.listen(1)  # Now wait for client connection.
         try:
             self.streamData(None, None)
+            self.servSock.close()
         except Exception as e:
             print("An error occured, closing connections.")
             self.servSock.close()
