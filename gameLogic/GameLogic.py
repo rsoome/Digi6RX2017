@@ -13,6 +13,7 @@ class GameLogic:
         self.frame = frame
         self.initializeValues()
         self.socketData = socketData
+        self.verticalStopBound = 440
 
     def turnToTarget(self, scanOrder, target):
         if target.horizontalMidPoint != None:
@@ -39,7 +40,7 @@ class GameLogic:
 
                 if not self.socketData.gameStarted:
                     break
-                    
+
                 self.updateTargetCoordinates(scanOrder, target)
                 self.move.drive(self.moveSpeed, 0)
             #start ballroller
@@ -92,7 +93,7 @@ class GameLogic:
         if(target.verticalMidPoint == None):
             return False
 
-        if(target.verticalMidPoint != None and target.verticalMidPoint < 460):
+        if(target.verticalMidPoint != None and target.verticalMidPoint < self.verticalStopBound):
             return False
 
         return True
