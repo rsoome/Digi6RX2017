@@ -20,10 +20,11 @@ class GameLogic:
                 if not self.socketData.gameStarted:
                     break
                 self.updateTargetCoordinates(scanOrder, target)
-                if target.horizontalMidPoint > self.screenMidpoint:
-                    self.move.rotate(self.turnSpeed)
-                elif target.horizontalMidPoint < self.screenMidpoint:
-                    self.move.rotate(-self.turnSpeed)
+                if target.horizontalMidPoint != None:
+                    if target.horizontalMidPoint > self.screenMidpoint:
+                        self.move.rotate(self.turnSpeed)
+                    elif target.horizontalMidPoint < self.screenMidpoint:
+                        self.move.rotate(-self.turnSpeed)
 
     def moveToTarget(self, scanOrder, target):
         self.updateTargetCoordinates(scanOrder, target)
@@ -70,11 +71,9 @@ class GameLogic:
         self.screenMidpoint = self.frame.width//2
 
     def checkHorizontalAlginment(self, target):
-        if target.horizontalMidPoint == None:
-            return False
 
-        if (target.horizontalMidPoint > self.screenMidpoint + self.deltaFromMidPoint
-            or target.horizontalMidPoint < self.screenMidpoint - self.deltaFromMidPoint):
+        if (target.horizontalMidPoint != None and (target.horizontalMidPoint > self.screenMidpoint + self.deltaFromMidPoint
+            or target.horizontalMidPoint < self.screenMidpoint - self.deltaFromMidPoint)):
 
             return False
 
