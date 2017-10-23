@@ -59,17 +59,20 @@ class GameLogic:
             self.updateTargetCoordinates(scanOrder, target)
             self.move.rotate(self.turnSpeed)
             i += 1
+            if target.horizontalMidPoint != None:
+                return True
+
+        return False
 
     def run(self, scanOrder, target):
         while(self.socketData.gameStarted):
             if(not (self.checkVerticalAlignment(target) and self.checkHorizontalAlginment(target))):
-                self.lookForBall(scanOrder, target)
-                #print(target.horizontalMidPoint)
+                targetFound = self.lookForBall(scanOrder, target)
+                if not targetFound:
+                    self.move.drive(self.moveSpeed, 0)
                 self.turnToTarget(scanOrder, target)
-                #print(target.horizontalMidPoint)
                 self.moveToTarget(scanOrder, target)
-                #print(target.verticalMidPoint)
-                #print("---------------------")
+
             else:
                 self.updateTargetCoordinates(scanOrder, target)
         self.move.rotate(0)
