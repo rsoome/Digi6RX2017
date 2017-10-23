@@ -26,6 +26,7 @@ class GameLogic:
                         self.move.rotate(self.turnSpeed)
                     elif target.horizontalMidPoint < self.screenMidpoint:
                         self.move.rotate(-self.turnSpeed)
+            self.move.rotate(0)
 
     def moveToTarget(self, scanOrder, target):
         self.updateTargetCoordinates(scanOrder, target)
