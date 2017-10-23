@@ -33,14 +33,15 @@ basket = Target.Target(None, None, "basket",
 
 hsv = None
 
+socketData = SocketData.SocketData()
 mb = MBcomm.MBcomm(settings.getValue("mbLocation"), 115200)
 #mb = None
 move = MovementLogic.MovementLogic(mb)
 imgHandler = ImageHandler.ImageHandler(bool(settings.getValue("multiThreading")))
 frameCapture = FrameCapturer.FrameCapturer(int(settings.getValue("camID")))
 game = GameLogic.GameLogic(move, 0, int(settings.getValue("driveSpeed")), int(settings.getValue("turnSpeed")),
-                           imgHandler, frameCapture, )
-socketData = SocketData.SocketData()
+                           imgHandler, frameCapture, socketData)
+
 socketHandler = SocketHandler.SocketHandler(socketData, ball, basket, fps, frameCapture)
 t = threading.Thread(target=socketHandler.initServ)
 t.start()
