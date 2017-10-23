@@ -1,4 +1,5 @@
 import curses
+import time
 
 class ManualDrive:
 
@@ -40,6 +41,7 @@ class ManualDrive:
             if keyStroke == ord(' '):
                 self.move.brake()
 
+            time.sleep(0.05)
             self.move.rotate(0)
         print("Manual driving deactivated.")
         curses.endwin()
