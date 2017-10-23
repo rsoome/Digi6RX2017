@@ -45,79 +45,100 @@ game = GameLogic.GameLogic(move, 0, int(settings.getValue("driveSpeed")), int(se
 socketHandler = SocketHandler.SocketHandler(socketData, ball, basket, fps, frameCapture)
 t = threading.Thread(target=socketHandler.initServ)
 t.start()
+try:
+    while True:
+        dt = datetime.now()
+        #dt.microsecond
+        start = float(str(dt).split()[1].split(":")[2]) * 1000000
+        frameCapture.capture(cv2.COLOR_BGR2HSV)  # Võta kaamerast pilt
+        frame = frameCapture.capturedFrame
+        hsv = frameCapture.filteredImg
 
-while True:
-    dt = datetime.now()
-    #dt.microsecond
-    start = float(str(dt).split()[1].split(":")[2]) * 1000000
-    frameCapture.capture(cv2.COLOR_BGR2HSV)  # Võta kaamerast pilt
-    frame = frameCapture.capturedFrame
-    hsv = frameCapture.filteredImg
+        if frame is None:  # Kontroll, kas pilt on olemas
+            socketData.stop = True
+            while not socketData.socketClosed:
+                pass
+            print("Capture fucntion failed")
+            break
 
-    if frame is None:  # Kontroll, kas pilt on olemas
-        socketData.stop = True
-        while not socketData.socketClosed:
-            pass
-        print("Capture fucntion failed")
-        break
+        imgHandler.generateMask(ball, hsv)
+        imgHandler.generateMask(basket, hsv)
+        imgHandler.detect(frame, ball.mask, int(settings.getValue("objectMinSize")), int(settings.getValue("minImgArea")),
+                          [int(x) for x in settings.getValue("ballScanOrder").split()], ball)
 
-    imgHandler.generateMask(ball, hsv)
-    imgHandler.generateMask(basket, hsv)
-    imgHandler.detect(frame, ball.mask, int(settings.getValue("objectMinSize")), int(settings.getValue("minImgArea")),
-                      [int(x) for x in settings.getValue("ballScanOrder").split()], ball)
+        imgHandler.detect(frame, basket.mask, int(settings.getValue("objectMinSize")), int(settings.getValue("minImgArea")),
+                          [int(x) for x in settings.getValue("basketScanOrder").split()], basket)
 
-    imgHandler.detect(frame, basket.mask, int(settings.getValue("objectMinSize")), int(settings.getValue("minImgArea")),
-                      [int(x) for x in settings.getValue("basketScanOrder").split()], basket)
+        if socketData.updateThresholds:
+            selectedTarget = None
+            if socketData.ballSelected:
+                selectedTarget = ball
+            else:
+                selectedTarget = basket
 
-    if socketData.updateThresholds:
-        selectedTarget = None
-        if socketData.ballSelected:
-            selectedTarget = ball
-        else:
-            selectedTarget = basket
+            if socketData.mouseY != -1 and socketData.mouseX != -1:
+                selectedTarget.updateThresholds(hsv[socketData.mouseY][socketData.mouseX])
+            socketData.updateThresholds = False
+            socketData.mouseX = -1
+            socketData.mouseY = -1
 
-        if socketData.mouseY != -1 and socketData.mouseX != -1:
-            selectedTarget.updateThresholds(hsv[socketData.mouseY][socketData.mouseX])
-        socketData.updateThresholds = False
-        socketData.mouseX = -1
-        socketData.mouseY = -1
+        if socketData.resetBall:
+            ball.resetBounds()
+            ball.resetThreshHolds()
+            socketData.resetBall = False
 
-    if socketData.resetBall:
-        ball.resetBounds()
-        ball.resetThreshHolds()
-        socketData.resetBall = False
+        if socketData.resetBasket:
+            basket.resetBounds()
+            basket.resetThreshHolds()
+            socketData.resetBasket = False
 
-    if socketData.resetBasket:
-        basket.resetBounds()
-        basket.resetThreshHolds()
-        socketData.resetBasket = False
+        if socketData.manualDrive:
+            manualDrive = ManualDrive.ManualDrive(move, int(settings.getValue("driveSpeed")), int(settings.getValue("turnSpeed")))
+            manualDrive.run()
+            socketData.manualDrive = False
 
-    if socketData.manualDrive:
-        manualDrive = ManualDrive.ManualDrive(move, int(settings.getValue("driveSpeed")), int(settings.getValue("turnSpeed")))
-        manualDrive.run()
-        socketData.manualDrive = False
+        if socketData.gameStarted:
+            print("Game mode activated")
+            game.run([int(x) for x in settings.getValue("ballScanOrder").split()], ball)
+            socketData.gameStarted = False
 
-    if socketData.gameStarted:
-        print("Game mode activated")
-        game.run([int(x) for x in settings.getValue("ballScanOrder").split()], ball)
-        socketData.gameStarted = False
+        if socketData.stop:
+            break
 
-    if socketData.stop:
-        break
+        dt = datetime.now()
+        #dt.microsecond
+        stop = float(str(dt).split()[1].split(":")[2]) * 1000000
+        framesCaptured += 1
+        totalTimeElapsed += stop - start
+        if framesCaptured >= 60:
+            fps = (round(framesCaptured / (totalTimeElapsed / 1000000), 0))
+            framesCaptured = 0
+            totalTimeElapsed = 0
 
-    dt = datetime.now()
-    #dt.microsecond
-    stop = float(str(dt).split()[1].split(":")[2]) * 1000000
-    framesCaptured += 1
-    totalTimeElapsed += stop - start
-    if framesCaptured >= 60:
-        fps = (round(framesCaptured / (totalTimeElapsed / 1000000), 0))
-        framesCaptured = 0
-        totalTimeElapsed = 0
+        socketData.fps = fps
+        socketHandler.updateData()
 
-    socketData.fps = fps
-    socketHandler.updateData()
+    print("Exit.")
+    settings.writeFromDictToFile()
+    frameCapture.releaseCapture()
+except Exception as e:
+    print(e)
+    try:
+        socketHandler.servSock.close()
+    except Exception as ee:
+        print(ee)
 
-print("Exit.")
-settings.writeFromDictToFile()
-frameCapture.releaseCapture()
+    try:
+        socketHandler.clientSock.close()
+    except Exception as ee:
+        print(ee)
+
+    try:
+        mb.ser.close()
+    except Exception as ee:
+        print(ee)
+
+    try:
+        frameCapture.releaseCapture()
+    except Exception as ee:
+        print(ee)
