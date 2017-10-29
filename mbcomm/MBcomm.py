@@ -13,8 +13,10 @@ class MBcomm:
         self.ser.write(cmd.encode())
 
     def readBytes(self):
+        print("Reading bytes")
         if self.ser.in_waiting:
             line = self.ser.readline().decode("ascii")
+            print(line)
             return line.split(":")
         return []
 
