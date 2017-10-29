@@ -22,6 +22,7 @@ class MBcomm:
 
     def setMotorSpeed(self, speed0, speed1, speed2):
         self.__sendByte("sd" + str(speed0) + ":" + str(speed1) + ":" + str(speed2))
+        self.getMotorSpeed()
 
     def getMotorSpeed(self):
         self.__sendByte("sg")
