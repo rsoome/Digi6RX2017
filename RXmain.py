@@ -42,6 +42,7 @@ def closeConnections():
 
 def handleMbMessage(msg):
     sendingNode = msg[0]
+    print(msg)
 
     if sendingNode == "motors":
         move.motorSpeed0 = float(msg[1])

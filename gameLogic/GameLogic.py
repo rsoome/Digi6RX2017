@@ -86,6 +86,8 @@ class GameLogic:
 
                 else:
                     self.updateTargetCoordinates(scanOrder, target)
+            if self.gameState == "STOP":
+                self.move.drive(0, 0)
         self.move.rotate(0)
 
 
