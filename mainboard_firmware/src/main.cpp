@@ -89,7 +89,7 @@ int main() {
 
 
     rfModule.update();
-    
+
   pidTicker.attach(pidTick, 1/PID_FREQ);
   //serial.attach(&serialInterrupt);
 
@@ -101,6 +101,13 @@ int main() {
   pwm1.pulsewidth_us(100);
 
   while (1) {
+
+    if (rfModule.readable()) {
+         serial.printf("ref:%s\n", rfModule.read());
+     }
+
+    rfModule.update();
+
     if (serial.readable()) {
       buf[serialCount] = serial.getc();
       //serial.putc(buf[serialCount]);
