@@ -19,7 +19,7 @@ class RefereeHandler:
                     if endOfMsg != -1:
                         cmd = msg[3:endOfMsg]
                     else:
-                        cmd = msg[3:]
+                        cmd = msg[3:].strip()
         return cmd
 
 

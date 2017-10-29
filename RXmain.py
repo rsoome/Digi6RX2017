@@ -42,7 +42,6 @@ def closeConnections():
 
 def handleMbMessage(msg):
     sendingNode = msg[0]
-    print(msg)
 
     if sendingNode == "motors":
         move.motorSpeed0 = float(msg[1])
@@ -54,6 +53,7 @@ def handleMbMessage(msg):
 
     if sendingNode == "ref":
         cmd = ref.handleCommand(msg[1])
+        print(cmd)
 
         if cmd == "START":
             game.gameState = "START"
