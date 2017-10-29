@@ -63,8 +63,8 @@ class GameLogic:
             self.updateTargetCoordinates(scanOrder, target)
             self.move.rotate(self.turnSpeed)
             i += 1
-            print("****")
-            print(target.horizontalMidPoint)
+            #print("****")
+            #print(target.horizontalMidPoint)
             if target.horizontalMidPoint != None:
                 return True
 
