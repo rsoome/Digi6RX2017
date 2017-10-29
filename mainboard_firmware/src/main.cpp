@@ -143,13 +143,8 @@ void parseCommand(char *command) {
 
     sd = strtok(NULL, ":");
     motor2.setSpeed((int16_t) atoi(sd));
-  }
 
-  else if (command[0] == 's' && command[1] == 'r') {
-    char * sd;
-
-    sd = command + 2;
-    motor3.setSpeed((int16_t) atoi(sd));
+    serial.printf("%d:%d:%d\n", motor0.getSpeed(), motor1.getSpeed(), motor2.getSpeed());
   }
 
   else if (command[0] == 'd') {
