@@ -13,7 +13,7 @@ class MBcomm:
         self.ser.write(cmd.encode())
 
     def readBytes(self):
-        print("Reading bytes")
+        #print("Reading bytes")
         if self.ser.in_waiting:
             line = self.ser.readline().decode("ascii")
             print(line)
