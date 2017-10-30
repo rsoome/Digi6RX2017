@@ -30,13 +30,13 @@ class GameLogic:
 
     def moveToTarget(self, scanOrder, target):
         self.updateTargetCoordinates(scanOrder, target)
-        print(target.horizontalMidPoint)
+        #print(target.horizontalMidPoint)
 
         if target.horizontalMidPoint != None:
             self.turnToTarget(scanOrder, target)
             while (not self.checkVerticalAlignment(target)):
 
-                if target.horizontalMidPoint != None and not self.checkHorizontalAlginment(target):
+                if target.verticalMidPoint == None: #and not self.checkHorizontalAlginment(target):
                     break
 
                 if not self.socketData.gameStarted:
@@ -45,7 +45,7 @@ class GameLogic:
                 self.updateTargetCoordinates(scanOrder, target)
                 self.move.drive(self.moveSpeed, 0)
             #start ballroller
-            self.move.rotate(0)
+            self.move.drive(0,0)
 
     def updateTargetCoordinates(self, scanOrder, target):
         self.frame.capture(cv2.COLOR_BGR2HSV)
