@@ -22,37 +22,28 @@ class GameLogic:
         self.robotID = robotID
         self.mb = mb
 
-    def turnToTarget(self, scanOrder, target):
+    def turnTowardTarget(self, scanOrder, target):
         if target.horizontalMidPoint != None:
-            while (target.horizontalMidPoint != None and not self.checkHorizontalAlginment(target)):
-                if not self.socketData.gameStarted:
-                    break
-                self.updateTargetCoordinates(scanOrder, target)
-                if target.horizontalMidPoint != None:
-                    if target.horizontalMidPoint > self.screenMidpoint:
-                        self.move.rotate(self.turnSpeed)
-                    elif target.horizontalMidPoint < self.screenMidpoint:
-                        self.move.rotate(-self.turnSpeed)
-            self.move.rotate(0)
+            if target.horizontalMidPoint != None:
+                if target.horizontalMidPoint > self.screenMidpoint:
+                    self.move.rotate(self.turnSpeed)
+                elif target.horizontalMidPoint < self.screenMidpoint:
+                    self.move.rotate(-self.turnSpeed)
+        self.move.rotate(0)
 
-    def moveToTarget(self, scanOrder, target):
-        self.updateTargetCoordinates(scanOrder, target)
-        #print(target.horizontalMidPoint)
+    def moveTowardTarget(self, scanOrder, target):
 
         if target.horizontalMidPoint != None:
-            self.turnToTarget(scanOrder, target)
-            while (not self.checkVerticalAlignment(target)):
+            if target.verticalMidPoint == None: #and not self.checkHorizontalAlginment(target):
+                return
 
-                if target.verticalMidPoint == None: #and not self.checkHorizontalAlginment(target):
-                    break
+            if not self.socketData.gameStarted:
+                return
 
-                if not self.socketData.gameStarted:
-                    break
-
-                self.updateTargetCoordinates(scanOrder, target)
-                self.move.drive(self.moveSpeed, 0)
-            #start ballroller
-            self.move.drive(0,0)
+            self.updateTargetCoordinates(scanOrder, target)
+            self.move.drive(self.moveSpeed, 0)
+        #start ballroller
+        self.move.drive(0,0)
 
     def updateTargetCoordinates(self, scanOrder, target):
         self.frame.capture(cv2.COLOR_BGR2HSV)
@@ -84,12 +75,13 @@ class GameLogic:
                     if not targetFound:
                         print("Relocating")
                         for i in range(1000):
-                            if not self.socketData.gameStarted:
+                            self.readMb()
+                            if not self.socketData.gameStarted or self.gameState == "STOP":
                                 break
                             self.move.drive(self.moveSpeed, 0)
                     else:
-                        self.turnToTarget(scanOrder, target)
-                        self.moveToTarget(scanOrder, target)
+                        self.turnTowardTarget(scanOrder, target)
+                        self.moveTowardTarget(scanOrder, target)
 
                 else:
                     self.updateTargetCoordinates(scanOrder, target)
