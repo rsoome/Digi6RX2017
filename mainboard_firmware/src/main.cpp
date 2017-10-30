@@ -8,7 +8,7 @@
 USBSerial serial;
 
 Serial pc(USBTX, USBRX);
-Serial com(COMTX, COMRX);
+//Serial com(COMTX, COMRX);
 
 RGBLed led1(LED1R, LED1G, LED1B);
 RGBLed led2(LED2R, LED2G, LED2B);
@@ -168,7 +168,6 @@ void parseCommand(char *command) {
   }
 
   if (command[0] == 'r' && command[1] == 'f') {
-      serial.printf("%s\n", command + 2);
       rfModule.send(command + 2);
   }
 
