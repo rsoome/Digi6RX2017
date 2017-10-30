@@ -239,7 +239,7 @@ class SocketHandler:
             #print(key)
 
             if key == "stop":
-                sys.exit(0)
+                self.socketData.stop = messages[key]
 
             if key == "ballSelected":
                 self.socketData.ballSelected = messages[key]
