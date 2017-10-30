@@ -167,6 +167,11 @@ void parseCommand(char *command) {
     //serial.printf("sending %d\n", (int) atoi(command+1));
   }
 
+  if (command[0] == 'r' && command[1] == 'f') {
+      serial.printf("%s\n", command + 2);
+      rfModule.send(command + 2);
+  }
+
   else if (command[0] == 's' && command[1] == 'g') {
     serial.printf("%d:%d:%d\n", motor0.getSpeed(), motor1.getSpeed(), motor2.getSpeed());
   }
