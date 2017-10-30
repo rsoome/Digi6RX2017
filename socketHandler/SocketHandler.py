@@ -100,6 +100,7 @@ class SocketHandler:
         self.servSock = socket.socket()  # Create a socket object
         self.servHost = socket.gethostname()  # Get local machine name
         self.servPort = 12345  # Reserve a port for your service.
+        self.servSock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.servSock.bind((host, self.servPort))  # Bind to the port
         self.servSock.listen(1)  # Now wait for client connection.
         try:
