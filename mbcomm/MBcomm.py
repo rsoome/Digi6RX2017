@@ -4,34 +4,28 @@ class MBcomm:
 
     def __init__(self, target, baud):
         self.ser = serial.Serial(port=target, baudrate=baud, timeout=0.8)
+        if not self.ser.isOpen():
+            self.ser.open()
 
     def __sendByte(self, cmd):
-        if not self.ser.isOpen():
-            self.ser.open()
         cmd += "\n"
-        print(cmd)
+        #print(cmd)
         self.ser.write(cmd.encode())
-        if self.ser.isOpen():
-            self.ser.close()
 
-    def __readBytes(self):
-        if not self.ser.isOpen():
-            self.ser.open()
-        line = self.ser.readline().decode("ascii")
-        if self.ser.isOpen():
-            self.ser.close()
-        return line
+    def readBytes(self):
+        if self.ser.in_waiting:
+            line = self.ser.readline().decode("ascii")
+            return line.split(":")
+        return []
 
     def setMotorSpeed(self, speed0, speed1, speed2):
         self.__sendByte("sd" + str(speed0) + ":" + str(speed1) + ":" + str(speed2))
 
     def getMotorSpeed(self):
         self.__sendByte("sg")
-        return self.__readBytes()
 
     def readInfrared(self):
         self.__sendByte("i")
-        return self.__readBytes()
 
     def charge(self):
         self.__sendByte("c")
@@ -44,3 +38,10 @@ class MBcomm:
 
     def enableFailSafe(self):
         self.__sendByte("f")
+
+    def sendRFMessage(self, msg):
+        self.__sendByte("rf" + msg)
+
+    def closeSerial(self):
+        if self.ser.isOpen():
+            self.ser.close()

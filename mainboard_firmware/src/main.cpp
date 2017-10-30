@@ -174,7 +174,7 @@ int main() {
 
     if (rfModule.readable()) {
 
-        serial.printf("<ref:%s>\n", rfModule.read());
+        serial.printf("ref:%s\n", rfModule.read());
 
     }
 
@@ -220,7 +220,7 @@ int main() {
 
       infraredStatus = newInfraredStatus;
 
-      serial.printf("<ball:%d>\n", newInfraredStatus);
+      serial.printf("ir:%d\n", newInfraredStatus);
 
       led2.setGreen(infraredStatus);
 
@@ -254,7 +254,7 @@ void parseCommand(char *buffer) {
 
 
 
-    serial.printf("<sg:%d:%d:%d>\n",
+    serial.printf("motors:%d:%d:%d\n",
 
       motors[0]->getSpeed(),
 
@@ -296,7 +296,7 @@ void parseCommand(char *buffer) {
 
   if (strncmp(cmd, "sg", 2) == 0) {
 
-    serial.printf("<sg:%d:%d:%d:%d>\n",
+    serial.printf("motors:%d:%d:%d:%d\n",
 
       motors[0]->getSpeed(),
 
@@ -344,7 +344,7 @@ void parseCommand(char *buffer) {
 
   if (strncmp(cmd, "gb", 2) == 0) {
 
-    serial.printf("<ball:%d>\n", infrared.read());
+    serial.printf("ir:%d\n", infrared.read());
 
   }
 

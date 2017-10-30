@@ -15,6 +15,59 @@ from socketHandler import SocketHandler
 from socketHandler import SocketData
 import threading
 from manualDrive import ManualDrive
+from refereeHandler import RefereeHandler
+
+def closeConnections():
+    try:
+        socketHandler.servSock.close()
+    except Exception as e:
+        print(e)
+
+    try:
+        socketHandler.clientSock.close()
+    except Exception as e:
+        print(e)
+
+    try:
+        mb.ser.close()
+    except Exception as e:
+        print(e)
+
+    try:
+        frameCapture.releaseCapture()
+    except Exception as e:
+        print(e)
+
+    mb.closeSerial()
+
+def handleMbMessage(msg):
+    sendingNode = msg[0]
+
+    if sendingNode == "motors":
+        move.motorSpeed0 = float(msg[1])
+        move.motorSpeed1 = float(msg[2])
+        move.motorSpeed2 = float(msg[3])
+
+    if sendingNode == "ir":
+        game.irStatus = float(msg[1])
+
+    if sendingNode == "ref":
+        cmd = ref.handleCommand(msg[1])
+
+        if cmd == "START":
+            game.gameState = "START"
+
+        if cmd == "STOP":
+            game.gameState = "STOP"
+
+        if cmd == "PING":
+            mb.sendRFMessage("a" + fieldID + robotID + "ACK------")
+
+def readMb():
+    mbMsg = mb.readBytes()
+
+    if len(mbMsg) > 0:
+        handleMbMessage(mbMsg)
 
 print("Running on Python " + sys.version)
 
@@ -27,29 +80,42 @@ fps = 0
 ball = Target.Target(None, None, "ball",
               np.array([int(x) for x in settings.getValue("ballHSVLower").split()]),
               np.array([int(x) for x in settings.getValue("ballHSVUpper").split()]))
+
 basket = Target.Target(None, None, "basket",
               np.array([int(x) for x in settings.getValue("basketHSVLower").split()]),
               np.array([int(x) for x in settings.getValue("basketHSVUpper").split()]))
 
+robotID = settings.getValue("ID")
+fieldID = settings.getValue("fieldID")
+
 hsv = None
 
 socketData = SocketData.SocketData()
+
 mb = MBcomm.MBcomm(settings.getValue("mbLocation"), 115200)
-#mb = None
+
 move = MovementLogic.MovementLogic(mb)
+
 imgHandler = ImageHandler.ImageHandler(bool(settings.getValue("multiThreading")))
+
 frameCapture = FrameCapturer.FrameCapturer(int(settings.getValue("camID")))
+
+ref = RefereeHandler.RefereeHandler(robotID, fieldID)
+
 game = GameLogic.GameLogic(move, 40, int(settings.getValue("driveSpeed")), int(settings.getValue("turnSpeed")),
                            imgHandler, frameCapture, socketData)
 
 socketHandler = SocketHandler.SocketHandler(socketData, ball, basket, fps, frameCapture)
+
 t = threading.Thread(target=socketHandler.initServ)
 t.start()
 try:
     while True:
+
         dt = datetime.now()
-        #dt.microsecond
         start = float(str(dt).split()[1].split(":")[2]) * 1000000
+
+        readMb()
         frameCapture.capture(cv2.COLOR_BGR2HSV)  # Võta kaamerast pilt
         frame = frameCapture.capturedFrame
         hsv = frameCapture.filteredImg
@@ -120,51 +186,16 @@ try:
 
     print("Exit.")
     settings.writeFromDictToFile()
-    frameCapture.releaseCapture()
+    closeConnections()
+
 except KeyboardInterrupt:
     print("Canceled by user with keyboard interrupt")
 
-    try:
-        socketHandler.servSock.close()
-    except Exception as ee:
-        print(ee)
-
-    try:
-        socketHandler.clientSock.close()
-    except Exception as ee:
-        print(ee)
-
-    try:
-        mb.ser.close()
-    except Exception as ee:
-        print(ee)
-
-    try:
-        frameCapture.releaseCapture()
-    except Exception as ee:
-        print(ee)
+    closeConnections()
 
 
 except Exception as e:
-    print(e)
-    try:
-        socketHandler.servSock.close()
-    except Exception as ee:
-        print(ee)
 
-    try:
-        socketHandler.clientSock.close()
-    except Exception as ee:
-        print(ee)
-
-    try:
-        mb.ser.close()
-    except Exception as ee:
-        print(ee)
-
-    try:
-        frameCapture.releaseCapture()
-    except Exception as ee:
-        print(ee)
+    closeConnections()
 
     raise e

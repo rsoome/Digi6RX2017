@@ -66,3 +66,7 @@ class SettingsHandler:
             self.values["objectMinSize"] = "1000"
         if not "minImgArea" in self.values:
             self.values["minImgArea"] = "0"
+        if not "ID" in self.values:
+            self.values["ID"] = "None"
+        if not "fieldID" in self.values:
+            self.values["fieldID"] = "None"
