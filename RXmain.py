@@ -139,6 +139,7 @@ try:
             print("Game mode activated")
             game.run([int(x) for x in settings.getValue("ballScanOrder").split()], ball)
             socketData.gameStarted = False
+            print("Game mode deactivated")
 
         if socketData.stop:
             break

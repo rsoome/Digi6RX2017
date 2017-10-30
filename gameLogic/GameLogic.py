@@ -82,13 +82,14 @@ class GameLogic:
                 if(not (self.checkVerticalAlignment(target) and self.checkHorizontalAlginment(target))):
                     targetFound = self.lookForBall(scanOrder, target)
                     if not targetFound:
-                        if not self.socketData.gameStarted:
-                            break
                         print("Relocating")
-                        for i in range(5000):
+                        for i in range(1000):
+                            if not self.socketData.gameStarted:
+                                break
                             self.move.drive(self.moveSpeed, 0)
-                    self.turnToTarget(scanOrder, target)
-                    self.moveToTarget(scanOrder, target)
+                    else:
+                        self.turnToTarget(scanOrder, target)
+                        self.moveToTarget(scanOrder, target)
 
                 else:
                     self.updateTargetCoordinates(scanOrder, target)
