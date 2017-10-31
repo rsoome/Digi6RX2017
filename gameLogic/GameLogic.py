@@ -155,7 +155,7 @@ class GameLogic:
 
         if sendingNode == "ref":
             cmd = self.ref.handleCommand(msg[1])
-            print(cmd)
+            #print(cmd)
 
             if cmd == "START":
                 self.gameState = "START"
