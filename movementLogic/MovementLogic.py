@@ -27,7 +27,7 @@ class MovementLogic:
         self.timer.startTimer()
         while self.timer.getTimePassed() < timeToRotate:
             self.mb.setMotorSpeed(speed, speed, speed)
-        self.stop()
+        #self.stop()
         self.timer.stopTimer()
 
 
