@@ -24,11 +24,10 @@ class MovementLogic:
 
     def rotate(self, speed, angle):
         timeToRotate = (angle/(self.RPS * 360))/(speed/100)
-        print(timeToRotate)
         self.timer.startTimer()
         while self.timer.getTimePassed() < timeToRotate:
-            print(speed)
             self.mb.setMotorSpeed(speed, speed, speed)
         self.stop()
+        print("Rotating completed")
         self.timer.stopTimer()
 
