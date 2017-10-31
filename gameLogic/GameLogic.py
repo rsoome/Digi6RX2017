@@ -144,7 +144,7 @@ class GameLogic:
 
             if cmd == "PING":
                 print("Sending ACK")
-                self.mb.sendRFMessage("a" + self.fieldID + self.robotID + "ACK------")
+                self.mb.sendRFMessage("a" + self.fieldID + self.robotID + "ACK-----")
 
     def readMb(self):
         mbMsg = self.mb.readBytes()
