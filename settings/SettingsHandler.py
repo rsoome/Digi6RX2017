@@ -70,3 +70,5 @@ class SettingsHandler:
             self.values["ID"] = "None"
         if not "fieldID" in self.values:
             self.values["fieldID"] = "None"
+        if not "defaultGameState" in self.values:
+            self.values["defaultGameState"] = "STOP"

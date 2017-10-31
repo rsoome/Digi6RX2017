@@ -3,11 +3,12 @@ import numpy as np
 # The object class, in which you can hold the coordinates of an instance. For example - a ball or a gate
 class Target:
 
-    def __init__(self, hBounds, vBounds, targetID, lowerRange, upperRange):
+    def __init__(self, hBounds, vBounds, targetID, lowerRange, upperRange, scanOrder):
         '''self.horizontalBounds = hBounds
         self.verticalBounds = vBounds
         self.horizontalMidPoint = None
-        self.verticalMidPoint = None'''
+        self.verticalMidPoint = None
+        :param scanOrder: '''
         self.setBounds(hBounds, vBounds)
         # HSV värviruumi alumine piir, hilisemaks filtreerimiseks TODO: Kirjuta faili
         self.hsvLowerRange = lowerRange
@@ -15,6 +16,7 @@ class Target:
         self.hsvUpperRange = upperRange
         self.id = targetID
         self.mask = None
+        self.scanOrder = scanOrder
 
     def getBounds(self):
         return self.horizontalBounds, self.verticalBounds

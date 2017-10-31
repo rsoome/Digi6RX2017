@@ -15,10 +15,10 @@ class MovementLogic:
                               int(speed*(math.cos(math.radians(90 - 60 + angle))))) #60deg in rad
 
     def brake(self):
-        speeds = self.mb.getMotorSpeed()
-        speeds = re.split(":|sd", speeds)
-        print(speeds)
-        #self.mb.setMotorSpeed(int(speeds[0]), int(speeds[1]), int(speeds[2]))
+        pass
+
+    def stop(self):
+        self.mb.setMotorSpeed(0, 0, 0)
 
     def rotate(self, speed):
         self.mb.setMotorSpeed(speed, speed, speed)

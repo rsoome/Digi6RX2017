@@ -2,7 +2,6 @@
 
 import numpy as np
 import cv2
-from datetime import datetime
 import sys
 from settings import SettingsHandler
 from target import Target
@@ -16,6 +15,7 @@ from socketHandler import SocketData
 import threading
 from manualDrive import ManualDrive
 from refereeHandler import RefereeHandler
+from timer import Timer
 
 def closeConnections():
     settings.writeFromDictToFile()
@@ -45,17 +45,13 @@ print("Running on Python " + sys.version)
 
 settings = SettingsHandler.SettingsHandler("conf")
 
-framesCaptured = 0
-totalTimeElapsed = 0
-fps = 0
+ball = Target.Target(None, None, "ball", np.array([int(x) for x in settings.getValue("ballHSVLower").split()]),
+                     np.array([int(x) for x in settings.getValue("ballHSVUpper").split()]),
+                     [int(x) for x in settings.getValue("ballScanOrder").split()])
 
-ball = Target.Target(None, None, "ball",
-              np.array([int(x) for x in settings.getValue("ballHSVLower").split()]),
-              np.array([int(x) for x in settings.getValue("ballHSVUpper").split()]))
-
-basket = Target.Target(None, None, "basket",
-              np.array([int(x) for x in settings.getValue("basketHSVLower").split()]),
-              np.array([int(x) for x in settings.getValue("basketHSVUpper").split()]))
+basket = Target.Target(None, None, "basket", np.array([int(x) for x in settings.getValue("basketHSVLower").split()]),
+                       np.array([int(x) for x in settings.getValue("basketHSVUpper").split()]),
+                       [int(x) for x in settings.getValue("basketScanOrder").split()])
 
 robotID = settings.getValue("ID")
 fieldID = settings.getValue("fieldID")
@@ -75,17 +71,19 @@ frameCapture = FrameCapturer.FrameCapturer(int(settings.getValue("camID")))
 ref = RefereeHandler.RefereeHandler(robotID, fieldID, mb)
 
 game = GameLogic.GameLogic(move, 40, int(settings.getValue("driveSpeed")), int(settings.getValue("turnSpeed")),
-                           imgHandler, frameCapture, socketData, ref, fieldID, robotID, mb)
+                           imgHandler, frameCapture, socketData, ref, fieldID, robotID, mb, ball, basket,
+                           settings.getValue("defaultGameState"))
 
-socketHandler = SocketHandler.SocketHandler(socketData, ball, basket, fps, frameCapture)
+socketHandler = SocketHandler.SocketHandler(socketData, ball, basket, 0, frameCapture)
+
+timer = Timer.Timer()
 
 t = threading.Thread(target=socketHandler.initServ)
 t.start()
 try:
     while True:
 
-        dt = datetime.now()
-        start = float(str(dt).split()[1].split(":")[2]) * 1000000
+        timer.startTimer()
 
         game.readMb()
         frameCapture.capture(cv2.COLOR_BGR2HSV)  # Võta kaamerast pilt
@@ -137,24 +135,17 @@ try:
 
         if socketData.gameStarted:
             print("Game mode activated")
-            game.run([int(x) for x in settings.getValue("ballScanOrder").split()], ball)
+            game.run()
             socketData.gameStarted = False
             print("Game mode deactivated")
 
         if socketData.stop:
             break
 
-        dt = datetime.now()
-        #dt.microsecond
-        stop = float(str(dt).split()[1].split(":")[2]) * 1000000
-        framesCaptured += 1
-        totalTimeElapsed += stop - start
-        if framesCaptured >= 60:
-            fps = (round(framesCaptured / (totalTimeElapsed / 1000000), 0))
-            framesCaptured = 0
-            totalTimeElapsed = 0
+        game.addFrame(timer.stopTimer())
 
-        socketData.fps = fps
+        game.updateFPS()
+
         socketHandler.updateData()
 
     print("Exit.")
@@ -164,7 +155,6 @@ except KeyboardInterrupt:
     print("Canceled by user with keyboard interrupt")
 
     closeConnections()
-
 
 except Exception as e:
 
