@@ -11,7 +11,7 @@ class MovementLogic:
         self.motorSpeed0 = 0.0
         self.motorSpeed1 = 0.0
         self.motorSpeed2 = 0.0
-        self.RPS = 4.17
+        self.RPS = 1.5
         self.timer = Timer.Timer()
 
     def drive(self, speed, angle):
@@ -22,7 +22,10 @@ class MovementLogic:
         #time.sleep(0.001)
 
     def brake(self):
-        pass
+        while self.motorSpeed0 > 0 or self.motorSpeed1 > 0 or self.motorSpeed2 > 0:
+            self.updateSpeeds(speeds)
+            speeds = self.mb.setMotorSpeed(-self.motorSpeed0, -self.motorSpeed1, -self.motorSpeed2)
+
 
     def stop(self):
         self.mb.setMotorSpeed(0, 0, 0)
@@ -34,13 +37,18 @@ class MovementLogic:
         self.timer.startTimer()
         timePassed = self.timer.getTimePassed()
         while timePassed < timeToRotate:
-            self.mb.setMotorSpeed(speed, speed, speed)
+            speeds = self.mb.setMotorSpeed(speed, speed, speed)
+            self.updateSpeeds(speeds)
             timePassed = self.timer.getTimePassed()
             print(timePassed)
         #self.mb.enableFailSafe()
-        self.stop()
+        self.brake()
         print("Rotation completed")
         self.timer.stopTimer()
 
-
+    def updateSpeeds(self, speeds):
+        if speeds[0] == "motors" and len(speeds == 4):
+            self.motorSpeed0 = float(speeds[1])
+            self.motorSpeed1 = float(speeds[2])
+            self.motorSpeed2 = float(speeds[3])
 
