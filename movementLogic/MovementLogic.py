@@ -11,7 +11,7 @@ class MovementLogic:
         self.motorSpeed0 = 0.0
         self.motorSpeed1 = 0.0
         self.motorSpeed2 = 0.0
-        self.RPS = 1.9
+        self.RPS = 4.17
         self.timer = Timer.Timer()
 
     def drive(self, speed, angle):
@@ -28,7 +28,7 @@ class MovementLogic:
         self.mb.setMotorSpeed(0, 0, 0)
 
     def rotate(self, speed, angle):
-        timeToRotate = ((angle/((self.RPS*(speed/100)))) * 360) * 1000
+        timeToRotate = (angle / ((self.RPS*(speed/100)) * 360)) * 1000
         print(timeToRotate)
         #self.mb.disableFailSafe()
         self.timer.startTimer()
