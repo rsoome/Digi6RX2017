@@ -1,4 +1,6 @@
 import cv2
+import time
+
 from timer import Timer
 # Contins the game logic
 # TODO: Implement
@@ -100,8 +102,9 @@ class GameLogic:
 
         if target.verticalMidPoint == None or target.horizontalMidPoint == None:
             if not self.lookForTarget(target):
+                time.sleep(0.01)
                 print("Looking for " + target.id)
-                for i in range(12):
+                for i in range(120):
                     print(i)
                     self.move.drive(self.moveSpeed, 0)
                 return False
