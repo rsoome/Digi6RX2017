@@ -6,7 +6,7 @@ class Timer:
         self.start = None
 
     def startTimer(self):
-        self.start = self.getTimeInMicros()
+        self.start = self.getTimeInMillis()
 
     def stopTimer(self):
         time = self.getTimePassed()
@@ -15,10 +15,10 @@ class Timer:
 
     def getTimePassed(self):
         time = -1
-        stop = self.getTimeInMicros()
+        stop = self.getTimeInMillis()
         if self.start != None:
             time = stop - self.start
         return time
 
-    def getTimeInMicros(self):
-        return float(str(datetime.now()).split()[1].split(":")[2]) * 1000
+    def getTimeInMillis(self):
+        return int(float(str(datetime.now()).split()[1].split(":")[2]) * 1000)
