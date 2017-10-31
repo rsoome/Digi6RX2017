@@ -21,4 +21,4 @@ class Timer:
         return time
 
     def getTimeInMicros(self):
-        return float(str(datetime.now()).split()[1].split(":")[2]) *1000000
+        return float(str(datetime.now()).split()[1].split(":")[2]) * 1000
