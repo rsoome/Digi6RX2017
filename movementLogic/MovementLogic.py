@@ -22,6 +22,9 @@ class MovementLogic:
         #time.sleep(0.001)
 
     def brake(self):
+        print(self.motorSpeed0)
+        print(self.motorSpeed1)
+        print(self.motorSpeed2)
         while self.motorSpeed0 > 0 or self.motorSpeed1 > 0 or self.motorSpeed2 > 0:
             self.updateSpeeds(speeds)
             speeds = self.mb.setMotorSpeed(-self.motorSpeed0, -self.motorSpeed1, -self.motorSpeed2)
