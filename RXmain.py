@@ -40,36 +40,6 @@ def closeConnections():
 
     mb.closeSerial()
 
-def handleMbMessage(msg):
-    sendingNode = msg[0]
-
-    if sendingNode == "motors":
-        move.motorSpeed0 = float(msg[1])
-        move.motorSpeed1 = float(msg[2])
-        move.motorSpeed2 = float(msg[3])
-
-    if sendingNode == "ir":
-        game.irStatus = float(msg[1])
-
-    if sendingNode == "ref":
-        cmd = ref.handleCommand(msg[1])
-        print(cmd)
-
-        if cmd == "START":
-            game.gameState = "START"
-
-        if cmd == "STOP":
-            game.gameState = "STOP"
-
-        if cmd == "PING":
-            mb.sendRFMessage("a" + fieldID + robotID + "ACK------")
-
-def readMb():
-    mbMsg = mb.readBytes()
-
-    if len(mbMsg) > 0:
-        handleMbMessage(mbMsg)
-
 print("Running on Python " + sys.version)
 
 settings = SettingsHandler.SettingsHandler("conf")
@@ -104,7 +74,7 @@ frameCapture = FrameCapturer.FrameCapturer(int(settings.getValue("camID")))
 ref = RefereeHandler.RefereeHandler(robotID, fieldID)
 
 game = GameLogic.GameLogic(move, 40, int(settings.getValue("driveSpeed")), int(settings.getValue("turnSpeed")),
-                           imgHandler, frameCapture, socketData)
+                           imgHandler, frameCapture, socketData, ref, fieldID, robotID)
 
 socketHandler = SocketHandler.SocketHandler(socketData, ball, basket, fps, frameCapture)
 
@@ -116,7 +86,7 @@ try:
         dt = datetime.now()
         start = float(str(dt).split()[1].split(":")[2]) * 1000000
 
-        readMb()
+        game.readMb()
         frameCapture.capture(cv2.COLOR_BGR2HSV)  # Võta kaamerast pilt
         frame = frameCapture.capturedFrame
         hsv = frameCapture.filteredImg
