@@ -1,4 +1,7 @@
 import math
+
+import time
+
 from timer import Timer
 
 class MovementLogic:
@@ -15,7 +18,7 @@ class MovementLogic:
         self.mb.setMotorSpeed(int(speed*(math.cos(math.radians(90 - 180 + angle)))),
                               int(speed*(math.cos(math.radians(90 - 300 + angle)))),
                               int(speed*(math.cos(math.radians(90 - 60 + angle))))) #60deg in rad
-        speeds = self.mb.waitForAnswer
+        time.sleep(0.001)
 
     def brake(self):
         pass
@@ -28,7 +31,7 @@ class MovementLogic:
         self.timer.startTimer()
         while self.timer.getTimePassed() < timeToRotate:
             self.mb.setMotorSpeed(speed, speed, speed)
-            speeds = self.mb.waitForAnswer()
+            time.sleep(0.001)
         self.stop()
         self.timer.stopTimer()
 
