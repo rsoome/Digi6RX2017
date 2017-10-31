@@ -38,7 +38,10 @@ class MBcomm:
         self.__sendBytes("e")
 
     def enableFailSafe(self):
-        self.__sendBytes("f")
+        self.__sendBytes("f1")
+
+    def disableFailSafe(self):
+        self.__sendBytes("f0")
 
     def sendRFMessage(self, msg):
         self.__sendBytes("rf" + msg + "\n")
