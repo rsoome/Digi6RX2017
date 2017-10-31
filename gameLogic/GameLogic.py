@@ -100,20 +100,16 @@ class GameLogic:
 
         if target.verticalMidPoint == None or target.horizontalMidPoint == None:
             if not self.lookForTarget(target):
-                self.move.stop()
                 print("Looking for " + target.id)
                 for i in range(12):
                     self.move.drive(self.moveSpeed, 0)
             return False
-
-        self.move.stop
 
         if not self.checkHorizontalAlginment(target):
             self.turnTowardTarget(target)
             return False
 
         elif not self.checkVerticalAlignment(target, verticalStopBound):
-            self.move.stop()
             self.moveTowardTarget(target)
             return False
 
