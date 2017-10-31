@@ -121,6 +121,7 @@ class GameLogic:
         return True
 
     def handleMbMessage(self, msg):
+        print(msg)
         sendingNode = msg[0]
 
         if sendingNode == "motors":
