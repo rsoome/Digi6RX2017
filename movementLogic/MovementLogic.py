@@ -45,7 +45,7 @@ class MovementLogic:
             timePassed = self.timer.getTimePassed()
             print(timePassed)
         #self.mb.enableFailSafe()
-        self.brake()
+        self.stop()
         print("Rotation completed")
         self.timer.stopTimer()
 

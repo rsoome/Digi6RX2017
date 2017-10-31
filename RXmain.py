@@ -86,7 +86,7 @@ t.start()
 try:
     while True:
         print("*")
-        move.rotate(30, 180)
+        move.rotate(50, 180)
         time.sleep(1)
         timer.startTimer()
 
