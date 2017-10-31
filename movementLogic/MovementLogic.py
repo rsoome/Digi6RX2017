@@ -28,7 +28,7 @@ class MovementLogic:
         self.mb.setMotorSpeed(0, 0, 0)
 
     def rotate(self, speed, angle):
-        timeToRotate = ((angle/(self.RPS * 360))/(speed/100)) * 1000
+        timeToRotate = ((angle/((self.RPS*(speed/100))) * 360)) * 1000
         #self.mb.disableFailSafe()
         self.timer.startTimer()
         timePassed = self.timer.getTimePassed()
