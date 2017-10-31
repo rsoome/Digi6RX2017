@@ -31,8 +31,10 @@ class MovementLogic:
         self.mb.disableFailSafe()
         self.timer.startTimer()
         self.mb.setMotorSpeed(speed, speed, speed)
-        while self.timer.getTimePassed() < timeToRotate:
-            pass
+        timePassed = self.timer.getTimePassed()
+        while timePassed < timeToRotate:
+            timePassed = self.timer.getTimePassed()
+            print(timePassed)
         self.mb.enableFailSafe()
         self.stop()
         print("Rotation completed")
