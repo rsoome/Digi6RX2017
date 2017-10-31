@@ -82,7 +82,8 @@ t = threading.Thread(target=socketHandler.initServ)
 t.start()
 try:
     while True:
-
+        print("*")
+        move.rotate(30, 180)
         timer.startTimer()
 
         game.readMb()
