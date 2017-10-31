@@ -18,6 +18,7 @@ class MovementLogic:
         self.mb.setMotorSpeed(int(speed*(math.cos(math.radians(90 - 180 + angle)))),
                               int(speed*(math.cos(math.radians(90 - 300 + angle)))),
                               int(speed*(math.cos(math.radians(90 - 60 + angle))))) #60deg in rad
+        return self.mb.waitForAnswer
         #time.sleep(0.001)
 
     def brake(self):
@@ -30,10 +31,11 @@ class MovementLogic:
         timeToRotate = (angle/(self.RPS * 360))/(speed/100)
         print(timeToRotate)
         #self.mb.disableFailSafe()
+        print(self.mb.setMotorSpeed(speed, speed, speed))
         self.timer.startTimer()
         timePassed = self.timer.getTimePassed()
         while timePassed < timeToRotate:
-            self.mb.setMotorSpeed(speed, speed, speed)
+            print(self.mb.setMotorSpeed(speed, speed, speed))
             timePassed = self.timer.getTimePassed()
             print(timePassed)
         #self.mb.enableFailSafe()
