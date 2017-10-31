@@ -17,7 +17,7 @@ class Timer:
         time = -1
         stop = self.getTimeInMicros()
         if self.start != None:
-            time = self.start - stop
+            time = stop - self.start
         return time
 
     def getTimeInMicros(self):
