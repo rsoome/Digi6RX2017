@@ -37,18 +37,18 @@ class ManualDrive:
                 keyStroke = self.getKeystroke(screen)
 
             while keyStroke == ord('a'):
-                self.move.rotate(-self.turnSpeed)
+                self.move.rotate(-self.turnSpeed, 180)
                 keyStroke = self.getKeystroke(screen)
 
             while keyStroke == ord('d'):
-                self.move.rotate(self.turnSpeed)
+                self.move.rotate(self.turnSpeed, 180)
                 keyStroke = self.getKeystroke(screen)
 
             while keyStroke == ord(' '):
                 self.move.brake()
                 keyStroke = self.getKeystroke(screen)
 
-            self.move.rotate(0)
+            self.move.rotate(0, )
 
         print("Manual driving deactivated.")
         curses.endwin()

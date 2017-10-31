@@ -1,5 +1,5 @@
 import math
-import re
+from timer import Timer
 
 class MovementLogic:
 
@@ -8,6 +8,8 @@ class MovementLogic:
         self.motorSpeed0 = 0.0
         self.motorSpeed1 = 0.0
         self.motorSpeed2 = 0.0
+        self.RPS = 1.9
+        self.timer = Timer.Timer()
 
     def drive(self, speed, angle):
         self.mb.setMotorSpeed(int(speed*(math.cos(math.radians(90 - 180 + angle)))),
@@ -20,5 +22,11 @@ class MovementLogic:
     def stop(self):
         self.mb.setMotorSpeed(0, 0, 0)
 
-    def rotate(self, speed):
-        self.mb.setMotorSpeed(speed, speed, speed)
+    def rotate(self, speed, angle):
+        timeToRotate = (angle/(self.RPS * 360))/(speed/100)
+        self.timer.startTimer()
+        while self.timer.getTimePassed() > timeToRotate:
+            self.mb.setMotorSpeed(speed, speed, speed)
+        self.stop()
+        self.timer.stopTimer()
+

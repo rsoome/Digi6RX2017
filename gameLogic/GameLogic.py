@@ -33,18 +33,18 @@ class GameLogic:
         self.timer = Timer.Timer()
 
     def turnTowardTarget(self, target):
-        if target.horizontalMidPoint != None:
+        if target.horizontalMidPoint is not None:
             if not self.socketData.gameStarted:
                 return
             if target.horizontalMidPoint > self.screenMidpoint + self.deltaFromMidPoint:
-                self.move.rotate(self.turnSpeed)
+                self.move.rotate(self.turnSpeed, 1)
             elif target.horizontalMidPoint < self.screenMidpoint - self.deltaFromMidPoint:
-                self.move.rotate(-self.turnSpeed)
+                self.move.rotate(-self.turnSpeed, 1)
 
     def moveTowardTarget(self, target):
-        if target.horizontalMidPoint != None:
+        if target.horizontalMidPoint is not None:
 
-            if target.verticalMidPoint == None:
+            if target.verticalMidPoint is None:
                 return
 
             if not self.socketData.gameStarted:
@@ -58,12 +58,12 @@ class GameLogic:
             self.imgHandler.detect(None, target.mask, 1000, 0, target.scanOrder, target)
 
     def lookForTarget(self, target):
-        if not self.socketData.gameStarted :
+        if not self.socketData.gameStarted:
             return False
         for i in range(12):
             self.updateTargetCoordinates([target])
-            self.move.rotate(self.turnSpeed)
-            if target.horizontalMidPoint != None:
+            self.move.rotate(self.turnSpeed, 30)
+            if target.horizontalMidPoint is not None:
                 return True
 
         return False
@@ -71,7 +71,7 @@ class GameLogic:
     def run(self):
         ballReached = False
         basketReached = False
-        while(self.socketData.gameStarted):
+        while self.socketData.gameStarted:
             self.timer.startTimer()
             self.updateTargetCoordinates([self.ball, self.basket])
             self.readMb()
@@ -125,7 +125,7 @@ class GameLogic:
 
     def checkHorizontalAlginment(self, target):
 
-        if target.horizontalMidPoint == None:
+        if target.horizontalMidPoint is None:
             return False
 
         if (target.horizontalMidPoint > (self.screenMidpoint + self.deltaFromMidPoint)
@@ -137,10 +137,10 @@ class GameLogic:
 
     def checkVerticalAlignment(self, target, verticalStopBound):
 
-        if(target.verticalMidPoint == None):
+        if target.verticalMidPoint is None:
             return False
 
-        if(target.verticalMidPoint < verticalStopBound):
+        if target.verticalMidPoint < verticalStopBound:
             return False
 
         return True
@@ -177,7 +177,7 @@ class GameLogic:
             self.handleMbMessage(mbMsg)
 
     def throwBall(self):
-        if not self.checkHorizontalAlginment(self.basket) or not self.checkVerticalAlignment(self.basket):
+        if not self.checkHorizontalAlginment(self.basket) or not self.checkVerticalAlignment(self.basket, self.basketVerticalStopBound):
             return False
         self.mb.startThrower(self.mb.THROWER_MAXSPEED)
         return True
@@ -194,4 +194,3 @@ class GameLogic:
             self.totalTimeElapsed = 0
 
         self.socketData.fps = self.fps
-
