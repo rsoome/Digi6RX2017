@@ -4,7 +4,7 @@ import cv2
 class GameLogic:
 
     def __init__(self, move, deltaFromMidPoint, moveSpeed, turnSpeed, imgHandler, frame, socketData, ref, fieldID,
-                 robotID):
+                 robotID, mb):
         self.screenMidpoint = None
         self.move = move
         self.deltaFromMidPoint = deltaFromMidPoint
@@ -20,6 +20,7 @@ class GameLogic:
         self.ref = ref
         self.fieldID = fieldID
         self.robotID = robotID
+        self.mb = mb
 
     def turnToTarget(self, scanOrder, target):
         if target.horizontalMidPoint != None:
