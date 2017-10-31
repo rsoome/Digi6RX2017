@@ -8,7 +8,7 @@ class MovementLogic:
         self.motorSpeed0 = 0.0
         self.motorSpeed1 = 0.0
         self.motorSpeed2 = 0.0
-        self.RPS = 1.9
+        self.RPS = 2.5
         self.timer = Timer.Timer()
 
     def drive(self, speed, angle):
@@ -27,7 +27,8 @@ class MovementLogic:
         self.timer.startTimer()
         while self.timer.getTimePassed() < timeToRotate:
             self.mb.setMotorSpeed(speed, speed, speed)
-        self.stop()
-        print("Rotating completed")
+        self.timer.stop()
         self.timer.stopTimer()
+
+
 
