@@ -31,6 +31,7 @@ class MovementLogic:
         self.timer.startTimer()
         while self.timer.getTimePassed() < timeToRotate:
             self.mb.setMotorSpeed(speed, speed, speed)
+            print(self.mb.readBytes())
             #time.sleep(0.001)
         self.stop()
         print("Rotation completed")
