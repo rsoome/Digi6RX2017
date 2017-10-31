@@ -72,7 +72,7 @@ imgHandler = ImageHandler.ImageHandler(bool(settings.getValue("multiThreading"))
 
 frameCapture = FrameCapturer.FrameCapturer(int(settings.getValue("camID")))
 
-ref = RefereeHandler.RefereeHandler(robotID, fieldID)
+ref = RefereeHandler.RefereeHandler(robotID, fieldID, mb)
 
 game = GameLogic.GameLogic(move, 40, int(settings.getValue("driveSpeed")), int(settings.getValue("turnSpeed")),
                            imgHandler, frameCapture, socketData, ref, fieldID, robotID, mb)
