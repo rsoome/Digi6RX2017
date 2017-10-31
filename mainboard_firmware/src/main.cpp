@@ -203,6 +203,7 @@ void parseCommand(char *command) {
 
   else if (command[0] == 'f') {
     failSafeEnabled = command[1] == '1';
+    failDeadlyEnabled = false;
   }
 
   else if (command[0] == 'f' && command[2] == 'd') {
