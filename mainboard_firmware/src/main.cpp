@@ -50,6 +50,7 @@ int serialCount = 0;
 bool serialData = false;
 
 bool failSafeEnabled = true;
+bool failDeadlyEnabled = false;
 int ticksSinceCommand = 0;
 
 void pidTick() {
@@ -63,15 +64,24 @@ void pidTick() {
   }
 
   // Fail-safe
-  if (failSafeEnabled) {
+  if (failSafeEnabled || failDeadlyEnabled) {
     ticksSinceCommand++;
   }
 
   if (ticksSinceCommand == 60) {
-    motor0.setSpeed(0);
-    motor1.setSpeed(0);
-    motor2.setSpeed(0);
-    motor3.setSpeed(0);
+    if (failSafeEnabled){
+        motor0.setSpeed(0);
+        motor1.setSpeed(0);
+        motor2.setSpeed(0);
+        //motor3.setSpeed(0);
+    }
+
+    if (failDeadlyEnabled){
+        motor0.setSpeed(100);
+        motor1.setSpeed(100);
+        motor2.setSpeed(100);
+        //motor3.setSpeed(0);
+    }
 
     pwm1.pulsewidth_us(100);
   }
@@ -193,5 +203,10 @@ void parseCommand(char *command) {
 
   else if (command[0] == 'f') {
     failSafeEnabled = command[1] == '1';
+  }
+
+  else if (command[0] == 'f' && command[2] == 'd') {
+    failSafeEnabled = false;
+    failDeadlyEnabled = command[2] == '1';
   }
 }

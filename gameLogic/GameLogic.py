@@ -32,27 +32,22 @@ class GameLogic:
 
     def turnTowardTarget(self, target):
         if target.horizontalMidPoint != None:
-            if target.horizontalMidPoint != None:
-                if not self.socketData.gameStarted:
-                    return
-                if target.horizontalMidPoint > self.screenMidpoint:
-                    self.move.rotate(self.turnSpeed)
-                elif target.horizontalMidPoint < self.screenMidpoint:
-                    self.move.rotate(-self.turnSpeed)
-        self.move.stop()
+            if not self.socketData.gameStarted:
+                return
+            if target.horizontalMidPoint > self.screenMidpoint + self.deltaFromMidPoint:
+                self.move.rotate(self.turnSpeed)
+            elif target.horizontalMidPoint < self.screenMidpoint - self.deltaFromMidPoint:
+                self.move.rotate(-self.turnSpeed)
 
     def moveTowardTarget(self, target):
         if target.horizontalMidPoint != None:
 
-            if target.verticalMidPoint == None: #and not self.checkHorizontalAlginment(target):
+            if target.verticalMidPoint == None:
                 return
 
             if not self.socketData.gameStarted:
                 return
-            self.updateTargetCoordinates([target])
             self.move.drive(self.moveSpeed, 0)
-        #start ballroller
-        self.move.stop()
 
     def updateTargetCoordinates(self, targets):
         self.frame.capture(cv2.COLOR_BGR2HSV)
@@ -76,6 +71,7 @@ class GameLogic:
         basketReached = False
         while(self.socketData.gameStarted):
             self.timer.startTimer()
+            self.updateTargetCoordinates([self.ball, self.basket])
             self.readMb()
             if self.gameState == "START":
 
@@ -83,15 +79,16 @@ class GameLogic:
                     ballReached = self.goToTarget(self.ball, self.ballVerticalStopBound)
 
                 elif not basketReached:
+                    self.move.stop()
                     basketReached = self.goToTarget(self.basket, self.basketVerticalStopBound)
 
                 else:
-                    self.throwBall()
-                    ballReached = False
+                    self.move.stop()
+                    ballThrown = self.throwBall()
+                    ballReached = not ballThrown
                     basketReached = False
 
             if self.gameState == "STOP":
-                self.updateTargetCoordinates([self.ball, self.basket])
                 self.move.stop()
 
             self.addFrame(self.timer.stopTimer())
@@ -102,8 +99,8 @@ class GameLogic:
     def goToTarget(self, target, verticalStopBound):
 
         if target.verticalMidPoint == None or target.horizontalMidPoint == None:
-            if not self.lookForTarget():
-                self.move.drive(self.moveSpeed, 30)
+            if not self.lookForTarget(target):
+                self.move.drive(self.moveSpeed, 0)
             return False
 
         if not self.checkHorizontalAlginment(target):
@@ -174,7 +171,10 @@ class GameLogic:
             self.handleMbMessage(mbMsg)
 
     def throwBall(self):
-        pass
+        if not self.checkHorizontalAlginment(self.basket) or not self.checkVerticalAlignment(self.basket):
+            return False
+        self.mb.startThrower(self.mb.THROWER_MAXSPEED)
+        return True
 
     def addFrame(self, elapsed):
         if elapsed > 0:

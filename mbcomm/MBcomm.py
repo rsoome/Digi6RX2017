@@ -6,8 +6,9 @@ class MBcomm:
         self.ser = serial.Serial(port=target, baudrate=baud, timeout=0.8)
         if not self.ser.isOpen():
             self.ser.open()
+            self.THROWER_MAXSPEED = 2000
 
-    def __sendByte(self, cmd):
+    def __sendBytes(self, cmd):
         cmd += "\n"
         #print(cmd)
         self.ser.write(cmd.encode())
@@ -19,28 +20,35 @@ class MBcomm:
         return []
 
     def setMotorSpeed(self, speed0, speed1, speed2):
-        self.__sendByte("sd" + str(speed0) + ":" + str(speed1) + ":" + str(speed2))
+        self.__sendBytes("sd" + str(speed0) + ":" + str(speed1) + ":" + str(speed2))
 
     def getMotorSpeed(self):
-        self.__sendByte("sg")
+        self.__sendBytes("sg")
 
     def readInfrared(self):
-        self.__sendByte("i")
+        self.__sendBytes("i")
 
     def charge(self):
-        self.__sendByte("c")
+        self.__sendBytes("c")
 
     def kick(self):
-        self.__sendByte("k")
+        self.__sendBytes("k")
 
     def discharge(self):
-        self.__sendByte("e")
+        self.__sendBytes("e")
 
     def enableFailSafe(self):
-        self.__sendByte("f")
+        self.__sendBytes("f")
 
     def sendRFMessage(self, msg):
-        self.__sendByte("rf" + msg + "\n")
+        self.__sendBytes("rf" + msg + "\n")
+
+    def startThrower(self, speed):
+        self.__sendBytes("cg")
+        self.__sendBytes("d" + str(speed))
+
+    def enableFailDeadly(self):     #DON'T EVER USE THIS
+        self.sendBytes("fd")
 
     def closeSerial(self):
         if self.ser.isOpen():
