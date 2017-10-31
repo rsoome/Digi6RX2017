@@ -12,9 +12,9 @@ class RefereeHandler:
         print(msg)
         cmd = ""
 
-        if cmd[0] == "a":
-            if cmd[1] == self.fieldID:
-                if cmd[2] == self.robotID or cmd[2] == "X":
+        if msg[0] == "a":
+            if msg[1] == self.fieldID:
+                if msg[2] == self.robotID or msg[2] == "X":
                     endOfMsg = msg.find("-")
                     if endOfMsg != -1:
                         cmd = msg[3:endOfMsg]
