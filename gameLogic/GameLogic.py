@@ -142,6 +142,7 @@ class GameLogic:
                 self.gameState = "STOP"
 
             if cmd == "PING":
+                print("Sending ACK")
                 self.mb.sendRFMessage("a" + self.fieldID + self.robotID + "ACK------")
 
     def readMb(self):
