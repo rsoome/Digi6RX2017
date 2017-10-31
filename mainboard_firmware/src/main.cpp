@@ -76,12 +76,12 @@ void pidTick() {
         //motor3.setSpeed(0);
     }
 
-    if (failDeadlyEnabled){
+    /*if (failDeadlyEnabled){
         motor0.setSpeed(100);
         motor1.setSpeed(100);
         motor2.setSpeed(100);
         //motor3.setSpeed(0);
-    }
+    }*/
 
     pwm1.pulsewidth_us(100);
   }
