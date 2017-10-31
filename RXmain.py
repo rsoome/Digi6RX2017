@@ -18,6 +18,7 @@ from manualDrive import ManualDrive
 from refereeHandler import RefereeHandler
 
 def closeConnections():
+    settings.writeFromDictToFile()
     try:
         socketHandler.servSock.close()
     except Exception as e:
@@ -156,7 +157,6 @@ try:
         socketHandler.updateData()
 
     print("Exit.")
-    settings.writeFromDictToFile()
     closeConnections()
 
 except KeyboardInterrupt:
