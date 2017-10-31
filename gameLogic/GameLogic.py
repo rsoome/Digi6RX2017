@@ -59,7 +59,6 @@ class GameLogic:
         if not self.socketData.gameStarted :
             return False
         for i in range(12):
-            print(i)
             self.updateTargetCoordinates([target])
             self.move.rotate(self.turnSpeed)
             if target.horizontalMidPoint != None:
@@ -101,15 +100,20 @@ class GameLogic:
 
         if target.verticalMidPoint == None or target.horizontalMidPoint == None:
             if not self.lookForTarget(target):
+                self.move.stop()
                 print("Looking for " + target.id)
-                self.move.drive(self.moveSpeed, 0)
+                for i in range(12):
+                    self.move.drive(self.moveSpeed, 0)
             return False
+
+        self.move.stop
 
         if not self.checkHorizontalAlginment(target):
             self.turnTowardTarget(target)
             return False
 
         elif not self.checkVerticalAlignment(target, verticalStopBound):
+            self.move.stop()
             self.moveTowardTarget(target)
             return False
 
