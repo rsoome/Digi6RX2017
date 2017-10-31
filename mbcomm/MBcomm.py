@@ -40,7 +40,7 @@ class MBcomm:
         self.__sendByte("f")
 
     def sendRFMessage(self, msg):
-        self.__sendByte("rf" + msg)
+        self.__sendByte("rf" + msg + "\n")
 
     def closeSerial(self):
         if self.ser.isOpen():

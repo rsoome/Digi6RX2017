@@ -9,7 +9,6 @@ class RefereeHandler:
         self.fieldID = fieldID
 
     def handleCommand(self, msg):
-        print(msg)
         cmd = ""
 
         if msg[0] == "a":
