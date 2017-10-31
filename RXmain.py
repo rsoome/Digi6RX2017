@@ -3,6 +3,9 @@
 import numpy as np
 import cv2
 import sys
+
+import time
+
 from settings import SettingsHandler
 from target import Target
 from  movementLogic import MovementLogic
@@ -84,6 +87,7 @@ try:
     while True:
         print("*")
         move.rotate(30, 180)
+        time.sleep(1)
         timer.startTimer()
 
         game.readMb()
