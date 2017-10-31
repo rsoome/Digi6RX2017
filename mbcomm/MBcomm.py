@@ -53,3 +53,9 @@ class MBcomm:
     def closeSerial(self):
         if self.ser.isOpen():
             self.ser.close()
+
+    def waitForAnswer(self):
+        msg = self.readBytes()
+        while not len(msg) > 0:
+            msg = self.readBytes()
+        return msg
