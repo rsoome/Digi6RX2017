@@ -24,6 +24,9 @@ class SocketData:
         self.updateThresholds = False
         self.mouseX = -1
         self.mouseY = -1
+        self.refreshConf = False
+        self.updateConf = False
+        self.clientDC = False
 
     def setAll(self, ballSelected, manualDrive, gameStarted, img, ballMask, basketMask,
                fps, ballHorizontalBounds, ballVerticalBounds, basketHorizontalBounds, basketVerticalBounds):

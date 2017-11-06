@@ -10,10 +10,7 @@ class Target:
         self.verticalMidPoint = None
         :param scanOrder: '''
         self.setBounds(hBounds, vBounds)
-        # HSV värviruumi alumine piir, hilisemaks filtreerimiseks TODO: Kirjuta faili
-        self.hsvLowerRange = lowerRange
-        # HSV värviruumi ülemine piir, hilisemaks filtreerimiseks TODO: Kirjuta faili
-        self.hsvUpperRange = upperRange
+        self.setThresholds(lowerRange, upperRange)
         self.id = targetID
         self.mask = None
         self.scanOrder = scanOrder
@@ -30,6 +27,11 @@ class Target:
                 self.hsvLowerRange[i] = values[i]  # Kui väärtus on väiksem ,uuenda alumist piiri
             if values[i] > self.hsvUpperRange[i]:
                 self.hsvUpperRange[i] = values[i]  # Kui väärtus on suurem, uuenda ülemist piiri
+        return (self.hsvLowerRange, self.hsvUpperRange)
+
+    def setThresholds(self, lower, upper):
+        self.hsvLowerRange = np.array(lower)
+        self.hsvUpperRange = np.array(upper)
 
     def resetThreshHolds(self):
         self.hsvLowerRange = np.array(

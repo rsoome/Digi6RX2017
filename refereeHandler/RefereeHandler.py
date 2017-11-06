@@ -5,8 +5,7 @@ import serial
 class RefereeHandler:
 
     def __init__(self, robotID, fieldID, mb):
-        self.robotID = robotID
-        self.fieldID = fieldID
+        self.setIDs(robotID, fieldID)
         self.mb = mb
 
     def handleCommand(self, msg):
@@ -23,6 +22,10 @@ class RefereeHandler:
                     else:
                         cmd = msg[3:].strip()
         return cmd
+
+    def setIDs(self, robotID, fieldID):
+        self.robotID = robotID
+        self.fieldID = fieldID
 
     def sendAck(self):
         self.mb.sendRFMessage("a" + self.fieldID + self.robotID + "ACK-----")

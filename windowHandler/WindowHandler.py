@@ -43,7 +43,7 @@ class WindowHandler:
         if self.socketData.basketHorizontalBounds != None and self.socketData.basketVerticalBounds != None:
             cv2.rectangle(self.socketData.img, (self.socketData.basketHorizontalBounds[0],
                                                 self.socketData.basketVerticalBounds[1]),
-                          (self.socketData.basketHorizontalBounds[1], self.socketDatabasketVerticalBounds[0]),
+                          (self.socketData.basketHorizontalBounds[1], self.socketData.basketVerticalBounds[0]),
                           (0, 255, 0), 3)
 
         if cv2.waitKey(1) & 0xFF == ord('e'):
@@ -81,6 +81,18 @@ class WindowHandler:
                 self.socketData.gameStarted = not self.socketData.gameStarted
                 print("Setting game started to: " + str(self.socketData.gameStarted))
                 self.values["gameStarted"] = self.socketData.gameStarted
+
+            if keyStroke & 0xFF == ord('r'):
+                self.values["refreshConf"] = True
+
+            if keyStroke & 0xFF == ord('c'):
+                self.values["updateConf"] = True
+
+            if keyStroke & 0xFF == ord('d'):
+                self.values["DC"] = True
+                self.closeWindows()
+                self.socketData.stop = True
+                return
 
             self.socketHandler.sendMessage(self.values, self.socketHandler.clientSock, 1)
 

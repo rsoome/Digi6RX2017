@@ -1,10 +1,7 @@
 # coding=utf-8
 
-import numpy as np
 import cv2
 import sys
-
-import time
 
 from settings import SettingsHandler
 from target import Target
@@ -48,13 +45,20 @@ print("Running on Python " + sys.version)
 
 settings = SettingsHandler.SettingsHandler("conf")
 
-ball = Target.Target(None, None, "ball", np.array([int(x) for x in settings.getValue("ballHSVLower").split()]),
-                     np.array([int(x) for x in settings.getValue("ballHSVUpper").split()]),
-                     [int(x) for x in settings.getValue("ballScanOrder").split()])
+opponent = settings.getValue("opponentBasket")
 
-basket = Target.Target(None, None, "basket", np.array([int(x) for x in settings.getValue("basketHSVLower").split()]),
-                       np.array([int(x) for x in settings.getValue("basketHSVUpper").split()]),
-                       [int(x) for x in settings.getValue("basketScanOrder").split()])
+if opponent != "magneta" and opponent != "blue":
+    print("Please choose opponent basket color in conf (magneta/blue)")
+    settings.writeFromDictToFile()
+    sys.exit(0)
+
+ball = Target.Target(None, None, "ball", settings.getValue("ballHSVLower"),
+                     settings.getValue("ballHSVUpper"),
+                     settings.getValue("ballScanOrder"))
+
+basket = Target.Target(None, None, "basket", settings.getValue(opponent + "BasketHSVLower"),
+                       settings.getValue(opponent + "BasketHSVUpper"),
+                       settings.getValue("basketScanOrder"))
 
 robotID = settings.getValue("ID")
 fieldID = settings.getValue("fieldID")
@@ -64,6 +68,7 @@ hsv = None
 socketData = SocketData.SocketData()
 
 mb = MBcomm.MBcomm(settings.getValue("mbLocation"), 115200)
+#mb = None
 
 move = MovementLogic.MovementLogic(mb)
 
@@ -85,12 +90,9 @@ t = threading.Thread(target=socketHandler.initServ)
 t.start()
 try:
     while True:
-        print("*")
-        move.rotate(50, 180)
-        time.sleep(1)
         timer.startTimer()
 
-        game.readMb()
+#        game.readMb()
         frameCapture.capture(cv2.COLOR_BGR2HSV)  # Võta kaamerast pilt
         frame = frameCapture.capturedFrame
         hsv = frameCapture.filteredImg
@@ -105,10 +107,10 @@ try:
         imgHandler.generateMask(ball, hsv)
         imgHandler.generateMask(basket, hsv)
         imgHandler.detect(frame, ball.mask, int(settings.getValue("objectMinSize")), int(settings.getValue("minImgArea")),
-                          [int(x) for x in settings.getValue("ballScanOrder").split()], ball)
+                          settings.getValue("ballScanOrder"), ball)
 
         imgHandler.detect(frame, basket.mask, int(settings.getValue("objectMinSize")), int(settings.getValue("minImgArea")),
-                          [int(x) for x in settings.getValue("basketScanOrder").split()], basket)
+                          settings.getValue("basketScanOrder"), basket)
 
         if socketData.updateThresholds:
             selectedTarget = None
@@ -118,7 +120,16 @@ try:
                 selectedTarget = basket
 
             if socketData.mouseY != -1 and socketData.mouseX != -1:
-                selectedTarget.updateThresholds(hsv[socketData.mouseY][socketData.mouseX])
+                ranges = selectedTarget.updateThresholds(hsv[socketData.mouseY][socketData.mouseX])
+
+                if selectedTarget == ball:
+                    settings.setValue("ballHSVLower", ranges[0].tolist())
+                    settings.setValue("ballHSVHigher", ranges[1].tolist())
+
+                if selectedTarget == basket:
+                    settings.setValue(opponent + "BasketHSVLower", ranges[0].tolist())
+                    settings.setValue(opponent + "BasketHSVUpper", ranges[1].tolist())
+
             socketData.updateThresholds = False
             socketData.mouseX = -1
             socketData.mouseY = -1
@@ -143,6 +154,21 @@ try:
             game.run()
             socketData.gameStarted = False
             print("Game mode deactivated")
+
+        if socketData.updateConf:
+            print("Updating conf.")
+            settings.writeFromDictToFile()
+            socketData.updateConf = False
+
+        if socketData.refreshConf:
+            print("Refreshing conf")
+            settings.values = settings.readFromFileToDict()
+            opponent = settings.getValue("opponentBasket")
+            robotID = settings.getValue("ID")
+            fieldID = settings.getValue("fieldID")
+            basket.setThresholds(settings.getValue(opponent + "BasketHSVLower"), settings.getValue(opponent + "BasketHSVUpper"))
+            ref.setIDs(robotID, fieldID)
+            socketData.refreshConf = False
 
         if socketData.stop:
             break

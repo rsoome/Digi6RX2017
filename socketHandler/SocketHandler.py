@@ -104,9 +104,11 @@ class SocketHandler:
         self.servSock.bind((host, self.servPort))  # Bind to the port
         self.servSock.listen(1)  # Now wait for client connection.
         try:
-            self.streamData(None, None)
-            print("Quit signal received. Closing socket.")
-            self.servSock.close()
+            closedByClient = self.streamData(None, None)
+
+            if closedByClient:
+                self.servSock.close()
+
         except Exception as e:
             print("An error occured, closing connections.")
             self.servSock.close()
@@ -114,9 +116,7 @@ class SocketHandler:
 
     def streamData(self, conn, addr):
         while True:
-            #print("Updating data")
             self.updateData()
-            #print("Data updated")
             try:
                 if conn == None:
                     self.servSock.settimeout(0.1)
@@ -126,38 +126,28 @@ class SocketHandler:
                     if messageSent:
                         self.waitForAck(conn)
 
-                    #print("Connection established to: " + str(addr))
-                    #time.sleep(0.1)
-
                 else:
 
-                    #print(self.values)
-                    #print("Checking connection")
                     messageSent = self.sendMessage({"check": ""}, conn, 0.001)
 
                     if messageSent:
-                        #print("Waiting for confirmation.")
                         self.waitForAck(conn)
-                        #print("Connection OK, updating values")
                         self.updateValues()
-                        #print("Values updated, sending.")
                         messageSent = self.sendMessage(self.values, conn, 4)
 
-                    #else:
-                        #print("Sending message timed out.")
-
-                    #print("Listening for incoming messages")
                     messages = self.listen(conn, 0.1)
 
                     if messages != None:
-                        #print("Received messages. Handling")
                         self.handleMessages(messages, conn)
-                        #print("Messages handled.")
 
                     if self.socketData.stop:
                         conn.close()
                         self.socketData.socketClosed = True
-                        return
+                        return True
+
+                    if self.socketData.clientDC:
+                        conn.close()
+                        return False
 
             except socket.timeout:
                 #print("Socket timed out")
@@ -165,7 +155,7 @@ class SocketHandler:
 
             except socket.error as e:
                 print("Client socket closed.")
-                if e.errno != errno.EPIPE:
+                if e.errno != errno.EPIPE and e.errno != errno.ECONNABORTED and e.errno != errno.ECONNRESET:
                     raise
                 try:
                     conn.close()
@@ -308,4 +298,13 @@ class SocketHandler:
 
             if key == "check":
                 messageSent = self.sendMessage({"ack" : True}, sock, 0.1)
+
+            if key == "refreshConf":
+                self.socketData.refreshConf = bool(messages[key])
+
+            if key == "updateConf":
+                self.socketData.updateConf = bool(messages[key])
+
+            if key == "DC":
+                self.socketData.clientDC = bool(messages[key])
 
