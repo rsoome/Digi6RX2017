@@ -20,7 +20,7 @@ DigitalIn infrared(ADC0);
 Motor motor0(&pc, M0_PWM, M0_DIR1, M0_DIR2, M0_FAULT, M0_ENCA, M0_ENCB);
 Motor motor1(&pc, M1_PWM, M1_DIR1, M1_DIR2, M1_FAULT, M1_ENCA, M1_ENCB);
 Motor motor2(&pc, M2_PWM, M2_DIR1, M2_DIR2, M2_FAULT, M2_ENCA, M2_ENCB);
-Motor motor3(&pc, M3_PWM, M3_DIR1, M3_DIR2, M3_FAULT, M3_ENCA, M3_ENCB);
+//Motor motor3(&pc, M3_PWM, M3_DIR1, M3_DIR2, M3_FAULT, M3_ENCA, M3_ENCB);
 
 /*Motor motors[NUMBER_OF_MOTORS] = {
   Motor(&pc, M0_PWM, M0_DIR1, M0_DIR2, M0_FAULT, M0_ENCA, M0_ENCB),
@@ -57,7 +57,7 @@ void pidTick() {
   motor0.pidTick();
   motor1.pidTick();
   motor2.pidTick();
-  motor3.pidTick();
+//  motor3.pidTick();
 
   if (pidTickerCount++ % 25 == 0) {
     led1.setBlue(!led1.getBlue());
@@ -83,7 +83,7 @@ void pidTick() {
         //motor3.setSpeed(0);
     }*/
 
-    pwm1.pulsewidth_us(100);
+    m3.pulsewidth_us(100);
   }
 
 }
@@ -107,8 +107,8 @@ int main() {
   int infraredStatus = -1;
 
   // Dribbler motor
-  pwm1.period_us(400);
-  pwm1.pulsewidth_us(100);
+  //m3.period_us(400);
+  m3.pulsewidth_us(100);
 
   while (1) {
 
@@ -171,7 +171,7 @@ void parseCommand(char *command) {
     } else if (command[1] == '1') {
       pwm1.pulsewidth_us(268);
     } else*/ {
-      pwm1.pulsewidth_us(atoi(command + 1));
+      m3.pulsewidth_us(atoi(command + 1));
     }
     //pwm1.pulsewidth_us((int) atoi(command+1));
     //serial.printf("sending %d\n", (int) atoi(command+1));
