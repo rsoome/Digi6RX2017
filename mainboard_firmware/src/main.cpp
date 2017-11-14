@@ -13,7 +13,7 @@ Serial pc(USBTX, USBRX);
 RGBLed led1(LED1R, LED1G, LED1B);
 RGBLed led2(LED2R, LED2G, LED2B);
 
-DigitalIn infrared(ADC0);
+DigitalIn infrared(P2_12);
 
 #define NUMBER_OF_MOTORS 4
 
@@ -90,6 +90,9 @@ void pidTick() {
 
 int main() {
 
+  pwm0.pulsewidth_us(1500);
+  pwm1.pulsewidth_us(1500);
+
   if (rfModule.readable()) {
 
         serial.printf("ref:%s\n", rfModule.read());
@@ -137,7 +140,14 @@ int main() {
     if (newInfraredStatus != infraredStatus) {
       infraredStatus = newInfraredStatus;
       serial.printf("i%d\n", newInfraredStatus);
-      led2.setGreen(infraredStatus);
+
+
+      if (newInfraredStatus) {
+        led2.set(RGBLed::White);
+      } else {
+        led2.set(RGBLed::Black);
+      }
+
     }
 
     /// COILGUN
@@ -162,6 +172,16 @@ void parseCommand(char *command) {
     motor2.setSpeed((int16_t) atoi(sd));
 
     serial.printf("%d:%d:%d\n", motor0.getSpeed(), motor1.getSpeed(), motor2.getSpeed());
+  }
+
+  else if (command[0] == 's' && command[1] == 's') {
+    int servoValue;
+
+    servoValue = atoi(strtok(command + 2, ":"));
+    pwm0.pulsewidth_us(servoValue);
+
+    servoValue = atoi(strtok(NULL, ":"));
+    pwm1.pulsewidth_us(servoValue);
   }
 
   else if (command[0] == 'd') {
