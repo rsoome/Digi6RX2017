@@ -10,7 +10,11 @@ class ImageHandler:
         self.multiThreading = multiThreading
 
     def generateMask(self, targetObject, hsv):
-        targetObject.mask = self.blur(cv2.inRange(hsv, targetObject.hsvLowerRange, targetObject.hsvUpperRange))
+        thresh = cv2.inRange(hsv, targetObject.hsvLowerRange, targetObject.hsvUpperRange)
+        im2, contours, hierarchy = cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
+        #targetObject.mask = self.blur(cv2.inRange(hsv, targetObject.hsvLowerRange, targetObject.hsvUpperRange))
+        targetObject.mask = contours
+	
 
     # Creates an imageP
     # rocessor object and runs it's findObject function.
