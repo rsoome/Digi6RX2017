@@ -119,16 +119,13 @@ try:
             else:
                 selectedTarget = basket
 
-            if socketData.mouseY != -1 and socketData.mouseX != -1:
-                ranges = selectedTarget.updateThresholds(hsv[socketData.mouseY][socketData.mouseX])
+            for frameX in range(socketData.mouseX - 10, socketData.mouseX):
+                for frameY in range(socketData.mouseY - 10, socketData.mouseY):
+                    if frameY != -1 and frameX != -1:
+                        ranges = selectedTarget.updateThresholds(hsv[frameY][frameX])
 
-                if selectedTarget == ball:
-                    settings.setValue("ballHSVLower", ranges[0].tolist())
-                    settings.setValue("ballHSVHigher", ranges[1].tolist())
-
-                if selectedTarget == basket:
-                    settings.setValue(opponent + "BasketHSVLower", ranges[0].tolist())
-                    settings.setValue(opponent + "BasketHSVUpper", ranges[1].tolist())
+            settings.setValue(selectedTarget.id + "HSVLower", selectedTarget.hsvLowerRange.tolist())
+            settings.setValue(selectedTarget.id + "HSVUpper", selectedTarget.hsvUpperRange.tolist())
 
             socketData.updateThresholds = False
             socketData.mouseX = -1
