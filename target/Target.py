@@ -15,15 +15,12 @@ class Target:
 
     # Writes new values into the variables containing threshholds of a given object.
     def updateThresholds(self, values):
-        print("Updating " + str(self.id) + "'s thresholds.")
         # Check all the received values against current values and update if necessary
         for i in range(3):
             if values[i] < self.hsvLowerRange[i]:
                 self.hsvLowerRange[i] = values[i]  # Kui väärtus on väiksem ,uuenda alumist piiri
             if values[i] > self.hsvUpperRange[i]:
                 self.hsvUpperRange[i] = values[i]  # Kui väärtus on suurem, uuenda ülemist piiri
-        print("New lower values: " + str(self.hsvLowerRange))
-        print("New upper values: " + str(self.hsvUpperRange))
         return (self.hsvLowerRange, self.hsvUpperRange)
 
     def setThresholds(self, lower, upper):

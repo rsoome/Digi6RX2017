@@ -88,6 +88,23 @@ timer = Timer.Timer()
 
 t = threading.Thread(target=socketHandler.initServ)
 t.start()
+
+
+def updateTargetsTresholds():
+    print("Updating " + str(selectedTarget.id) + "'s thresholds.")
+    for frameX in range(socketData.mouseX - 5, socketData.mouseX):
+        for frameY in range(socketData.mouseY - 5, socketData.mouseY):
+            if frameY != -1 and frameX != -1:
+                ranges = selectedTarget.updateThresholds(hsv[frameY][frameX])
+    print("New lower values: " + str(selectedTarget.hsvLowerRange))
+    print("New upper values: " + str(selectedTarget.hsvUpperRange))
+    settings.setValue(selectedTarget.id + "HSVLower", selectedTarget.hsvLowerRange.tolist())
+    settings.setValue(selectedTarget.id + "HSVUpper", selectedTarget.hsvUpperRange.tolist())
+    socketData.updateThresholds = False
+    socketData.mouseX = -1
+    socketData.mouseY = -1
+
+
 try:
     while True:
         timer.startTimer()
@@ -119,17 +136,7 @@ try:
             else:
                 selectedTarget = basket
 
-            for frameX in range(socketData.mouseX - 10, socketData.mouseX):
-                for frameY in range(socketData.mouseY - 10, socketData.mouseY):
-                    if frameY != -1 and frameX != -1:
-                        ranges = selectedTarget.updateThresholds(hsv[frameY][frameX])
-
-            settings.setValue(selectedTarget.id + "HSVLower", selectedTarget.hsvLowerRange.tolist())
-            settings.setValue(selectedTarget.id + "HSVUpper", selectedTarget.hsvUpperRange.tolist())
-
-            socketData.updateThresholds = False
-            socketData.mouseX = -1
-            socketData.mouseY = -1
+            updateTargetsTresholds()
 
         if socketData.resetBall:
             ball.resetBounds()
