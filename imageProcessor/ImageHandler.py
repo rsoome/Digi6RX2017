@@ -161,7 +161,7 @@ class ImageHandler:
     # scanOrder - the order by which the image is fed to threads by multi threaded object finding function. More information
     # in findObjectMultithreaded() description.
     def detect(self, mainImg, mask, objectMinSize, imageMinArea, scanOrder, target):
-        height, width = mask.shape
+        height, width, depth = mask.shape
         horizontalBounds = None
         verticalBounds = None
 
