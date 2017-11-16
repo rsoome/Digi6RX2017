@@ -8,6 +8,7 @@ class Target:
         self.setThresholds(lowerRange, upperRange)
         self.id = targetID
         self.mask = None
+        self.contours = None
         self.scanOrder = scanOrder
 
     def getBounds(self):
