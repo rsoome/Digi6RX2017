@@ -54,7 +54,6 @@ class MBcomm:
         self.__sendBytes("rf" + msg + "\n")
 
     def setThrowerSpeed(self, speed):
-        self.__sendBytes("cg")
         self.__sendBytes("d" + str(speed))
 
     def enableFailDeadly(self):     #DON'T EVER USE THIS: IT WAS FUNNY UNTIL IT ACTUALLY FAILED DEADLY
