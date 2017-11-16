@@ -13,7 +13,8 @@ class ImageHandler:
         thresh = cv2.inRange(hsv, targetObject.hsvLowerRange, targetObject.hsvUpperRange)
         im2, contours, hierarchy = cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
         #targetObject.mask = self.blur(cv2.inRange(hsv, targetObject.hsvLowerRange, targetObject.hsvUpperRange))
-        targetObject.mask = cv2.drawContours(np.zeros((480, 640, 3), np.uint8), contours, -1, [255, 0, 0])
+        targetObject.mask = np.zeros((480, 640, 3), np.uint8)
+        cv2.drawContours(targetObject.mask, contours, -1, [255, 0, 0])
         targetObject.contours = contours
 	
 
