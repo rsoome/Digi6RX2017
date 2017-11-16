@@ -10,7 +10,7 @@ class ImageHandler:
         self.multiThreading = multiThreading
 
     def generateMask(self, targetObject, hsv):
-        targetObject.mask = self.blur(cv2.inRange(hsv, targetObject.hsvLowerRange, targetObject.hsvUpperRange))
+        targetObject.mask = cv2.inRange(hsv, targetObject.hsvLowerRange, targetObject.hsvUpperRange)
 
     # Creates an imageP
     # rocessor object and runs it's findObject function.
@@ -35,7 +35,7 @@ class ImageHandler:
         kernel = np.ones((50, 50), np.uint8)  # //TODO: Find values to put in the kernel
         closing = cv2.morphologyEx(img, cv2.MORPH_CLOSE, kernel)
         gauss = cv2.GaussianBlur(img, (5, 5), 0)
-        return gauss
+        return closing
 
     # Finds object coordinates in the given picture
     # img - the mask from which to find the coordinates
