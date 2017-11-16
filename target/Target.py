@@ -22,8 +22,8 @@ class Target:
                 self.hsvLowerRange[i] = values[i]  # Kui väärtus on väiksem ,uuenda alumist piiri
             if values[i] > self.hsvUpperRange[i]:
                 self.hsvUpperRange[i] = values[i]  # Kui väärtus on suurem, uuenda ülemist piiri
-        print("New lower values: " + self.hsvLowerRange)
-        print("New upper values: " + self.hsvUpperRange)
+        print("New lower values: " + str(self.hsvLowerRange))
+        print("New upper values: " + str(self.hsvUpperRange))
         return (self.hsvLowerRange, self.hsvUpperRange)
 
     def setThresholds(self, lower, upper):
