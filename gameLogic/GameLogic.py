@@ -8,7 +8,7 @@ class GameLogic:
 
     def __init__(self, move, deltaFromMidPoint, moveSpeed, turnSpeed, imgHandler, frame, socketData, ref, fieldID,
                  robotID, mb, ball, basket, defaultGameState):
-        self.screenMidpoint = None
+        self.frameWidth = None
         self.move = move
         self.deltaFromMidPoint = deltaFromMidPoint
         self.moveSpeed = moveSpeed
@@ -17,10 +17,10 @@ class GameLogic:
         self.frame = frame
         self.initializeValues()
         self.socketData = socketData
-        self.ballVerticalStopBound = 400
-        self.basketVerticalStopBound = 240
+        self.ballVerticalStopBound = self.frame.height
+        self.basketVerticalStopBound = self.frame.height/2
         self.gameState = defaultGameState
-        self.irStatus = -1.0
+        self.irStatus = 0
         self.ref = ref
         self.fieldID = fieldID
         self.robotID = robotID
@@ -78,8 +78,12 @@ class GameLogic:
             if self.gameState == "START":
 
                 if not ballReached:
-                    ballReached = self.goToTarget(self.ball, self.ballVerticalStopBound)
-                    self.mb.setGrabberPosition(self.mb.GRABBER_MAX_POSITION/3)
+                    self.goToTarget(self.ball, self.ballVerticalStopBound)
+                    ballReached = self.irStatus == 1
+
+                    if ballReached:
+                        self.move.drive(self.moveSpeed, 0)
+                        self.mb.setGrabberPosition(self.mb.GRABBER_CARRY_POSITION)
 
                 elif not basketReached:
                     self.move.stop()
@@ -156,7 +160,7 @@ class GameLogic:
             self.move.motorSpeed2 = float(msg[3])
 
         if sendingNode == "ir":
-            self.irStatus = float(msg[1])
+            self.irStatus = int(msg[1])
 
         if sendingNode == "ref":
             cmd = self.ref.handleCommand(msg[1])
@@ -180,10 +184,11 @@ class GameLogic:
     def throwBall(self):
         if not self.checkHorizontalAlginment(self.basket) or not self.checkVerticalAlignment(self.basket, self.basketVerticalStopBound):
             return False
-        self.mb.startThrower(self.mb.THROWER_MAXSPEED/2)
-        time.sleep(1)
-        self.mb.startThrower(self.mb.THROWER_MAXSPEED)
-        self.mb.setGrabberPosition(self.mb.GRABBER_MAX_POSITION)
+        self.mb.setThrowerSpeed(self.mb.THROWER_MAXSPEED / 2)
+        time.sleep(0.5)
+        self.mb.setThrowerSpeed(self.mb.THROWER_MAXSPEED)
+        self.mb.setGrabberPosition(self.mb.GRABBER_THROW_POSITION)
+        self.mb.setThrowerSpeed(self.mb.THROWER_STOP)
         return True
 
     def addFrame(self, elapsed):

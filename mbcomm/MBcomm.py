@@ -7,7 +7,12 @@ class MBcomm:
         if not self.ser.isOpen():
             self.ser.open()
             self.THROWER_MAXSPEED = 2000
-            self.GRABBER_MAX_POSITION = 2000
+            self.THROWER_MINSPEED = 1200
+            self.THROWER_STOP = 1000
+            self.GRABBER_MAX_POSITION = 2350
+            self.GRABBER_MIN_POSITION = 550
+            self.GRABBER_CARRY_POSITION = self.GRABBER_MAX_POSITION/3 + self.GRABBER_MIN_POSITION
+            self.GRABBER_THROW_POSITION = self.GRABBER_MAX_POSITION
 
     def __sendBytes(self, cmd):
         cmd += "\n"
@@ -48,12 +53,12 @@ class MBcomm:
     def sendRFMessage(self, msg):
         self.__sendBytes("rf" + msg + "\n")
 
-    def startThrower(self, speed):
+    def setThrowerSpeed(self, speed):
         self.__sendBytes("cg")
         self.__sendBytes("d" + str(speed))
 
     def enableFailDeadly(self):     #DON'T EVER USE THIS: IT WAS FUNNY UNTIL IT ACTUALLY FAILED DEADLY
-        self.sendBytes("fd")
+        self.__sendBytes("fd")
 
     def closeSerial(self):
         if self.ser.isOpen():
@@ -66,4 +71,4 @@ class MBcomm:
         return msg
 
     def setGrabberPosition(self, pos):
-        self.__sendBytes("c" + str(pos))
+        self.__sendBytes("ss" + str(pos))
