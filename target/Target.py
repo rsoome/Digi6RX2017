@@ -4,11 +4,6 @@ import numpy as np
 class Target:
 
     def __init__(self, hBounds, vBounds, targetID, lowerRange, upperRange, scanOrder):
-        '''self.horizontalBounds = hBounds
-        self.verticalBounds = vBounds
-        self.horizontalMidPoint = None
-        self.verticalMidPoint = None
-        :param scanOrder: '''
         self.setBounds(hBounds, vBounds)
         self.setThresholds(lowerRange, upperRange)
         self.id = targetID
@@ -40,9 +35,7 @@ class Target:
             [0, 0, 0])
 
     def resetBounds(self):
-        self.horizontalBounds = None
-        self.verticalBounds = None
-        self.horizontalMidPoint = None
+        self.setBounds(None, None)
 
     def setBounds(self, hBounds, vBounds):
         self.horizontalBounds = hBounds

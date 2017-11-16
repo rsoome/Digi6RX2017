@@ -16,6 +16,7 @@ RGBLed led2(LED2R, LED2G, LED2B);
 DigitalIn infrared(ADC0);
 
 #define NUMBER_OF_MOTORS 4
+#define GRABBER_MAX_PWM 2000
 
 Motor motor0(&pc, M0_PWM, M0_DIR1, M0_DIR2, M0_FAULT, M0_ENCA, M0_ENCB);
 Motor motor1(&pc, M1_PWM, M1_DIR1, M1_DIR2, M1_FAULT, M1_ENCA, M1_ENCB);
@@ -84,6 +85,8 @@ void pidTick() {
     }*/
 
     m3.pulsewidth_us(100);
+    pwm1.pulsewidth_us(0);
+    pwm2.pulsewidth_us(GRABBER_MAX_PWM);
   }
 
 }
@@ -165,16 +168,7 @@ void parseCommand(char *command) {
   }
 
   else if (command[0] == 'd') {
-    /*
-    if (command[1] == '0') {
-      pwm1.pulsewidth_us(100);
-    } else if (command[1] == '1') {
-      pwm1.pulsewidth_us(268);
-    } else*/ {
       m3.pulsewidth_us(atoi(command + 1));
-    }
-    //pwm1.pulsewidth_us((int) atoi(command+1));
-    //serial.printf("sending %d\n", (int) atoi(command+1));
   }
 
   if (command[0] == 'r' && command[1] == 'f') {
@@ -209,5 +203,10 @@ void parseCommand(char *command) {
   else if (command[0] == 'f' && command[2] == 'd') {
     failSafeEnabled = false;
     failDeadlyEnabled = command[2] == '1';
+  }
+
+  else if (command[0] == 'c'){
+      pwm1.pulsewidth_us(atoi(command + 1));
+      pwm2.pulsewidth_us(GRABBER_MAX_PWM - atoi(command + 1))
   }
 }

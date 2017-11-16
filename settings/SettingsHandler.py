@@ -22,7 +22,7 @@ class SettingsHandler:
 
     def writeFromDictToFile(self):
         with open(self.fileLoc, "w") as f:
-            return f.write(json.dumps(self.values, indent=1, sort_keys=True))
+            return f.write(json.dumps(self.values, indent=4, sort_keys=True))
 
     def initializeSettings(self):
 

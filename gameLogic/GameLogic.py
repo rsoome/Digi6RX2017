@@ -79,6 +79,7 @@ class GameLogic:
 
                 if not ballReached:
                     ballReached = self.goToTarget(self.ball, self.ballVerticalStopBound)
+                    self.mb.setGrabberPosition(self.mb.GRABBER_MAX_POSITION/3)
 
                 elif not basketReached:
                     self.move.stop()
@@ -102,10 +103,10 @@ class GameLogic:
 
         if target.verticalMidPoint == None or target.horizontalMidPoint == None:
             if not self.lookForTarget(target):
-                time.sleep(0.01)
+                #time.sleep(0.01)
                 print("Looking for " + target.id)
                 for i in range(120):
-                    print(i)
+                    #print(i)
                     self.move.drive(self.moveSpeed, 0)
                 return False
 
@@ -179,7 +180,10 @@ class GameLogic:
     def throwBall(self):
         if not self.checkHorizontalAlginment(self.basket) or not self.checkVerticalAlignment(self.basket, self.basketVerticalStopBound):
             return False
+        self.mb.startThrower(self.mb.THROWER_MAXSPEED/2)
+        time.sleep(1)
         self.mb.startThrower(self.mb.THROWER_MAXSPEED)
+        self.mb.setGrabberPosition(self.mb.GRABBER_MAX_POSITION)
         return True
 
     def addFrame(self, elapsed):
