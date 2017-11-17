@@ -13,7 +13,7 @@ from gameLogic import GameLogic
 from socketHandler import SocketHandler
 from socketHandler import SocketData
 import threading
-#from manualDrive import ManualDrive
+from manualDrive import ManualDrive
 from refereeHandler import RefereeHandler
 from timer import Timer
 
@@ -67,8 +67,8 @@ hsv = None
 
 socketData = SocketData.SocketData()
 
-#mb = MBcomm.MBcomm(settings.getValue("mbLocation"), 115200)
-mb = None
+mb = MBcomm.MBcomm(settings.getValue("mbLocation"), 115200)
+#mb = None
 
 move = MovementLogic.MovementLogic(mb)
 
@@ -107,9 +107,12 @@ def updateTargetsTresholds():
 
 try:
     while True:
+        
+        mb.setGrabberPosition(mb.GRABBER_OPEN_POSITION)
+
         timer.startTimer()
 
-#        game.readMb()
+        game.readMb()
         frameCapture.capture(cv2.COLOR_BGR2HSV)  # Võta kaamerast pilt
         frame = frameCapture.capturedFrame
         hsv = frameCapture.filteredImg
