@@ -123,11 +123,11 @@ try:
 
         imgHandler.generateMask(ball, hsv)
         imgHandler.generateMask(basket, hsv)
-#        imgHandler.detect(frame, ball.mask, int(settings.getValue("objectMinSize")), int(settings.getValue("minImgArea")),
-#                          settings.getValue("ballScanOrder"), ball)
+        imgHandler.detect(frame, ball.mask, int(settings.getValue("objectMinSize")), int(settings.getValue("minImgArea")),
+                          settings.getValue("ballScanOrder"), ball)
 
-#        imgHandler.detect(frame, basket.mask, int(settings.getValue("objectMinSize")), int(settings.getValue("minImgArea")),
-#                          settings.getValue("basketScanOrder"), basket)
+        imgHandler.detect(frame, basket.mask, int(settings.getValue("objectMinSize")), int(settings.getValue("minImgArea")),
+                          settings.getValue("basketScanOrder"), basket)
 
         if socketData.updateThresholds:
             selectedTarget = None
