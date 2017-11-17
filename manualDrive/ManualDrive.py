@@ -37,11 +37,11 @@ class ManualDrive:
                 keyStroke = self.getKeystroke(screen)
 
             while keyStroke == ord('a'):
-                self.move.rotate(-self.turnSpeed, 180)
+                self.move.rotate(-self.turnSpeed)
                 keyStroke = self.getKeystroke(screen)
 
             while keyStroke == ord('d'):
-                self.move.rotate(self.turnSpeed, 180)
+                self.move.rotate(self.turnSpeed)
                 keyStroke = self.getKeystroke(screen)
 
             while keyStroke == ord(' '):

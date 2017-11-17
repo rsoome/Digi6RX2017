@@ -33,23 +33,8 @@ class MovementLogic:
     def stop(self):
         self.mb.setMotorSpeed(0, 0, 0)
 
-    def rotate(self, speed, angle):
-        timeToRotate = (angle / ((self.RPS*(speed/100)) * 360)) * 1000
-        timeToRotate = timeToRotate - timeToRotate * (speed / 1000)
-        print(timeToRotate)
-        #self.mb.disableFailSafe()
+    def rotate(self, speed):
         self.mb.setMotorSpeed(speed, speed, speed)
-        self.timer.startTimer()
-        timePassed = self.timer.getTimePassed()
-        while timePassed < timeToRotate:
-            speeds = self.mb.setMotorSpeed(speed, speed, speed)
-            self.updateSpeeds(speeds)
-            timePassed = self.timer.getTimePassed()
-            print(timePassed)
-        #self.mb.enableFailSafe()
-        self.stop()
-        print("Rotation completed")
-        self.timer.stopTimer()
 
     def updateSpeeds(self, speeds):
         if speeds[0] == "motors" and len(speeds == 4):
