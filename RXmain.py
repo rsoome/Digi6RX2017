@@ -107,7 +107,7 @@ def updateTargetsTresholds():
 
 try:
     while True:
-        
+
         mb.setGrabberPosition(mb.GRABBER_OPEN_POSITION)
 
         timer.startTimer()

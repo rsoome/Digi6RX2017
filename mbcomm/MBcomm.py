@@ -15,7 +15,7 @@ class MBcomm:
             self.GRABBER_MIN_POSITION = 550
             self.GRABBER_CARRY_POSITION = self.GRABBER_MAX_POSITION/3 + self.GRABBER_MIN_POSITION
             self.GRABBER_THROW_POSITION = self.GRABBER_MIN_POSITION
-            self.GRABBER_OPEN_POSITION = self.GRABBER_MAX_POSITION -50
+            self.GRABBER_OPEN_POSITION = self.GRABBER_MAX_POSITION - 50
 
     def __sendBytes(self, cmd):
         cmd += "\n"
