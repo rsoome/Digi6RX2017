@@ -201,7 +201,7 @@ class GameLogic:
 
     def updateFPS(self):
         if self.framesCaptured >= 60:
-            self.fps = (round(self.framesCaptured / (self.totalTimeElapsed / 1000000), 0))
+            self.fps = (round(self.framesCaptured / (self.totalTimeElapsed / 1000), 0))
             self.framesCaptured = 0
             self.totalTimeElapsed = 0
 
