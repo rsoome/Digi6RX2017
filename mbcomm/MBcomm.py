@@ -8,8 +8,8 @@ class MBcomm:
             self.ser.open()
             self.THROWER_MAXSPEED = 2000
             self.THROWER_MINSPEED = 1200
-            self.THROWER_CONSTANT = (self.THROWER_MINSPEED + self.THROWER_MAXSPEED)/2
-            self.THROWER_MIDSPEED = self.THROWER_CONSTANT/2
+            self.THROWER_CONSTANT = (self.THROWER_MINSPEED + self.THROWER_MAXSPEED)
+            self.THROWER_MIDSPEED = self.THROWER_CONSTANT//2
             self.THROWER_STOP = 1000
             self.GRABBER_MAX_POSITION = 2350
             self.GRABBER_MIN_POSITION = 550
