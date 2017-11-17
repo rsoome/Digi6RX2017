@@ -17,8 +17,8 @@ class GameLogic:
         self.frame = frame
         self.initializeValues()
         self.socketData = socketData
-        self.ballVerticalStopBound = self.frame.height
-        self.basketVerticalStopBound = self.frame.height/2
+        self.ballVerticalStopBound = self.frame.height - 50
+        self.basketVerticalStopBound = self.frame.height/4
         self.gameState = defaultGameState
         self.irStatus = 0
         self.ref = ref
@@ -78,7 +78,9 @@ class GameLogic:
             if self.gameState == "START":
 
                 if not ballReached:
-                    self.goToTarget(self.ball, self.ballVerticalStopBound)
+                    atPosition = self.goToTarget(self.ball, self.ballVerticalStopBound, self.moveSpeed)
+                    if atPosition:
+                        self.goToTarget(self.ball, 0, self.moveSpeed//2)
                     ballReached = self.irStatus == 1
 
                     if ballReached:
@@ -87,7 +89,7 @@ class GameLogic:
 
                 elif not basketReached:
                     self.move.stop()
-                    basketReached = self.goToTarget(self.basket, self.basketVerticalStopBound)
+                    basketReached = self.goToTarget(self.basket, self.basketVerticalStopBound, )
 
                 else:
                     self.move.stop()
@@ -103,7 +105,7 @@ class GameLogic:
 
         self.move.stop()
 
-    def goToTarget(self, target, verticalStopBound):
+    def goToTarget(self, target, verticalStopBound, speed):
 
         if target.verticalMidPoint == None or target.horizontalMidPoint == None:
             if not self.lookForTarget(target):
@@ -111,7 +113,7 @@ class GameLogic:
                 print("Looking for " + target.id)
                 for i in range(120):
                     #print(i)
-                    self.move.drive(self.moveSpeed, 0)
+                    self.move.drive(speed, 0)
                 return False
 
         if not self.checkHorizontalAlginment(target):
