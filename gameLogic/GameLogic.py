@@ -89,7 +89,7 @@ class GameLogic:
 
                 elif not basketReached:
                     self.move.stop()
-                    basketReached = self.goToTarget(self.basket, self.basketVerticalStopBound, )
+                    basketReached = self.goToTarget(self.basket, self.basketVerticalStopBound, self.moveSpeed)
 
                 else:
                     self.move.stop()
