@@ -78,7 +78,7 @@ frameCapture = FrameCapturer.FrameCapturer(int(settings.getValue("camID")))
 
 ref = RefereeHandler.RefereeHandler(robotID, fieldID, mb)
 
-game = GameLogic.GameLogic(move, 40, int(settings.getValue("driveSpeed")), int(settings.getValue("turnSpeed")),
+game = GameLogic.GameLogic(move, settings.getValue("deltaFromMidPoint"), int(settings.getValue("driveSpeed")), int(settings.getValue("turnSpeed")),
                            imgHandler, frameCapture, socketData, ref, fieldID, robotID, mb, ball, basket,
                            settings.getValue("defaultGameState"))
 

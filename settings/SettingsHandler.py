@@ -70,3 +70,5 @@ class SettingsHandler:
             self.values["defaultGameState"] = "STOP"
         if not "opponentBasket" in self.values:
             self.values["opponentBasket"] = None
+        if not "deltaFromMidPoint" in self.values:
+            self.values["deltaFromMidPoint"] = 100
