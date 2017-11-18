@@ -65,6 +65,7 @@ class GameLogic:
             self.move.rotate(self.turnSpeed)
             if target.horizontalMidPoint is not None:
                 return True
+            time.sleep(0.3)
 
         return False
 
@@ -80,7 +81,7 @@ class GameLogic:
                 if not ballReached:
                     atPosition = self.goToTarget(self.ball, self.ballVerticalStopBound, self.moveSpeed)
                     if atPosition:
-                        self.goToTarget(self.ball, 0, self.moveSpeed//2)
+                        self.goToTarget(self.ball, 0, self.moveSpeed//3)
                     ballReached = self.irStatus == 1
 
                     if ballReached:
@@ -111,7 +112,7 @@ class GameLogic:
             if not self.lookForTarget(target):
                 #time.sleep(0.01)
                 print("Looking for " + target.id)
-                for i in range(120):
+                for i in range(1000):
                     #print(i)
                     self.move.drive(speed, 0)
                 return False
