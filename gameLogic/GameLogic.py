@@ -111,13 +111,14 @@ class GameLogic:
 
         if target.verticalMidPoint == None or target.horizontalMidPoint == None:
             turnTimer = Timer.Timer()
-            turnTimer.start()
+            turnTimer.startTimer()
             targetFound = self.lookForTarget(target)
             while not targetFound:
                 targetFound = self.lookForTarget(target)
                 if turnTimer.getTimePassed() >= 1000:
                     break
-                    
+            turnTimer.stopTimer()
+
             if not targetFound:
                 print("Looking for " + target.id)
                 for i in range(2000):
