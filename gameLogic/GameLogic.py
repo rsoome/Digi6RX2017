@@ -78,7 +78,7 @@ class GameLogic:
             self.updateTargetCoordinates([self.ball, self.basket])
             self.readMb()
             if self.gameState == "START":
-
+                print(ballReached)
                 if not ballReached:
                     atPosition = self.goToTarget(self.ball, self.ballVerticalStopBound, self.moveSpeed)
                     ballReached = self.irStatus == 1
