@@ -60,15 +60,14 @@ class GameLogic:
         if not self.socketData.gameStarted:
             print("Game ended by client.")
             return False
-        for i in range(4):
-            print(target.horizontalMidPoint)
-            self.move.rotate(self.turnSpeed)
-            self.updateTargetCoordinates([target])
-            if target.horizontalMidPoint is not None:
-                print("Target found.")
-                return True
 
-            time.sleep(1)
+        print(target.horizontalMidPoint)
+        self.move.rotate(self.turnSpeed)
+        self.updateTargetCoordinates([target])
+        if target.horizontalMidPoint is not None:
+            print("Target found.")
+            return True
+
         return False
 
     def run(self):
@@ -111,10 +110,17 @@ class GameLogic:
     def goToTarget(self, target, verticalStopBound, speed):
 
         if target.verticalMidPoint == None or target.horizontalMidPoint == None:
-            if not self.lookForTarget(target):
-                #time.sleep(0.01)
+            turnTimer = Timer.Timer()
+            turnTimer.start()
+            targetFound = self.lookForTarget(target)
+            while not targetFound:
+                targetFound = self.lookForTarget(target)
+                if turnTimer.getTimePassed() >= 1000:
+                    break
+                    
+            if not targetFound:
                 print("Looking for " + target.id)
-                for i in range(1000):
+                for i in range(2000):
                     #print(i)
                     self.move.drive(speed, 0)
                 self.move.stop()
