@@ -62,13 +62,13 @@ class GameLogic:
             return False
         for i in range(4):
             print(target.horizontalMidPoint)
-            self.updateTargetCoordinates([target])
             self.move.rotate(self.turnSpeed)
+            self.updateTargetCoordinates([target])
             if target.horizontalMidPoint is not None:
                 print("Target found.")
                 return True
-            time.sleep(3)
 
+            time.sleep(1)
         return False
 
     def run(self):
