@@ -41,6 +41,7 @@ class Target:
         self.horizontalBounds = hBounds
         self.verticalBounds = vBounds
 
+
         if hBounds != None:
             self.horizontalMidPoint = hBounds[0] + (hBounds[1] - hBounds[0]) // 2
         else:

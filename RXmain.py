@@ -105,6 +105,50 @@ def updateTargetsTresholds():
     socketData.mouseY = -1
 
 
+def socketDataCheck():
+    global selectedTarget, manualDrive, opponent, robotID, fieldID
+    if socketData.updateThresholds:
+        selectedTarget = None
+        if socketData.ballSelected:
+            selectedTarget = ball
+        else:
+            selectedTarget = basket
+
+        updateTargetsTresholds()
+    if socketData.resetBall:
+        ball.resetBounds()
+        ball.resetThreshHolds()
+        socketData.resetBall = False
+    if socketData.resetBasket:
+        basket.resetBounds()
+        basket.resetThreshHolds()
+        socketData.resetBasket = False
+    if socketData.manualDrive:
+        manualDrive = ManualDrive.ManualDrive(move, int(settings.getValue("driveSpeed")),
+                                              int(settings.getValue("turnSpeed")))
+        manualDrive.run()
+        socketData.manualDrive = False
+    if socketData.gameStarted:
+        print("Game mode activated")
+        game.run()
+        socketData.gameStarted = False
+        print("Game mode deactivated")
+    if socketData.updateConf:
+        print("Updating conf.")
+        settings.writeFromDictToFile()
+        socketData.updateConf = False
+    if socketData.refreshConf:
+        print("Refreshing conf")
+        settings.values = settings.readFromFileToDict()
+        opponent = settings.getValue("opponentBasket")
+        robotID = settings.getValue("ID")
+        fieldID = settings.getValue("fieldID")
+        basket.setThresholds(settings.getValue(opponent + "BasketHSVLower"),
+                             settings.getValue(opponent + "BasketHSVUpper"))
+        ref.setIDs(robotID, fieldID)
+        socketData.refreshConf = False
+
+
 try:
     while True:
 
@@ -115,7 +159,6 @@ try:
         game.readMb()
         frameCapture.capture(cv2.COLOR_BGR2HSV)  # Võta kaamerast pilt
         frame = frameCapture.capturedFrame
-        hsv = frameCapture.filteredImg
 
         if frame is None:  # Kontroll, kas pilt on olemas
             socketData.stop = True
@@ -130,50 +173,7 @@ try:
         imgHandler.detect(int(settings.getValue("objectMinSize")), int(settings.getValue("minImgArea")),
                           settings.getValue("basketScanOrder"), basket)
 
-        if socketData.updateThresholds:
-            selectedTarget = None
-            if socketData.ballSelected:
-                selectedTarget = ball
-            else:
-                selectedTarget = basket
-
-            updateTargetsTresholds()
-
-        if socketData.resetBall:
-            ball.resetBounds()
-            ball.resetThreshHolds()
-            socketData.resetBall = False
-
-        if socketData.resetBasket:
-            basket.resetBounds()
-            basket.resetThreshHolds()
-            socketData.resetBasket = False
-
-        if socketData.manualDrive:
-            manualDrive = ManualDrive.ManualDrive(move, int(settings.getValue("driveSpeed")), int(settings.getValue("turnSpeed")))
-            manualDrive.run()
-            socketData.manualDrive = False
-
-        if socketData.gameStarted:
-            print("Game mode activated")
-            game.run()
-            socketData.gameStarted = False
-            print("Game mode deactivated")
-
-        if socketData.updateConf:
-            print("Updating conf.")
-            settings.writeFromDictToFile()
-            socketData.updateConf = False
-
-        if socketData.refreshConf:
-            print("Refreshing conf")
-            settings.values = settings.readFromFileToDict()
-            opponent = settings.getValue("opponentBasket")
-            robotID = settings.getValue("ID")
-            fieldID = settings.getValue("fieldID")
-            basket.setThresholds(settings.getValue(opponent + "BasketHSVLower"), settings.getValue(opponent + "BasketHSVUpper"))
-            ref.setIDs(robotID, fieldID)
-            socketData.refreshConf = False
+        socketDataCheck()
 
         if socketData.stop:
             break

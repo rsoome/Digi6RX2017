@@ -14,6 +14,7 @@ class ImageHandler:
         thresh = cv2.inRange(self.frame.filteredImg, targetObject.hsvLowerRange, targetObject.hsvUpperRange)
         im2, contours, hierarchy = cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
         targetObject.mask = thresh
+        print(targetObject.mask)
         targetObject.contours = np.zeros((480, 640, 3), np.uint8)
         cv2.drawContours(targetObject.contours, contours, -1, [255, 0, 0])
 	
