@@ -91,6 +91,7 @@ class GameLogic:
                                 print("Reaching ball")
                                 self.move.drive(int(self.moveSpeed * 1.5), 0)
                                 self.mb.setGrabberPosition(self.mb.GRABBER_CARRY_POSITION)
+                                time.sleep(0.3)
                                 break
 
                 elif not basketReached:
@@ -204,11 +205,11 @@ class GameLogic:
         if not self.checkHorizontalAlginment(self.basket) or not self.checkVerticalAlignment(self.basket, self.basketVerticalStopBound):
             return False
         self.mb.setThrowerSpeed(self.mb.THROWER_MIDSPEED)
-        time.sleep(0.3)
+        time.sleep(0.5)
         self.mb.setThrowerSpeed(self.mb.THROWER_MAXSPEED)
         time.sleep(0.5)
         self.mb.setGrabberPosition(self.mb.GRABBER_THROW_POSITION)
-        time.sleep(0.1)
+        time.sleep(0.5)
         self.mb.setThrowerSpeed(self.mb.THROWER_STOP)
         self.mb.setGrabberPosition(self.mb.GRABBER_OPEN_POSITION)
         return self.irStatus == 0
