@@ -89,7 +89,7 @@ class GameLogic:
 
                     if atPosition and not ballReached:
                         print("Reaching ball")
-                        self.turnTowardTarget(self.ball)
+                        #self.turnTowardTarget(self.ball)
                         self.move.drive(self.moveSpeed, 0)
 
 
