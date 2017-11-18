@@ -17,7 +17,7 @@ class GameLogic:
         self.frame = frame
         self.initializeValues()
         self.socketData = socketData
-        self.ballVerticalStopBound = self.frame.height - 100
+        self.ballVerticalStopBound = self.frame.height - 20
         self.basketVerticalStopBound = self.frame.height/4
         self.gameState = defaultGameState
         self.irStatus = 0
@@ -83,7 +83,7 @@ class GameLogic:
                     atPosition = self.goToTarget(self.ball, self.ballVerticalStopBound, self.moveSpeed)
                     ballReached = self.irStatus == 1
                     if atPosition:
-                        self.goToTarget(self.ball, self.frame.height, self.moveSpeed//2)
+                        self.move.drive(self.moveSpeed, 0)
 
                 elif ballReached:
                     print("Reaching ball")
