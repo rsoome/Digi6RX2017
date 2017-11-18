@@ -18,6 +18,7 @@ from refereeHandler import RefereeHandler
 from timer import Timer
 
 def closeConnections():
+    print("Closing connections and writing new values to conf.")
     settings.writeFromDictToFile()
     try:
         socketHandler.servSock.close()
