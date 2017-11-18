@@ -84,7 +84,7 @@ class GameLogic:
                     ballReached = self.irStatus == 1
 
                     if ballReached:
-                        self.move.drive(self.moveSpeed, 0)
+                        self.move.drive(int(self.moveSpeed * 1.5), 0)
                         self.mb.setGrabberPosition(self.mb.GRABBER_CARRY_POSITION)
 
                     if atPosition and not ballReached:
