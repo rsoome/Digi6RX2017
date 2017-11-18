@@ -83,14 +83,10 @@ class GameLogic:
                     atPosition = self.goToTarget(self.ball, self.ballVerticalStopBound, self.moveSpeed)
                     ballReached = self.irStatus == 1
 
-                    if ballReached:
-                        self.move.drive(int(self.moveSpeed * 1.5), 0)
-                        self.mb.setGrabberPosition(self.mb.GRABBER_CARRY_POSITION)
-
-                    if atPosition and not ballReached:
-                        print("Reaching ball")
-                        #self.turnTowardTarget(self.ball)
-                        self.move.drive(self.moveSpeed, 0)
+                elif ballReached:
+                    print("Reaching ball")
+                    self.move.drive(int(self.moveSpeed * 1.5), 0)
+                    self.mb.setGrabberPosition(self.mb.GRABBER_CARRY_POSITION)
 
 
                 elif not basketReached:
