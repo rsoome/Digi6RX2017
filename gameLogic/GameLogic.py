@@ -19,7 +19,6 @@ class GameLogic:
         self.socketData = socketData
         self.ballVerticalStopBound = self.frame.height - 20
         self.basketVerticalStopBound = self.frame.height/4
-        print(self.basketVerticalStopBound)
         self.gameState = defaultGameState
         self.irStatus = 0
         self.ref = ref
@@ -162,8 +161,6 @@ class GameLogic:
 
         if target.verticalMidPoint is None:
             return False
-
-        print(target.verticalMidPoint)
 
         if target.verticalMidPoint < verticalStopBound:
             return False
