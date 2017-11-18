@@ -14,9 +14,6 @@ class ImageHandler:
         thresh = cv2.inRange(self.frame.filteredImg, targetObject.hsvLowerRange, targetObject.hsvUpperRange)
         im2, contours, hierarchy = cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
         targetObject.mask = thresh
-        print(targetObject.mask)
-        targetObject.contours = np.zeros((480, 640, 3), np.uint8)
-        cv2.drawContours(targetObject.contours, contours, -1, [255, 0, 0])
 	
 
     # Creates an imageP
@@ -52,9 +49,9 @@ class ImageHandler:
         c = CancellationToken.CancellationToken()
         self.createImageProcessor(verticalLowerBound, horizontalLowerBound, 1, c, obj, "0")
 
+    #TODO: CURRENTLY DOES NOT WORK, MIGHT DO MORE HARM THAN GOOD EITHER WAY
     # Divides the given image into parts recursively. Then feeds the found parts to multiple threads to be processed for
     # object coordinates.
-    # mainImg - The main frame. TODO: REMOVE IF NOT USED ANYMORE
     # img - A mask of thresholded colors from which the blobs are to be found
     # verticalLowerBound - The image global vertical lower bound of img. On first iteration it is to be set 0.
     # verticalUpperBound - The image global vertical lupper bound of img. On first iteration it is to be set image height.

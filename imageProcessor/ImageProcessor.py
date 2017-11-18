@@ -1,5 +1,6 @@
 import threading
 import cv2
+import numpy as np
 
 # Class for processing images. It is expected to be created by createImageProcessor() function.
 class ImageProcessor:
@@ -23,6 +24,8 @@ class ImageProcessor:
     def findObjectCoordinates(self):
         # Find blobs
         image, cnts, hirearchy = cv2.findContours(self.obj.mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        self.obj.contours = np.zeros((480, 640, 3), np.uint8)
+        cv2.drawContours(self.obj.contours, cnts, -1, [255, 0, 0])
 
         # If no blob is found, cancel
         if len(cnts) == 0:
