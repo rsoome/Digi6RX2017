@@ -82,15 +82,15 @@ class GameLogic:
 
                 if not ballReached:
                     atPosition = self.goToTarget(self.ball, self.ballVerticalStopBound, self.moveSpeed)
-                    ballReached = self.irStatus == 1
                     if atPosition:
-                        self.move.drive(self.moveSpeed, 0)
-
-                elif ballReached:
-                    print("Reaching ball")
-                    self.move.drive(int(self.moveSpeed * 1.5), 0)
-                    self.mb.setGrabberPosition(self.mb.GRABBER_CARRY_POSITION)
-
+                        for i in range(10):
+                            self.move.drive(self.moveSpeed, 0)
+                            ballReached = self.irStatus == 1
+                            if ballReached:
+                                print("Reaching ball")
+                                self.move.drive(int(self.moveSpeed * 1.5), 0)
+                                self.mb.setGrabberPosition(self.mb.GRABBER_CARRY_POSITION)
+                                break
 
                 elif not basketReached:
                     self.move.stop()
@@ -164,7 +164,7 @@ class GameLogic:
             return False
 
         print(target.verticalMidPoint)
-        
+
         if target.verticalMidPoint < verticalStopBound:
             return False
 
