@@ -73,15 +73,19 @@ class GameLogic:
     def run(self):
         ballReached = False
         basketReached = False
+
         while self.socketData.gameStarted:
             self.timer.startTimer()
             self.updateTargetCoordinates([self.ball, self.basket])
             self.readMb()
+
             if self.gameState == "START":
-                print(ballReached)
+                print(self.irStatus)
+
                 if not ballReached:
                     atPosition = self.goToTarget(self.ball, self.ballVerticalStopBound, self.moveSpeed)
                     ballReached = self.irStatus == 1
+
                     if atPosition:
                         for i in range(10):
                             self.move.drive(self.moveSpeed, 0)
