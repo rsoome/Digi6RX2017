@@ -204,9 +204,9 @@ class GameLogic:
         if not self.checkHorizontalAlginment(self.basket) or not self.checkVerticalAlignment(self.basket, self.basketVerticalStopBound):
             return False
         self.mb.setThrowerSpeed(self.mb.THROWER_MIDSPEED)
-        time.sleep(0.2)
+        time.sleep(0.3)
         self.mb.setThrowerSpeed(self.mb.THROWER_MAXSPEED)
-        time.sleep(0.1)
+        time.sleep(0.5)
         self.mb.setGrabberPosition(self.mb.GRABBER_THROW_POSITION)
         time.sleep(0.1)
         self.mb.setThrowerSpeed(self.mb.THROWER_STOP)
