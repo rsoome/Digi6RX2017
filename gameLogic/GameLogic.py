@@ -80,12 +80,10 @@ class GameLogic:
             self.readMb()
 
             if self.gameState == "START":
-                print(self.irStatus)
+                ballReached = self.irStatus == 1
 
                 if not ballReached:
                     atPosition = self.goToTarget(self.ball, self.ballVerticalStopBound, self.moveSpeed)
-                    ballReached = self.irStatus == 1
-
                     if atPosition:
                         for i in range(10):
                             self.move.drive(self.moveSpeed, 0)
