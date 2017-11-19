@@ -72,9 +72,9 @@ mb = MBcomm.MBcomm(settings.getValue("mbLocation"), 115200)
 
 move = MovementLogic.MovementLogic(mb)
 
-imgHandler = ImageHandler.ImageHandler(bool(settings.getValue("multiThreading")))
-
 frameCapture = FrameCapturer.FrameCapturer(int(settings.getValue("camID")))
+
+imgHandler = ImageHandler.ImageHandler(bool(settings.getValue("multiThreading")), frameCapture)
 
 ref = RefereeHandler.RefereeHandler(robotID, fieldID, mb)
 

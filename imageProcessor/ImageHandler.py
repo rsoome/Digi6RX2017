@@ -6,8 +6,9 @@ import threading
 
 class ImageHandler:
 
-    def __init__(self, multiThreading):
+    def __init__(self, multiThreading, frame):
         self.multiThreading = multiThreading
+        self.frame = frame
 
     def generateMask(self, targetObject, hsv):
         thresh = cv2.inRange(hsv, targetObject.hsvLowerRange, targetObject.hsvUpperRange)
@@ -82,7 +83,7 @@ class ImageHandler:
     # ^hLB+(hUB-hLB)/3   hLB+2*((hUB-hLB)/3)^
     # ^                                     ^
     # horizontalLowerBound=hLB      horizontalUpperBound=hUB
-    def findObjectMultithreaded(self, mainImg, img, verticalLowerBound, verticalUpperBound, horizontalLowerBound,
+    def findObjectMultithreaded(self, verticalLowerBound, verticalUpperBound, horizontalLowerBound,
                                 horizontalUpperBound, minObjectSize, minImgArea, scanOrder, obj):
         obj.resetBounds()
         # print("*")
@@ -119,11 +120,9 @@ class ImageHandler:
                 #                          (0, 0, 255), 1)
 
                 # By the scan order divide each part of the image recursively
-                self.findObjectMultithreaded(mainImg, img, verticalLowerBounds[scanOrder[i]],
-                                        verticalUpperBounds[scanOrder[i]],
-                                        horizontalLowerBounds[scanOrder[i]],
-                                        horizontalUpperBounds[scanOrder[i]],
-                                        minObjectSize * 3, minImgArea, scanOrder, obj)
+                self.findObjectMultithreaded(verticalLowerBounds[scanOrder[i]], verticalUpperBounds[scanOrder[i]],
+                                             horizontalLowerBounds[scanOrder[i]], horizontalUpperBounds[scanOrder[i]],
+                                             minObjectSize * 3, minImgArea, scanOrder, obj)
 
                 horizontalBounds, verticalBounds = obj.getBounds()
                 # If an object was found by the called recursion, return its coordinates
@@ -140,7 +139,7 @@ class ImageHandler:
             # If an object has been found, return its coordinates
             if horizontalBounds is not None and verticalBounds is not None:
                 return
-            t = threading.Thread(target=self.createImageProcessor(img[
+            t = threading.Thread(target=self.createImageProcessor(self.frame.img[
                                                              verticalLowerBounds[scanOrder[i]]:
                                                              verticalUpperBounds[scanOrder[i]],
                                                              horizontalLowerBounds[scanOrder[i]]:
@@ -160,7 +159,8 @@ class ImageHandler:
     # scanOrder - the order by which the image is fed to threads by multi threaded object finding function. More information
     # in findObjectMultithreaded() description.
     def detect(self, mainImg, objectMinSize, imageMinArea, scanOrder, target):
-        properties = mask.shape
+        self.generateMask(target, self.frame.filteredImg)
+        properties = target.mask.shape
         height = properties[0]
         width = properties[1]
         horizontalBounds = None
@@ -170,7 +170,6 @@ class ImageHandler:
             imageMinArea = height * width + 1
 
         if self.multiThreading:
-            self.findObjectMultithreaded(mainImg, target.mask, 0, height, 0, width, objectMinSize,
-                                         imageMinArea, scanOrder, target)
+            self.findObjectMultithreaded(0, height, 0, width, objectMinSize, imageMinArea, scanOrder, target)
         else:
-            self.findObject(target.mask, 0, 0, target)
+            self.findObject(mask, 0, 0, target)
