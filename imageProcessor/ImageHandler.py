@@ -12,7 +12,7 @@ class ImageHandler:
     def generateMask(self, targetObject, hsv):
         thresh = cv2.inRange(hsv, targetObject.hsvLowerRange, targetObject.hsvUpperRange)
         im2, contours, hierarchy = cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
-        targetObject.mask = self.blur(cv2.inRange(hsv, targetObject.hsvLowerRange, targetObject.hsvUpperRange))
+        targetObject.mask = cv2.inRange(hsv, targetObject.hsvLowerRange, targetObject.hsvUpperRange)
         targetObject.contours = np.zeros((480, 640, 3), np.uint8)
         cv2.drawContours(targetObject.contours, contours, -1, [255, 0, 0])
 	
@@ -163,6 +163,8 @@ class ImageHandler:
         properties = mask.shape
         height = properties[0]
         width = properties[1]
+        print(height)
+        print(width)
         horizontalBounds = None
         verticalBounds = None
 
