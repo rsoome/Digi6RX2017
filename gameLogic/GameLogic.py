@@ -121,6 +121,7 @@ class GameLogic:
 
         if not self.checkHorizontalAlginment(target):
             print("Alligning to " + target.id)
+            self.move.stop()
             self.turnTowardTarget(target)
             self.move.stop()
             return False
