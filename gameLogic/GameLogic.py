@@ -116,11 +116,13 @@ class GameLogic:
                 for i in range(1000):
                     #print(i)
                     self.move.drive(speed, 0)
+                self.move.stop()
                 return False
 
         if not self.checkHorizontalAlginment(target):
             print("Alligning to " + target.id)
             self.turnTowardTarget(target)
+            self.move.stop()
             return False
 
         elif not self.checkVerticalAlignment(target, verticalStopBound):
@@ -128,6 +130,7 @@ class GameLogic:
             self.moveTowardTarget(target)
             return False
 
+        self.move.stop()
         return True
 
     def initializeValues(self):
