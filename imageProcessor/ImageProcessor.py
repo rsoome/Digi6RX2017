@@ -26,10 +26,7 @@ class ImageProcessor:
 
         # If no blob is found, cancel
         if len(cnts) == 0:
-            #print("No contours found")
             return
-
-        print("*")
 
         # Find the biggest blob
         c = max(cnts, key=cv2.contourArea)
@@ -37,6 +34,7 @@ class ImageProcessor:
 
         # If the rectangle surrounding the biggest blob is big enough, try to write it's coordinates into the object given
         if w * h >= self.minSize:
+            print("Found an object")
             # Check, whether another thread has signalled a cancellation of the job, and stop if the job is cancelled
             if self.cancelToken.isCanceled:
                 return
