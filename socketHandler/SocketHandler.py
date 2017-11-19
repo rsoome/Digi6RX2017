@@ -33,11 +33,11 @@ class SocketHandler:
 
         if self.ball.mask is not None:
             self.socketData.ballDimensions = self.ball.mask.shape
-            self.socketData.ballMask = self.ball.contours
+            self.socketData.ballMask = self.ball.mask
 
         if self.basket.mask is not None:
             self.socketData.basketDimensions = self.basket.mask.shape
-            self.socketData.basketMask = self.basket.contours
+            self.socketData.basketMask = self.basket.mask
 
         self.socketData.ballHorizontalBounds = self.ball.horizontalBounds
         self.socketData.ballVerticalBounds = self.ball.verticalBounds

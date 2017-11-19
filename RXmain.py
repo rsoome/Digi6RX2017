@@ -124,8 +124,6 @@ try:
             print("Capture fucntion failed")
             break
 
-        imgHandler.generateMask(ball, hsv)
-        imgHandler.generateMask(basket, hsv)
         imgHandler.detect(frame, int(settings.getValue("objectMinSize")), int(settings.getValue("minImgArea")),
                           settings.getValue("ballScanOrder"), ball)
 

@@ -10,10 +10,10 @@ class ImageHandler:
         self.multiThreading = multiThreading
         self.frame = frame
 
-    def generateMask(self, targetObject, hsv):
-        thresh = cv2.inRange(hsv, targetObject.hsvLowerRange, targetObject.hsvUpperRange)
+    def generateMask(self, targetObject):
+        thresh = cv2.inRange(self.frame.filteredImg, targetObject.hsvLowerRange, targetObject.hsvUpperRange)
         im2, contours, hierarchy = cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
-        targetObject.mask = cv2.inRange(hsv, targetObject.hsvLowerRange, targetObject.hsvUpperRange)
+        targetObject.mask = cv2.inRange(self.frame.filteredImg, targetObject.hsvLowerRange, targetObject.hsvUpperRange)
         targetObject.contours = np.zeros((480, 640, 3), np.uint8)
         cv2.drawContours(targetObject.contours, contours, -1, [255, 0, 0])
 	
@@ -30,7 +30,7 @@ class ImageHandler:
     # cancellationToken - A token that signals the parallel threads whether the object has been already found.
     # target - the object into which the found coordinates will be inserted.
     # threadID - the ID by which the parallel threads will be identified. Can be any value.
-    def createImageProcessor(self, img, verticalLowerBound, horizontalLowerBound, minSize, cancellationToken, target,
+    def createImageProcessor(self, verticalLowerBound, horizontalLowerBound, minSize, cancellationToken, target,
                              threadID):
         imgProc = ImageProcessor.ImageProcessor(verticalLowerBound, horizontalLowerBound, minSize, cancellationToken,
                                                 target, threadID)
@@ -47,10 +47,10 @@ class ImageHandler:
     # img - the mask from which to find the coordinates
     # verticalLowerBound - the image global vertical lower bound
     # horizontalLowerbound - the image global horizontal lower bound
-    def findObject(self, img, verticalLowerBound, horizontalLowerBound, obj):
+    def findObject(self, verticalLowerBound, horizontalLowerBound, obj):
         obj.resetBounds()
         c = CancellationToken.CancellationToken()
-        self.createImageProcessor(img, verticalLowerBound, horizontalLowerBound, 1, c, obj, "0")
+        self.createImageProcessor(verticalLowerBound, horizontalLowerBound, 1, c, obj, "0")
 
     # Divides the given image into parts recursively. Then feeds the found parts to multiple threads to be processed for
     # object coordinates.
@@ -139,15 +139,9 @@ class ImageHandler:
             # If an object has been found, return its coordinates
             if horizontalBounds is not None and verticalBounds is not None:
                 return
-            t = threading.Thread(target=self.createImageProcessor(self.frame.capturedFrame[
-                                                             verticalLowerBounds[scanOrder[i]]:
-                                                             verticalUpperBounds[scanOrder[i]],
-                                                             horizontalLowerBounds[scanOrder[i]]:
-                                                             horizontalUpperBounds[scanOrder[i]]
-                                                             ],
-                                                             verticalLowerBounds[scanOrder[i]],
-                                                             horizontalLowerBounds[scanOrder[i]],
-                                                             minObjectSize, cToken, obj, i))
+            t = threading.Thread(target=self.createImageProcessor(verticalLowerBounds[scanOrder[i]],
+                                                                  horizontalLowerBounds[scanOrder[i]], minObjectSize,
+                                                                  cToken, obj, i))
             t.start()
 
     # Wrapper function to find coordinates of a given object
@@ -159,7 +153,7 @@ class ImageHandler:
     # scanOrder - the order by which the image is fed to threads by multi threaded object finding function. More information
     # in findObjectMultithreaded() description.
     def detect(self, mainImg, objectMinSize, imageMinArea, scanOrder, target):
-        self.generateMask(target, self.frame.filteredImg)
+        self.generateMask(target)
         properties = target.mask.shape
         height = properties[0]
         width = properties[1]
@@ -172,4 +166,4 @@ class ImageHandler:
         if self.multiThreading:
             self.findObjectMultithreaded(0, height, 0, width, objectMinSize, imageMinArea, scanOrder, target)
         else:
-            self.findObject(mask, 0, 0, target)
+            self.findObject(0, 0, target)
