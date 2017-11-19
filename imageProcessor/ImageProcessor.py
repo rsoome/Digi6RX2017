@@ -22,11 +22,12 @@ class ImageProcessor:
     # Finds from the given mask a blob at least as big as the minSize
     def findObjectCoordinates(self):
         # Find blobs
+        print(self.obj.mask)
         image, cnts, hirearchy = cv2.findContours(self.obj.mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
         # If no blob is found, cancel
         if len(cnts) == 0:
-            print("No contours found")
+            #print("No contours found")
             return
 
         # Find the biggest blob
