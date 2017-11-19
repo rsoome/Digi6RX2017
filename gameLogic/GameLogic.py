@@ -66,7 +66,7 @@ class GameLogic:
             self.move.rotate(self.turnSpeed)
             if target.horizontalMidPoint is not None:
                 return True
-            time.sleep(0.5)
+            time.sleep(10)
 
         return False
 
