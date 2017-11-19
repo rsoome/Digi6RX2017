@@ -11,7 +11,6 @@ class ImageProcessor:
     # obejct - the object into which to write the coordinates found
     # threadID - ID of the thread
     def __init__(self, verticalLowerBound, horizontalLowerBound, minSize, cancelToken, target, threadID):
-        self.img = target.mask
         self.verticalLowerBound = verticalLowerBound
         self.horizontalLowerBound = horizontalLowerBound
         self.minSize = minSize
@@ -23,7 +22,7 @@ class ImageProcessor:
     # Finds from the given mask a blob at least as big as the minSize
     def findObjectCoordinates(self):
         # Find blobs
-        image, cnts, hirearchy = cv2.findContours(self.img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        image, cnts, hirearchy = cv2.findContours(self.obj.mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
         # If no blob is found, cancel
         if len(cnts) == 0:
@@ -33,9 +32,6 @@ class ImageProcessor:
         # Find the biggest blob
         c = max(cnts, key=cv2.contourArea)
         x, y, w, h = cv2.boundingRect(c)
-
-        # print(x)
-        # print(y)
 
         # If the rectangle surrounding the biggest blob is big enough, try to write it's coordinates into the object given
         if w * h >= self.minSize:
