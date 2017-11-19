@@ -22,7 +22,6 @@ class ImageHandler:
     # rocessor object and runs it's findObject function.
     # The funtion is meant to be ran on multiple threads processing different parts of a picture but can be used on a single
     # thread with the whole picture.
-    # img - (the part of) the image to be processed
     # verticalLowerBound - image's vertical (y-axis) global lower bound of the part of the imgae being processed.
     # In case the whole picture is being processed it is to be assigned the value 0.
     # horizontalLowerBound - image's horizontal (x-axis) global lower bound of the part of the image being processed.
