@@ -32,8 +32,8 @@ class ImageHandler:
     # threadID - the ID by which the parallel threads will be identified. Can be any value.
     def createImageProcessor(self, img, verticalLowerBound, horizontalLowerBound, minSize, cancellationToken, target,
                              threadID):
-        imgProc = ImageProcessor.ImageProcessor(img, verticalLowerBound, horizontalLowerBound, minSize, cancellationToken, target,
-                                 threadID)
+        imgProc = ImageProcessor.ImageProcessor(verticalLowerBound, horizontalLowerBound, minSize, cancellationToken,
+                                                target, threadID)
         imgProc.findObjectCoordinates()
 
     # Blurs the image to remove noise
