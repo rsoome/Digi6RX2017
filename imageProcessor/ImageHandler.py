@@ -139,7 +139,7 @@ class ImageHandler:
             # If an object has been found, return its coordinates
             if horizontalBounds is not None and verticalBounds is not None:
                 return
-            t = threading.Thread(target=self.createImageProcessor(self.frame.img[
+            t = threading.Thread(target=self.createImageProcessor(self.frame.capturedFrame[
                                                              verticalLowerBounds[scanOrder[i]]:
                                                              verticalUpperBounds[scanOrder[i]],
                                                              horizontalLowerBounds[scanOrder[i]]:
