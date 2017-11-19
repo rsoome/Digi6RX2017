@@ -54,7 +54,7 @@ class GameLogic:
     def updateTargetCoordinates(self, targets):
         self.frame.capture(cv2.COLOR_BGR2HSV)
         for target in targets:
-            self.imgHandler.detect(None, 1000, 0, target.scanOrder, target)
+            self.imgHandler.detect(1000, 0, target.scanOrder, target)
 
     def lookForTarget(self, target):
         if not self.socketData.gameStarted:

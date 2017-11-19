@@ -86,7 +86,6 @@ class ImageHandler:
     def findObjectMultithreaded(self, verticalLowerBound, verticalUpperBound, horizontalLowerBound,
                                 horizontalUpperBound, minObjectSize, minImgArea, scanOrder, obj):
         obj.resetBounds()
-        # print("*")
 
         horizontalBounds = None
         verticalBounds = None
@@ -134,9 +133,8 @@ class ImageHandler:
 
         # Send each part of the image to a separate thread in the order specified by the caller of the funtion
         for i in range(len(scanOrder)):
-            # print(i)
 
-            # If an object has been found, return its coordinates
+            # If an object has been found, return
             if horizontalBounds is not None and verticalBounds is not None:
                 return
             t = threading.Thread(target=self.createImageProcessor(verticalLowerBounds[scanOrder[i]],
@@ -152,18 +150,19 @@ class ImageHandler:
     # divided recursively by the multi threaded function. If not specified or less then 0, no no recursive calls shall be done.
     # scanOrder - the order by which the image is fed to threads by multi threaded object finding function. More information
     # in findObjectMultithreaded() description.
-    def detect(self, mainImg, objectMinSize, imageMinArea, scanOrder, target):
+    def detect(self, objectMinSize, imageMinArea, scanOrder, target):
         self.generateMask(target)
-        properties = target.mask.shape
-        height = properties[0]
-        width = properties[1]
-        horizontalBounds = None
-        verticalBounds = None
+        if target.mask is not None:
+            properties = target.mask.shape
+            height = properties[0]
+            width = properties[1]
 
-        if imageMinArea < 1:
-            imageMinArea = height * width + 1
+            if imageMinArea < 1:
+                imageMinArea = height * width + 1
 
-        if self.multiThreading:
-            self.findObjectMultithreaded(0, height, 0, width, objectMinSize, imageMinArea, scanOrder, target)
+            if self.multiThreading:
+                self.findObjectMultithreaded(0, height, 0, width, objectMinSize, imageMinArea, scanOrder, target)
+            else:
+                self.findObject(0, 0, target)
         else:
-            self.findObject(0, 0, target)
+            print("Target has no mask.")

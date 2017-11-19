@@ -124,10 +124,10 @@ try:
             print("Capture fucntion failed")
             break
 
-        imgHandler.detect(frame, int(settings.getValue("objectMinSize")), int(settings.getValue("minImgArea")),
+        imgHandler.detect(int(settings.getValue("objectMinSize")), int(settings.getValue("minImgArea")),
                           settings.getValue("ballScanOrder"), ball)
 
-        imgHandler.detect(frame, int(settings.getValue("objectMinSize")), int(settings.getValue("minImgArea")),
+        imgHandler.detect(int(settings.getValue("objectMinSize")), int(settings.getValue("minImgArea")),
                           settings.getValue("basketScanOrder"), basket)
 
         if socketData.updateThresholds:

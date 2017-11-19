@@ -27,6 +27,7 @@ class ImageProcessor:
 
         # If no blob is found, cancel
         if len(cnts) == 0:
+            print("No contours found")
             return
 
         # Find the biggest blob
