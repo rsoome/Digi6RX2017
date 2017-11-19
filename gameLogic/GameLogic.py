@@ -59,13 +59,14 @@ class GameLogic:
 
     def lookForTarget(self, target):
         if not self.socketData.gameStarted:
+            print("Game ended by client.")
             return False
         for i in range(12):
             self.updateTargetCoordinates([target])
             self.move.rotate(self.turnSpeed)
             if target.horizontalMidPoint is not None:
                 return True
-            time.sleep(0.3)
+            time.sleep(0.5)
 
         return False
 
@@ -118,10 +119,12 @@ class GameLogic:
                 return False
 
         if not self.checkHorizontalAlginment(target):
+            print("Alligning to " + target.id)
             self.turnTowardTarget(target)
             return False
 
         elif not self.checkVerticalAlignment(target, verticalStopBound):
+            print("Moving to " + target.id)
             self.moveTowardTarget(target)
             return False
 
