@@ -55,7 +55,7 @@ class GameLogic:
         self.frame.capture(cv2.COLOR_BGR2HSV)
         for target in targets:
             self.imgHandler.generateMask(target, self.frame.filteredImg)
-            self.imgHandler.detect(None, target.mask, 1000, 0, target.scanOrder, target)
+            self.imgHandler.detect(None, 1000, 0, target.scanOrder, target)
 
     def lookForTarget(self, target):
         if not self.socketData.gameStarted:
