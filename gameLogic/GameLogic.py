@@ -61,12 +61,14 @@ class GameLogic:
         if not self.socketData.gameStarted:
             print("Game ended by client.")
             return False
-        for i in range(3):
+        for i in range(4):
+            print(target.horizontalMidPoint)
             self.updateTargetCoordinates([target])
             self.move.rotate(self.turnSpeed)
             if target.horizontalMidPoint is not None:
+                print("Target found.")
                 return True
-            time.sleep(1)
+            time.sleep(3)
 
         return False
 
