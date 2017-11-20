@@ -219,6 +219,7 @@ class GameLogic:
         self.mb.setThrowerSpeed(self.mb.THROWER_MAXSPEED)
         time.sleep(0.5)
         self.mb.setGrabberPosition(self.mb.GRABBER_THROW_POSITION)
+        self.move.drive(self.moveSpeed // 5, 180)
         time.sleep(0.5)
         self.mb.setThrowerSpeed(self.mb.THROWER_STOP)
         self.mb.setGrabberPosition(self.mb.GRABBER_OPEN_POSITION)
