@@ -100,14 +100,13 @@ class GameLogic:
                     ballReached = False
 
                 if not ballReached:
-                    print("*")
                     self.mb.setGrabberPosition(self.mb.GRABBER_OPEN_POSITION)
                     atPosition = self.goToTarget(self.ball, self.ballVerticalStopBound, self.moveSpeed)
                     if atPosition:
                         self.move.drive(int(self.moveSpeed), 0, 0)
 
                 elif ballReached and not ballGrabbed:
-                    print("Reaching ball")
+                    #print("Reaching ball")
                     self.move.drive(int(self.moveSpeed), 0, 0)
                     time.sleep(0.1)
                     self.mb.setGrabberPosition(self.mb.GRABBER_CARRY_POSITION)
@@ -120,7 +119,7 @@ class GameLogic:
 
                 elif (self.irStatus == 1):
                     throwTimer = Timer.Timer()
-                    print("Throwing ball")
+                    #print("Throwing ball")
                     self.move.stop()
                     ballThrown = self.throwBall()
                     time.sleep(0.1)
