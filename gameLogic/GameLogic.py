@@ -72,6 +72,7 @@ class GameLogic:
     def run(self):
         ballReached = False
         basketReached = False
+        ballGrabbed = False;
 
         while self.socketData.gameStarted:
             self.timer.startTimer()
@@ -90,12 +91,13 @@ class GameLogic:
                     if atPosition:
                         self.move.drive(self.moveSpeed, 0)
 
-                elif ballReached:
+                elif ballReached and not ballGrabbed:
                     print("Reaching ball")
                     self.move.drive(int(self.moveSpeed * 1.5), 0)
                     self.mb.setGrabberPosition(self.mb.GRABBER_CARRY_POSITION)
                     time.sleep(0.3)
                     self.move.drive(self.moveSpeed // 5, 180)
+                    ballGrabbed = True
 
                 elif not basketReached:
                     self.move.stop()
@@ -105,6 +107,7 @@ class GameLogic:
                     self.move.stop()
                     ballThrown = self.throwBall()
                     ballReached = not ballThrown
+                    ballGrabbed = ballReached
                     basketReached = False
 
             if self.gameState == "STOP":
