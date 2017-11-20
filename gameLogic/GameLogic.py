@@ -52,13 +52,17 @@ class GameLogic:
 
             if not self.socketData.gameStarted:
                 return
+
+            print("Verticalmidpoint: " + str(target.verticalMidPoint))
+            print("Jagamine: " + str(float(target.verticalMidPoint)/self.frame.height))
+            print("CalculateSpeed: " + str(self.move.calculateSpeed(self.moveSpeed, 1 - float(target.verticalMidPoint)/self.frame.height)))
             self.move.driveXY(0,
 
                               self.move.calculateSpeed(self.moveSpeed, 1 - float(target.verticalMidPoint)/self.frame.height),
-
-                              self.move.calculateSpeed(self.moveSpeed,
-                                                       (target.horizontalMidPoint - self.screenMidpoint) / float(self.screenMidpoint))
-                              )
+                                0)
+                              #self.move.calculateSpeed(self.moveSpeed,
+                              #                         (target.horizontalMidPoint - self.screenMidpoint) / float(self.screenMidpoint))
+                              #)
 
     def updateTargetCoordinates(self, targets):
         self.frame.capture(cv2.COLOR_BGR2HSV)
