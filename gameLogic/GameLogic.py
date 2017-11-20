@@ -65,7 +65,6 @@ class GameLogic:
         self.move.rotate(self.turnSpeed)
         self.updateTargetCoordinates([target])
         if target.horizontalMidPoint is not None:
-            print("Target found.")
             return True
 
         return False
