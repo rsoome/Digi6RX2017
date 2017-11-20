@@ -120,7 +120,6 @@ class GameLogic:
             if self.gameState == "STOP":
                 self.move.stop()
 
-            self.mb.clearMBbuf()
             self.addFrame(self.timer.stopTimer())
             self.updateFPS()
 
