@@ -86,6 +86,7 @@ class GameLogic:
                     atPosition = self.goToTarget(self.ball, self.ballVerticalStopBound, self.moveSpeed)
                     if atPosition:
                         for i in range(10):
+                            ballReached = self.irStatus == 1
                             self.move.drive(self.moveSpeed, 0)
                             if ballReached:
                                 print("Reaching ball")
