@@ -224,6 +224,7 @@ class GameLogic:
         time.sleep(0.5)
         self.mb.setThrowerSpeed(self.mb.THROWER_STOP)
         self.mb.setGrabberPosition(self.mb.GRABBER_OPEN_POSITION)
+        print("throwing irStatus " + str(self.irStatus))
         return self.irStatus == 0
 
     def addFrame(self, elapsed):
