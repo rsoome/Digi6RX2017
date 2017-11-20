@@ -181,7 +181,7 @@ class GameLogic:
 
         if sendingNode == "ir":
             self.irStatus = int(msg[1])
-            print("irStatus: " + self.irStatus)
+            print("irStatus: " + str(self.irStatus))
 
         if sendingNode == "ref":
             cmd = self.ref.handleCommand(msg[1])
