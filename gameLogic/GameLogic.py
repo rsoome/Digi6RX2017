@@ -87,7 +87,6 @@ class GameLogic:
                     ballReached = False
 
                 if not ballReached:
-                    self.mb.setGrabberPosition(self.mb.GRABBER_OPEN_POSITION)
                     atPosition = self.goToTarget(self.ball, self.ballVerticalStopBound, self.moveSpeed)
                     if atPosition:
                         self.move.drive(self.moveSpeed, 0)
@@ -112,7 +111,8 @@ class GameLogic:
                     ballGrabbed = ballReached
                     if ballGrabbed:
                         self.mb.setGrabberPosition(self.mb.GRABBER_CARRY_POSITION)
-
+                    else:
+                        self.mb.setGrabberPosition(self.mb.GRABBER_OPEN_POSITION)
                     time.sleep(0.1)
                     self.handleMbMessage(self.mb.readInfrared())
                     basketReached = False
