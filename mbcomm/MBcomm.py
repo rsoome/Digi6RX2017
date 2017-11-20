@@ -39,15 +39,6 @@ class MBcomm:
         self.__sendBytes("i")
         return self.waitForAnswer()
 
-    def charge(self):
-        self.__sendBytes("c")
-
-    def kick(self):
-        self.__sendBytes("k")
-
-    def discharge(self):
-        self.__sendBytes("e")
-
     def enableFailSafe(self):
         self.__sendBytes("f1")
 
@@ -70,8 +61,8 @@ class MBcomm:
 
     def waitForAnswer(self):
         msg = self.readBytes()
-        #while not len(msg) > 0:
-        #    msg = self.readBytes()
+        while not len(msg) > 0:
+            msg = self.readBytes()
         return msg
 
     def setGrabberPosition(self, pos):
