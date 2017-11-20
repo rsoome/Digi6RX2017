@@ -61,10 +61,10 @@ class GameLogic:
             self.move.driveXY(0,
 
                               self.move.calculateSpeed(self.moveSpeed, 1 - float(target.verticalMidPoint)/self.frame.height),
-                                0)
-                              #self.move.calculateSpeed(self.moveSpeed,
-                              #                         (target.horizontalMidPoint - self.screenMidpoint) / float(self.screenMidpoint))
-                              #)
+                              #  0)
+                              self.move.calculateSpeed(self.moveSpeed,
+                                                       (target.horizontalMidPoint - self.screenMidpoint) / float(self.screenMidpoint))
+                              )
 
     def updateTargetCoordinates(self, targets):
         self.frame.capture(cv2.COLOR_BGR2HSV)
