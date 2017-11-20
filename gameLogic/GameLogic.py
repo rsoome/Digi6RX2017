@@ -120,6 +120,7 @@ class GameLogic:
                     while throwTimer.getTimePassed() < 1000:
                         self.handleMbMessage(self.mb.readInfrared())
                         time.sleep(0.1)
+                    throwTimer.stopTimer()
 
             if self.gameState == "STOP":
                 self.move.stop()
