@@ -80,19 +80,22 @@ class GameLogic:
             self.readMb()
 
             if self.gameState == "START":
-                ballReached = (self.irStatus == 1)
+
+                if self.irStatus == 1:
+                    ballReached = True
+                else:
+                    ballReached = False
 
                 if not ballReached:
                     atPosition = self.goToTarget(self.ball, self.ballVerticalStopBound, self.moveSpeed)
                     if atPosition:
-                        print(ballReached)
                         self.move.drive(self.moveSpeed, 0)
-                        if ballReached:
-                            print("Reaching ball")
-                            self.move.drive(int(self.moveSpeed * 1.5), 0)
-                            self.mb.setGrabberPosition(self.mb.GRABBER_CARRY_POSITION)
-                            self.move.drive(self.moveSpeed//10, 180)
-                            time.sleep(0.3)
+                elif ballReached:
+                    print("Reaching ball")
+                    self.move.drive(int(self.moveSpeed * 1.5), 0)
+                    self.mb.setGrabberPosition(self.mb.GRABBER_CARRY_POSITION)
+                    time.sleep(0.3)
+                    self.move.drive(self.moveSpeed // 5, 180)
 
                 elif not basketReached:
                     self.move.stop()
@@ -180,7 +183,6 @@ class GameLogic:
             self.move.motorSpeed2 = float(msg[3])
 
         if sendingNode == "ir":
-            self.irStatus = int(msg[1])
             print("irStatus: " + str(self.irStatus))
 
         if sendingNode == "ref":
