@@ -108,20 +108,18 @@ class GameLogic:
                     print("Throwing ball")
                     self.move.stop()
                     ballThrown = self.throwBall()
-                    ballReached = not ballThrown
+                    time.sleep(0.1)
+                    self.handleMbMessage(self.mb.readInfrared())
+                    ballReached = (self.irStatus == 1)
                     ballGrabbed = ballReached
                     if ballGrabbed:
                         self.mb.setGrabberPosition(self.mb.GRABBER_CARRY_POSITION)
-                    time.sleep(0.1)
-                    self.handleMbMessage(self.mb.readInfrared())
                     basketReached = False
-
-                self.mb.clearMBbuf()
 
             if self.gameState == "STOP":
                 self.move.stop()
-                self.mb.clearMBbuf()
 
+            self.mb.clearMBbuf()
             self.addFrame(self.timer.stopTimer())
             self.updateFPS()
 
