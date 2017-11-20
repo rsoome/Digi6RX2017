@@ -52,8 +52,11 @@ class GameLogic:
 
             if not self.socketData.gameStarted:
                 return
-            self.move.driveXY(self.moveSpeed, target.horizontalMidPoint/self.frame.height,
-                              (target.horizontalMidPoint - self.screenMidpoint)/self.screenMidpoint, self.turnSpeed)
+            self.move.driveXY(0,
+                              self.move.calculateSpeed(self.moveSpeed, target.verticalMidPoint/self.frame.height),
+                              self.move.calculateSpeed(self.moveSpeed,
+                                                       (target.horizontalMidPoint - self.screenMidpoint) / self.screenMidpoint)
+                              )
 
     def updateTargetCoordinates(self, targets):
         self.frame.capture(cv2.COLOR_BGR2HSV)
@@ -150,8 +153,7 @@ class GameLogic:
                 print("Looking for " + target.id)
                 for i in range(2000):
                     #print(i)
-                    self.move.driveXY(self.moveSpeed, target.horizontalMidPoint / self.frame.height,
-                                      (target.horizontalMidPoint - self.screenMidpoint) / self.screenMidpoint, 0)
+                    self.move.driveXY(0, self.moveSpeed, 0)
                     self.move.stop()
                 return False
 
