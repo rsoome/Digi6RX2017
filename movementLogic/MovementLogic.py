@@ -12,7 +12,7 @@ class MovementLogic:
         self.motorSpeed1 = 0.0
         self.motorSpeed2 = 0.0
         self.timer = Timer.Timer()
-        self.minDriveSpeed = 10
+        self.minDriveSpeed = 0.1
         self.wheelDistance = 0.13
 
         self.wheelSpeedToMainboardUnits = 18.75 * 64 / (2 * math.pi * 0.035 * 60)
@@ -32,7 +32,7 @@ class MovementLogic:
         self.drive(maxSpeed, angle, omega)
 
     def calculateSpeed(self, maxSpeed, coif):
-        return coif * maxSpeed
+        return (coif * maxSpeed) + self.minDriveSpeed
 
     def brake(self):
         print(self.motorSpeed0)
