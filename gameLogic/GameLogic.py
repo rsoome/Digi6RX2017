@@ -61,7 +61,7 @@ class GameLogic:
             print("Game ended by client.")
             return False
 
-        print(target.horizontalMidPoint)
+        #print(target.horizontalMidPoint)
         self.move.rotate(self.turnSpeed)
         self.updateTargetCoordinates([target])
         if target.horizontalMidPoint is not None:
@@ -80,13 +80,15 @@ class GameLogic:
             self.readMb()
 
             if self.gameState == "START":
-                ballReached = self.irStatus == 1
+                ballReached = (self.irStatus == 1)
 
                 if not ballReached:
                     atPosition = self.goToTarget(self.ball, self.ballVerticalStopBound, self.moveSpeed)
                     if atPosition:
+                        print("In position")
                         for i in range(10):
-                            ballReached = self.irStatus == 1
+                            print(ballReached)
+                            ballReached = (self.irStatus == 1)
                             self.move.drive(self.moveSpeed, 0)
                             if ballReached:
                                 print("Reaching ball")
