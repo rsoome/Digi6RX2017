@@ -183,8 +183,8 @@ class GameLogic:
             self.move.motorSpeed2 = float(msg[3])
 
         if sendingNode == "ir":
-            print("irStatus: " + str(self.irStatus))
             self.irStatus = int(msg[1])
+            print("irStatus: " + str(self.irStatus))
 
         if sendingNode == "ref":
             cmd = self.ref.handleCommand(msg[1])
