@@ -61,8 +61,11 @@ class MBcomm:
 
     def waitForAnswer(self):
         msg = self.readBytes()
-        while not len(msg) > 0:
+        for i in range(1000000):
+            if len(msg) > 0:
+                return msg
             msg = self.readBytes()
+        print("Mainboard crashed.")
         return msg
 
     def setGrabberPosition(self, pos):
