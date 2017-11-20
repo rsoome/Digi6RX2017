@@ -93,7 +93,8 @@ class GameLogic:
 
                 elif ballReached and not ballGrabbed:
                     print("Reaching ball")
-                    self.move.drive(int(self.moveSpeed * 1.5), 0)
+                    self.move.drive(int(self.moveSpeed), 0)
+                    time.sleep(0.1)
                     self.mb.setGrabberPosition(self.mb.GRABBER_CARRY_POSITION)
                     time.sleep(0.3)
                     self.move.drive(self.moveSpeed // 5, 180)
