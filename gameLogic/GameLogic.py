@@ -117,8 +117,11 @@ class GameLogic:
                     self.handleMbMessage(self.mb.readInfrared())
                     basketReached = False
 
+                self.mb.clearMBbuf()
+
             if self.gameState == "STOP":
                 self.move.stop()
+                self.mb.clearMBbuf()
 
             self.addFrame(self.timer.stopTimer())
             self.updateFPS()

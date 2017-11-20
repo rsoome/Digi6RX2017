@@ -77,3 +77,6 @@ class MBcomm:
     def setGrabberPosition(self, pos):
         self.__sendBytes("ss" + str(pos))
         return self.waitForAnswer()
+
+    def clearMBbuf(self):
+        self.__sendBytes("cb")
