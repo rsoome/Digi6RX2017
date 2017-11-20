@@ -104,6 +104,7 @@ class GameLogic:
                     basketReached = self.goToTarget(self.basket, self.basketVerticalStopBound, self.moveSpeed)
 
                 else:
+                    print("Throwing ball")
                     self.move.stop()
                     ballThrown = self.throwBall()
                     ballReached = not ballThrown
