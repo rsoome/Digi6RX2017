@@ -58,6 +58,7 @@ class MBcomm:
 
     def setThrowerSpeed(self, speed):
         self.__sendBytes("d" + str(speed))
+        return self.waitForAnswer()
 
     def enableFailDeadly(self):     #DON'T EVER USE THIS: IT WAS FUNNY UNTIL IT ACTUALLY FAILED DEADLY
         self.__sendBytes("fd")
@@ -74,3 +75,4 @@ class MBcomm:
 
     def setGrabberPosition(self, pos):
         self.__sendBytes("ss" + str(pos))
+        return self.waitForAnswer()
