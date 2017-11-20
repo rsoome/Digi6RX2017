@@ -33,7 +33,7 @@ class SettingsHandler:
                 pass
 
         if not "driveSpeed" in self.values:
-            self.values["driveSpeed"] = 10
+            self.values["driveSpeed"] = 1
         if not "turnSpeed" in self.values:
             self.values["turnSpeed"] = 10
         if not "camID" in self.values:

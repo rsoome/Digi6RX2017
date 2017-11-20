@@ -77,7 +77,7 @@ imgHandler = ImageHandler.ImageHandler(bool(settings.getValue("multiThreading"))
 
 ref = RefereeHandler.RefereeHandler(robotID, fieldID, mb)
 
-game = GameLogic.GameLogic(move, settings.getValue("deltaFromMidPoint"), int(settings.getValue("driveSpeed")), int(settings.getValue("turnSpeed")),
+game = GameLogic.GameLogic(move, settings.getValue("deltaFromMidPoint"), settings.getValue("driveSpeed"), settings.getValue("turnSpeed"),
                            imgHandler, frameCapture, socketData, ref, fieldID, robotID, mb, ball, basket,
                            settings.getValue("defaultGameState"))
 
