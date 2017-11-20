@@ -87,6 +87,7 @@ class GameLogic:
                     ballReached = False
 
                 if not ballReached:
+                    self.mb.setGrabberPosition(self.mb.GRABBER_OPEN_POSITION)
                     atPosition = self.goToTarget(self.ball, self.ballVerticalStopBound, self.moveSpeed)
                     if atPosition:
                         self.move.drive(self.moveSpeed, 0)
