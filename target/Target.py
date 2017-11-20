@@ -43,7 +43,10 @@ class Target:
 
 
         if hBounds != None:
-            self.horizontalMidPoint = (self.horizontalMidPoint + (hBounds[0] + (hBounds[1] - hBounds[0]) // 2))//2
+            if self.horizontalMidPoint != None:
+                self.horizontalMidPoint = (self.horizontalMidPoint + (hBounds[0] + (hBounds[1] - hBounds[0]) // 2))//2
+            else:
+                self.horizontalMidPoint = hBounds[0] + (hBounds[1] - hBounds[0]) // 2
         else:
             self.horizontalMidPoint = None
 
