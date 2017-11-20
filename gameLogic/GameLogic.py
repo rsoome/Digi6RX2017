@@ -116,6 +116,7 @@ class GameLogic:
                     if ballGrabbed:
                         self.mb.setGrabberPosition(self.mb.GRABBER_CARRY_POSITION)
                     basketReached = False
+                    time.sleep(0.5)
 
             if self.gameState == "STOP":
                 self.move.stop()
