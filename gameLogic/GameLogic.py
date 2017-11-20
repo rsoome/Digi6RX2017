@@ -39,10 +39,11 @@ class GameLogic:
         if target.horizontalMidPoint is not None:
             if not self.socketData.gameStarted:
                 return
-            if target.horizontalMidPoint > self.screenMidpoint + self.deltaFromMidPoint:
-                self.move.rotate(currentTurnSpeed)
-            elif target.horizontalMidPoint < self.screenMidpoint - self.deltaFromMidPoint:
-                self.move.rotate(-currentTurnSpeed)
+            self.moveTowardTarget(target)
+            #if target.horizontalMidPoint > self.screenMidpoint + self.deltaFromMidPoint:
+            #    self.move.rotate(currentTurnSpeed)
+            #elif target.horizontalMidPoint < self.screenMidpoint - self.deltaFromMidPoint:
+            #    self.move.rotate(-currentTurnSpeed)
 
     def moveTowardTarget(self, target):
         if target.horizontalMidPoint is not None:
