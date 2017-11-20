@@ -72,7 +72,7 @@ class GameLogic:
     def run(self):
         ballReached = False
         basketReached = False
-        ballGrabbed = False;
+        ballGrabbed = False
 
         while self.socketData.gameStarted:
             self.timer.startTimer()
@@ -87,6 +87,7 @@ class GameLogic:
                     ballReached = False
 
                 if not ballReached:
+                    print("*")
                     self.mb.setGrabberPosition(self.mb.GRABBER_OPEN_POSITION)
                     atPosition = self.goToTarget(self.ball, self.ballVerticalStopBound, self.moveSpeed)
                     if atPosition:
