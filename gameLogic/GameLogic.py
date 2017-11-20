@@ -62,7 +62,7 @@ class GameLogic:
 
                               self.move.calculateSpeed(self.moveSpeed, 1 - float(target.verticalMidPoint)/self.frame.height),
                               #  0)
-                              self.move.calculateSpeed(self.moveSpeed,
+                              self.move.calculateSpeed(self.turnSpeed,
                                                        (target.horizontalMidPoint - self.screenMidpoint) / float(self.screenMidpoint))
                               )
 
