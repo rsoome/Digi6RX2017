@@ -113,7 +113,7 @@ class GameLogic:
                     if ballGrabbed:
                         self.mb.setGrabberPosition(self.mb.GRABBER_CARRY_POSITION)
 
-                    self.mb.readInfrared()
+                    self.handleMbMessage(self.mb.readInfrared())
                     basketReached = False
 
             if self.gameState == "STOP":

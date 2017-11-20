@@ -37,6 +37,7 @@ class MBcomm:
 
     def readInfrared(self):
         self.__sendBytes("i")
+        return self.waitForAnswer()
 
     def charge(self):
         self.__sendBytes("c")
@@ -71,7 +72,7 @@ class MBcomm:
         msg = self.readBytes()
         while not len(msg) > 0:
             msg = self.readBytes()
-        return msg
+        return msg.split(":")
 
     def setGrabberPosition(self, pos):
         self.__sendBytes("ss" + str(pos))
