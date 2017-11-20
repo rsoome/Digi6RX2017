@@ -72,7 +72,7 @@ class MBcomm:
         msg = self.readBytes()
         while not len(msg) > 0:
             msg = self.readBytes()
-        return msg.split(":")
+        return msg
 
     def setGrabberPosition(self, pos):
         self.__sendBytes("ss" + str(pos))
