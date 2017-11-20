@@ -108,6 +108,8 @@ class GameLogic:
                     ballThrown = self.throwBall()
                     ballReached = not ballThrown
                     ballGrabbed = ballReached
+                    if ballGrabbed:
+                        self.mb.setGrabberPosition(self.mb.GRABBER_CARRY_POSITION)
                     basketReached = False
 
             if self.gameState == "STOP":
