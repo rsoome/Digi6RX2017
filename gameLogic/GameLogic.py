@@ -104,7 +104,7 @@ class GameLogic:
                     self.move.stop()
                     basketReached = self.goToTarget(self.basket, self.basketVerticalStopBound, self.moveSpeed)
 
-                else:
+                elif (self.irStatus == 1):
                     print("Throwing ball")
                     self.move.stop()
                     ballThrown = self.throwBall()
@@ -112,6 +112,8 @@ class GameLogic:
                     ballGrabbed = ballReached
                     if ballGrabbed:
                         self.mb.setGrabberPosition(self.mb.GRABBER_CARRY_POSITION)
+
+                    self.mb.readInfrared()
                     basketReached = False
 
             if self.gameState == "STOP":
@@ -225,7 +227,7 @@ class GameLogic:
         self.mb.setThrowerSpeed(self.mb.THROWER_STOP)
         self.mb.setGrabberPosition(self.mb.GRABBER_OPEN_POSITION)
         print("throwing irStatus " + str(self.irStatus))
-        return self.irStatus == 0
+        return True
 
     def addFrame(self, elapsed):
         if elapsed > 0:
