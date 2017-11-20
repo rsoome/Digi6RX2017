@@ -53,13 +53,11 @@ if opponent != "magneta" and opponent != "blue":
     settings.writeFromDictToFile()
     sys.exit(0)
 
-ball = Target.Target(None, None, "ball", settings.getValue("ballHSVLower"),
-                     settings.getValue("ballHSVUpper"),
+ball = Target.Target(None, None, "ball", settings.getValue("ballHSVLower"), settings.getValue("ballHSVUpper"),
                      settings.getValue("ballScanOrder"))
 
 basket = Target.Target(None, None, "basket", settings.getValue(opponent + "BasketHSVLower"),
-                       settings.getValue(opponent + "BasketHSVUpper"),
-                       settings.getValue("basketScanOrder"))
+                       settings.getValue(opponent + "BasketHSVUpper"), settings.getValue("basketScanOrder"))
 
 robotID = settings.getValue("ID")
 fieldID = settings.getValue("fieldID")

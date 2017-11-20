@@ -52,7 +52,8 @@ class GameLogic:
 
             if not self.socketData.gameStarted:
                 return
-            self.move.drive(self.moveSpeed, 0)
+            self.move.driveXY(self.moveSpeed, target.horizontalMidPoint/self.frame.height,
+                              (target.horizontalMidPoint - self.screenMidpoint)/self.screenMidpoint, self.turnSpeed)
 
     def updateTargetCoordinates(self, targets):
         self.frame.capture(cv2.COLOR_BGR2HSV)
@@ -94,11 +95,11 @@ class GameLogic:
                     self.mb.setGrabberPosition(self.mb.GRABBER_OPEN_POSITION)
                     atPosition = self.goToTarget(self.ball, self.ballVerticalStopBound, self.moveSpeed)
                     if atPosition:
-                        self.move.drive(self.moveSpeed, 0)
+                        self.move.drive(int(self.moveSpeed), 0, 0)
 
                 elif ballReached and not ballGrabbed:
                     print("Reaching ball")
-                    self.move.drive(int(self.moveSpeed), 0)
+                    self.move.drive(int(self.moveSpeed), 0, 0)
                     time.sleep(0.1)
                     self.mb.setGrabberPosition(self.mb.GRABBER_CARRY_POSITION)
                     time.sleep(0.3)
@@ -149,8 +150,9 @@ class GameLogic:
                 print("Looking for " + target.id)
                 for i in range(2000):
                     #print(i)
-                    self.move.drive(speed, 0)
-                self.move.stop()
+                    self.move.driveXY(self.moveSpeed, target.horizontalMidPoint / self.frame.height,
+                                      (target.horizontalMidPoint - self.screenMidpoint) / self.screenMidpoint, 0)
+                    self.move.stop()
                 return False
 
         if not self.checkHorizontalAlginment(target):
@@ -231,7 +233,6 @@ class GameLogic:
         self.mb.setThrowerSpeed(self.mb.THROWER_MAXSPEED)
         time.sleep(0.5)
         self.mb.setGrabberPosition(self.mb.GRABBER_THROW_POSITION)
-        self.move.drive(self.moveSpeed // 5, 180)
         time.sleep(0.5)
         self.mb.setThrowerSpeed(self.mb.THROWER_STOP)
         self.mb.setGrabberPosition(self.mb.GRABBER_OPEN_POSITION)

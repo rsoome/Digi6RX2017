@@ -22,3 +22,8 @@ class Timer:
 
     def getTimeInMillis(self):
         return int(float(str(datetime.now()).split()[1].split(":")[2]) * 1000)
+
+    def reset(self):
+        time = self.stopTimer()
+        self.startTimer()
+        return time

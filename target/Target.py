@@ -1,6 +1,10 @@
 import numpy as np
+import math
 
 # The object class, in which you can hold the coordinates of an instance. For example - a ball or a gate
+from timer import Timer
+
+
 class Target:
 
     def __init__(self, hBounds, vBounds, targetID, lowerRange, upperRange, scanOrder):
@@ -10,6 +14,7 @@ class Target:
         self.mask = None
         self.contours = None
         self.scanOrder = scanOrder
+        self.timer = Timer.Timer()
 
     def getBounds(self):
         return self.horizontalBounds, self.verticalBounds

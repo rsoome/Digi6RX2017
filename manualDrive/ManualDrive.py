@@ -21,19 +21,19 @@ class ManualDrive:
             keyStroke = screen.getch()
 
             while keyStroke == ord('w'):
-                self.move.drive(self.driveSpeed, 0)
+                self.move.drive(self.driveSpeed, 0, ), None,
                 keyStroke = self.getKeystroke(screen)
 
             while keyStroke == ord('2'):
-                self.move.drive(self.driveSpeed, 60)
+                self.move.drive(self.driveSpeed, 60, ), None,
                 keyStroke = self.getKeystroke(screen)
 
             while keyStroke == ord('s'):
-                self.move.drive(self.driveSpeed, 180)
+                self.move.drive(self.driveSpeed, 180, ), None,
                 keyStroke = self.getKeystroke(screen)
 
             while keyStroke == ord('1'):
-                self.move.drive(self.driveSpeed, -60)
+                self.move.drive(self.driveSpeed, -60, ), None,
                 keyStroke = self.getKeystroke(screen)
 
             while keyStroke == ord('a'):
