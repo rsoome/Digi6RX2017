@@ -53,9 +53,11 @@ class GameLogic:
             if not self.socketData.gameStarted:
                 return
             self.move.driveXY(0,
-                              self.move.calculateSpeed(self.moveSpeed, 1 - target.verticalMidPoint/self.frame.height),
+
+                              self.move.calculateSpeed(self.moveSpeed, 1 - float(target.verticalMidPoint)/self.frame.height),
+
                               self.move.calculateSpeed(self.moveSpeed,
-                                                       (target.horizontalMidPoint - self.screenMidpoint) / self.screenMidpoint)
+                                                       (target.horizontalMidPoint - self.screenMidpoint) / float(self.screenMidpoint))
                               )
 
     def updateTargetCoordinates(self, targets):
