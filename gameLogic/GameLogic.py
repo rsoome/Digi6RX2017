@@ -89,6 +89,7 @@ class GameLogic:
                     atPosition = self.goToTarget(self.ball, self.ballVerticalStopBound, self.moveSpeed)
                     if atPosition:
                         self.move.drive(self.moveSpeed, 0)
+
                 elif ballReached:
                     print("Reaching ball")
                     self.move.drive(int(self.moveSpeed * 1.5), 0)
@@ -183,6 +184,7 @@ class GameLogic:
 
         if sendingNode == "ir":
             print("irStatus: " + str(self.irStatus))
+            self.irStatus = int(msg[1])
 
         if sendingNode == "ref":
             cmd = self.ref.handleCommand(msg[1])
