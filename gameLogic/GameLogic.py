@@ -77,7 +77,7 @@ class GameLogic:
             return False
 
         #print(target.horizontalMidPoint)
-        self.move.rotate(self.turnSpeed)
+        self.move.drive(0,0,self.turnSpeed)
         self.updateTargetCoordinates([target])
         if target.horizontalMidPoint is not None:
             return True
