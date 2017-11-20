@@ -70,8 +70,8 @@ class MBcomm:
 
     def waitForAnswer(self):
         msg = self.readBytes()
-        while not len(msg) > 0:
-            msg = self.readBytes()
+        #while not len(msg) > 0:
+        #    msg = self.readBytes()
         return msg
 
     def setGrabberPosition(self, pos):
