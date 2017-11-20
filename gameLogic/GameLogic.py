@@ -53,7 +53,7 @@ class GameLogic:
             if not self.socketData.gameStarted:
                 return
             self.move.driveXY(0,
-                              self.move.calculateSpeed(self.moveSpeed, target.verticalMidPoint/self.frame.height),
+                              self.move.calculateSpeed(self.moveSpeed, 1 - target.verticalMidPoint/self.frame.height),
                               self.move.calculateSpeed(self.moveSpeed,
                                                        (target.horizontalMidPoint - self.screenMidpoint) / self.screenMidpoint)
                               )
