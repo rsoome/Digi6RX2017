@@ -105,10 +105,10 @@ class GameLogic:
                     ballReached = True
                     ballGrabbed = True
                 else:
-                    ballReached = True
                     ballGrabbed = False
 
                 if not ballReached:
+                    print("Going to ball")
                     self.mb.setGrabberPosition(self.mb.GRABBER_OPEN_POSITION)
                     ballReached = self.goToTarget(self.ball, self.ballVerticalStopBound, self.moveSpeed)
 
