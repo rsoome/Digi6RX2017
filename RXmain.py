@@ -155,7 +155,7 @@ try:
     while True:
 
         #DEBUGGING LOOKING FOR TARGET
-        game.lookForTarget(ball)
+        #game.lookForTarget(ball)
         #END DEBUGGING
 
 
