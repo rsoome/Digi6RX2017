@@ -212,12 +212,12 @@ class GameLogic:
 
     def checkVerticalAlignment(self, target, stopArea):
 
-        if target.verticalMidPoint is None:
+        if target.area is None:
             return False
 
         if target.area < stopArea:
             return False
-
+        print("Vertically alligned.")
         return True
 
     def handleMbMessage(self, msg):
