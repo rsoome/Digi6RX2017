@@ -83,5 +83,6 @@ class MBcomm:
     def sendValues(self):
         if len(self.values) > 0:
             for key in self.values:
+                print(key+self.values[key])
                 self.__sendBytes(key + self.values[key])
             self.values = dict()
