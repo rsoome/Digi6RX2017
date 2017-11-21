@@ -35,7 +35,7 @@ class GameLogic:
         self.timer = Timer.Timer()
 
     def turnTowardTarget(self, target):
-        turnCoificent = target.horizontalMidPoint - self.screenMidpoint/float(self.screenMidpoint)
+        turnCoificent = (target.horizontalMidPoint - self.screenMidpoint)/float(self.screenMidpoint)
         if target.horizontalMidPoint is not None:
             if not self.socketData.gameStarted:
                 return
@@ -306,7 +306,7 @@ class GameLogic:
         self.mb.setThrowerSpeed(self.mb.THROWER_MINSPEED)
         self.mb.sendValues()
         time.sleep(2)
-        self.mb.setThrowerSpeed(self.mb.THROWER_MIDSPEED)
+        self.mb.setThrowerSpeed(self.mb.THROWER_MAXSPEED)
         self.mb.sendValues()
         time.sleep(2)
         self.mb.setGrabberPosition(self.mb.GRABBER_THROW_POSITION)
