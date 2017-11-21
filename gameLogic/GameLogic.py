@@ -1,6 +1,8 @@
 import cv2
 import time
 
+import math
+
 from timer import Timer
 # Contins the game logic
 # TODO: Implement
@@ -18,7 +20,7 @@ class GameLogic:
         self.initializeValues()
         self.socketData = socketData
         self.ballStopArea = 1800
-        self.basketStopArea = 0
+        self.basketStopArea = math.inf
         self.gameState = defaultGameState
         self.irStatus = 0
         self.ref = ref
