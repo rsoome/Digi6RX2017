@@ -79,7 +79,7 @@ class GameLogic:
         self.move.driveXY(0,0,self.turnSpeed)
         if self.mb.sendingTime:
             self.mb.sendValues()
-            
+
         self.updateTargetCoordinates([target])
         if target.horizontalMidPoint is not None:
             return True
