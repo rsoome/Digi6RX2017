@@ -149,9 +149,12 @@ def socketDataCheck():
 
 
 try:
+    mb.sendTimer.startTimer()
     while True:
-
         mb.setGrabberPosition(mb.GRABBER_OPEN_POSITION)
+
+        if mb.sendingTime():
+            mb.sendValues()
 
         timer.startTimer()
 

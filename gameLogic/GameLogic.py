@@ -95,7 +95,7 @@ class GameLogic:
             self.updateTargetCoordinates([self.ball, self.basket])
             self.readMb()
 
-            if self.mb.sendTimer.getTimePassed() >= 1000/self.mb.SENDFREQ:
+            if self.mb.sendingTime():
                 self.mb.sendValues()
                 self.mb.sendTimer.reset()
 

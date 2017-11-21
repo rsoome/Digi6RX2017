@@ -86,3 +86,9 @@ class MBcomm:
                 print(key+self.values[key])
                 self.__sendBytes(key + self.values[key])
             self.values = dict()
+
+    def sendingTime(self):
+        if self.sendTimer.getTimePassed() >= 1000/self.SENDFREQ:
+            self.sendTimer.reset()
+            return True
+        return False
