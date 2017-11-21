@@ -20,7 +20,7 @@ class GameLogic:
         self.initializeValues()
         self.socketData = socketData
         self.ballStopArea = 1800
-        self.basketStopArea = math.inf
+        self.basketStopArea = 0
         self.gameState = defaultGameState
         self.irStatus = 0
         self.ref = ref
@@ -161,7 +161,7 @@ class GameLogic:
         self.move.stop()
 
     def goToTarget(self, target, verticalStopBound, speed):
-        print(target.area)
+        #print(target.area)
         if target.verticalMidPoint == None or target.horizontalMidPoint == None:
             turnTimer = Timer.Timer()
             turnTimer.startTimer()
@@ -212,6 +212,9 @@ class GameLogic:
 
     def checkVerticalAlignment(self, target, stopArea):
 
+        print(stopArea)
+        print(target.area)
+        print(target.area > stopArea)
         if target.area is None:
             return False
 
