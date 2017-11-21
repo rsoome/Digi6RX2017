@@ -103,12 +103,14 @@ class GameLogic:
 
                 if self.irStatus == 1:
                     ballReached = True
+                    ballGrabbed = True
                 else:
-                    ballReached = False
+                    ballReached = True
+                    ballGrabbed = False
 
                 if not ballReached:
                     self.mb.setGrabberPosition(self.mb.GRABBER_OPEN_POSITION)
-                    atPosition = self.goToTarget(self.ball, self.ballVerticalStopBound, self.moveSpeed)
+                    ballReached = self.goToTarget(self.ball, self.ballVerticalStopBound, self.moveSpeed)
 
                 elif ballReached and not ballGrabbed:
                     print("Reaching ball")
@@ -117,7 +119,7 @@ class GameLogic:
                     self.mb.setGrabberPosition(self.mb.GRABBER_CARRY_POSITION)
                     self.move.stop()
                     time.sleep(0.3)
-                    ballGrabbed = True
+                    ballGrabbed = self.irStatus == 1
 
                 elif not basketReached:
                     print("Reaching basket")
@@ -249,13 +251,17 @@ class GameLogic:
         if not self.checkHorizontalAlginment(self.basket) or not self.checkVerticalAlignment(self.basket, self.basketVerticalStopBound):
             return False
         self.mb.setThrowerSpeed(self.mb.THROWER_MIDSPEED)
+        self.mb.sendValues()
         time.sleep(0.5)
         self.mb.setThrowerSpeed(self.mb.THROWER_MAXSPEED)
+        self.mb.sendValues()
         time.sleep(0.5)
         self.mb.setGrabberPosition(self.mb.GRABBER_THROW_POSITION)
+        self.mb.sendValues()
         time.sleep(0.5)
         self.mb.setThrowerSpeed(self.mb.THROWER_STOP)
         self.mb.setGrabberPosition(self.mb.GRABBER_OPEN_POSITION)
+        self.mb.sendValues()
         print("throwing irStatus " + str(self.irStatus))
         return True
 
