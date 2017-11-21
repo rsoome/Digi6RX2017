@@ -149,6 +149,8 @@ class GameLogic:
                     basketReached = False
                     ballGrabbed = False
                     throwTimer.stopTimer()
+                else:
+                    print("FIXME")
 
             if self.gameState == "STOP":
                 self.emptyThrower()
