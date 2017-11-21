@@ -36,13 +36,13 @@ class GameLogic:
 
     def turnTowardTarget(self, target):
         turnCoificent = (target.horizontalMidPoint - self.screenMidpoint)/float(self.screenMidpoint)
-        print("Turncoificent: " + turnCoificent)
+        print("Turncoificent: " + str(turnCoificent))
         if target.horizontalMidPoint is not None:
             if not self.socketData.gameStarted:
                 return
             self.moveTowardTarget(target)
             turningSpeed = self.move.calculateSpeed(self.turnSpeed, turnCoificent)
-            print("Turning with speed: " + turningSpeed)
+            print("Turning with speed: " + str(turningSpeed))
             self.move.driveXY(0,0,turningSpeed)
 
     def moveTowardTarget(self, target):
