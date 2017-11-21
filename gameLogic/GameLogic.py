@@ -91,6 +91,7 @@ class GameLogic:
         basketReached = False
         ballGrabbed = False
         self.mb.sendTimer.startTimer()
+        irConfirmation = 0
 
         while self.socketData.gameStarted:
             self.timer.startTimer()
@@ -104,10 +105,13 @@ class GameLogic:
             if self.gameState == "START":
 
                 if self.irStatus == 1:
-                    ballReached = True
-                    ballGrabbed = True
+                    irConfirmation += 1
+                    if irConfirmation >= 100:
+                        ballReached = True
+                        ballGrabbed = True
                 else:
                     ballGrabbed = False
+                    irConfirmation = 0
 
                 if ballGrabbed:
                     self.mb.setGrabberPosition(self.mb.GRABBER_CARRY_POSITION)
