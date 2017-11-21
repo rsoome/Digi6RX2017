@@ -116,7 +116,7 @@ class GameLogic:
 
                 elif ballReached and not ballGrabbed:
                     print("Reaching ball")
-                    self.move.driveXY(0, int(self.moveSpeed), 0)
+                    self.move.driveXY(0, self.moveSpeed, 0)
                     time.sleep(0.05)
                     ballGrabbed = self.irStatus == 1
                     if ballGrabbed:
