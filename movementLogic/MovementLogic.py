@@ -13,11 +13,13 @@ class MovementLogic:
         self.motorSpeed2 = 0.0
         self.timer = Timer.Timer()
         self.minDriveSpeed = 0.1
+        self.minTurnSpeed = 0.2
         self.wheelDistance = 0.13
 
         self.wheelSpeedToMainboardUnits = 18.75 * 64 / (2 * math.pi * 0.035 * 60)
 
     def drive(self, speed, angle, omega):
+        print(omega)
         '''print("Motor 0: " + str(self.wheelSpeedToMainboardUnits* (speed*(math.cos(math.radians(90 - 180 + angle)))
                                   + omega*self.wheelDistance)))
         print("Motor 1: " + str(self.wheelSpeedToMainboardUnits * (speed * (math.cos(math.radians(90 - 300 + angle)))
@@ -35,11 +37,11 @@ class MovementLogic:
 
     def driveXY(self, speedX, speedY, omega):
         angle = math.atan2(speedX, speedY)
-        maxSpeed = math.sqrt(pow(speedX, 2) + pow(speedY, 2))
-        self.drive(maxSpeed, angle, omega)
+        speed = math.sqrt(pow(speedX, 2) + pow(speedY, 2)) + self.minDriveSpeed
+        self.drive(speed, angle, omega + self.minTurnSpeed)
 
     def calculateSpeed(self, maxSpeed, coif):
-        return (coif * maxSpeed) + self.minDriveSpeed
+        return (coif * maxSpeed)
 
     def brake(self):
         print(self.motorSpeed0)
