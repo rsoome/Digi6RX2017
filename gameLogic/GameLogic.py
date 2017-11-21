@@ -17,8 +17,8 @@ class GameLogic:
         self.frame = frame
         self.initializeValues()
         self.socketData = socketData
-        self.ballVerticalStopBound = self.frame.height - 20
-        self.basketVerticalStopBound = 0
+        self.ballStopArea = 1800
+        self.basketStopArea = 0
         self.gameState = defaultGameState
         self.irStatus = 0
         self.ref = ref
@@ -110,7 +110,7 @@ class GameLogic:
                 if not ballReached:
                     print("Going to ball")
                     self.mb.setGrabberPosition(self.mb.GRABBER_OPEN_POSITION)
-                    ballReached = self.goToTarget(self.ball, self.ballVerticalStopBound, self.moveSpeed)
+                    ballReached = self.goToTarget(self.ball, self.ballStopArea, self.moveSpeed)
 
                 elif ballReached and not ballGrabbed:
                     print("Reaching ball")
@@ -126,7 +126,7 @@ class GameLogic:
 
                 elif not basketReached:
                     print("Reaching basket")
-                    basketReached = self.goToTarget(self.basket, self.basketVerticalStopBound, self.moveSpeed)
+                    basketReached = self.goToTarget(self.basket, self.basketStopArea, self.moveSpeed)
 
                 elif (self.irStatus == 1):
                     self.move.stop()
@@ -206,12 +206,12 @@ class GameLogic:
 
         return True
 
-    def checkVerticalAlignment(self, target, verticalStopBound):
+    def checkVerticalAlignment(self, target, stopArea):
 
         if target.verticalMidPoint is None:
             return False
 
-        if target.verticalMidPoint < verticalStopBound:
+        if target.area < stopArea:
             return False
 
         return True
@@ -253,7 +253,7 @@ class GameLogic:
             self.handleMbMessage(mbMsg)
 
     def throwBall(self):
-        if not self.checkHorizontalAlginment(self.basket) or not self.checkVerticalAlignment(self.basket, self.basketVerticalStopBound):
+        if not self.checkHorizontalAlginment(self.basket) or not self.checkVerticalAlignment(self.basket, self.basketStopArea):
             return False
         self.mb.setThrowerSpeed(self.mb.THROWER_MIDSPEED)
         self.mb.sendValues()
