@@ -35,9 +35,9 @@ class MBcomm:
         return []
 
     def setMotorSpeed(self, speed0, speed1, speed2):
-        print("Speed0: " + str(speed0))
-        print("Speed1: " + str(speed1))
-        print("Speed2: " + str(speed2))
+        #print("Speed0: " + str(speed0))
+        #print("Speed1: " + str(speed1))
+        #print("Speed2: " + str(speed2))
         self.setValue("sd", str(speed0) + ":" + str(speed1) + ":" + str(speed2))
 
     def getMotorSpeed(self):
@@ -85,11 +85,11 @@ class MBcomm:
 
     def sendValues(self):
         if len(self.values) > 0:
-            #print("-----")
+            print("-----")
             for key in self.values:
-                #print(len(key) + len(self.values[key]))
+                print(key + self.values[key])
                 self.__sendBytes(key + self.values[key])
-            #print("------")
+            print("------")
             self.values = dict()
 
     def sendingTime(self):
