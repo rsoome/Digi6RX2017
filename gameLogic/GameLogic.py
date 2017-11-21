@@ -195,7 +195,7 @@ class GameLogic:
         #    self.turnTowardTarget(target)
         #    return False
 
-        elif not self.checkVerticalAlignment(target, verticalStopBound and not self.checkHorizontalAlginment(target)):
+        elif not self.checkVerticalAlignment(target, verticalStopBound) and not self.checkHorizontalAlginment(target):
             print("Alligning")
             self.moveTowardTarget(target)
             return False
