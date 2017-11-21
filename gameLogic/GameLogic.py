@@ -262,6 +262,7 @@ class GameLogic:
         if not self.checkHorizontalAlginment(self.basket) or not self.checkVerticalAlignment(self.basket, self.basketStopArea):
             return False
         self.mb.setThrowerSpeed(self.mb.THROWER_MIDSPEED)
+        self.mb.disableFailSafe()
         self.mb.sendValues()
         time.sleep(1)
         self.mb.setThrowerSpeed(self.mb.THROWER_MAXSPEED)
@@ -270,7 +271,8 @@ class GameLogic:
         self.mb.setGrabberPosition(self.mb.GRABBER_THROW_POSITION)
         self.mb.sendValues()
         time.sleep(3)
-        #self.mb.setThrowerSpeed(self.mb.THROWER_STOP)
+        self.mb.enableFailSafe()
+        self.mb.setThrowerSpeed(self.mb.THROWER_STOP)
         self.mb.setGrabberPosition(self.mb.GRABBER_OPEN_POSITION)
         self.mb.sendValues()
         print("throwing irStatus " + str(self.irStatus))
