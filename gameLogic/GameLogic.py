@@ -139,11 +139,13 @@ class GameLogic:
                     ballGrabbed = ballReached
                     if ballGrabbed:
                         self.mb.setGrabberPosition(self.mb.GRABBER_CARRY_POSITION)
-                    basketReached = False
                     throwTimer.startTimer()
                     while throwTimer.getTimePassed() < 1000:
                         self.mb.readInfrared()
                         time.sleep(0.1)
+                    ballReached = False
+                    basketReached = False
+                    ballGrabbed = False
                     throwTimer.stopTimer()
 
             if self.gameState == "STOP":
