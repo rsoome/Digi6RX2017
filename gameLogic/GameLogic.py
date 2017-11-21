@@ -77,6 +77,9 @@ class GameLogic:
 
         #print(target.horizontalMidPoint)
         self.move.driveXY(0,0,self.turnSpeed)
+        if self.mb.sendingTime:
+            self.mb.sendValues()
+            
         self.updateTargetCoordinates([target])
         if target.horizontalMidPoint is not None:
             return True
@@ -166,17 +169,19 @@ class GameLogic:
             turnTimer = Timer.Timer()
             turnTimer.startTimer()
             targetFound = self.lookForTarget(target)
+            self.mb.sendTimer.reset()
             while not targetFound:
                 targetFound = self.lookForTarget(target)
                 if turnTimer.getTimePassed() >= 1000:
                     break
+
             turnTimer.stopTimer()
 
             if not targetFound:
                 print("Looking for " + target.id)
                 for i in range(2000):
                     #print(i)
-                    self.move.driveXY(0, self.moveSpeed, 0)
+                    self.move.driveXY(0, self.moveSpeed//4, 0)
                     self.move.stop()
                 return False
 
@@ -294,7 +299,7 @@ class GameLogic:
 
     def emptyThrower(self):
         self.mb.disableFailSafe()
-        self.mb.setThrowerSpeed(self.mb.THROWER_MINSPEED)
+        self.mb.setThrowerSpeed(self.mb.THROWER_MINSPEED + self.mb.THROWER_MINSPEED//4)
         self.mb.sendValues()
         time.sleep(1)
         self.mb.setGrabberPosition(self.mb.GRABBER_THROW_POSITION)
