@@ -21,6 +21,7 @@ class SettingsHandler:
         self.values[key] = value
 
     def writeFromDictToFile(self):
+        print("Writing  new settings to file.")
         with open(self.fileLoc, "w") as f:
             return f.write(json.dumps(self.values, indent=4, sort_keys=True))
 
