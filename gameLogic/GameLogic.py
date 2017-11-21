@@ -269,7 +269,7 @@ class GameLogic:
         time.sleep(3)
         self.mb.setGrabberPosition(self.mb.GRABBER_THROW_POSITION)
         self.mb.sendValues()
-        time.sleep(1)
+        time.sleep(3)
         self.mb.setThrowerSpeed(self.mb.THROWER_STOP)
         self.mb.setGrabberPosition(self.mb.GRABBER_OPEN_POSITION)
         self.mb.sendValues()
