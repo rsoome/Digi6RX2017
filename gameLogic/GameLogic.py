@@ -109,6 +109,9 @@ class GameLogic:
                 else:
                     ballGrabbed = False
 
+                if ballGrabbed:
+                    self.mb.setGrabberPosition(self.mb.GRABBER_CARRY_POSITION)
+
                 if not ballReached:
                     print("Going to ball")
                     self.mb.setGrabberPosition(self.mb.GRABBER_OPEN_POSITION)
@@ -119,12 +122,6 @@ class GameLogic:
                     self.move.driveXY(0, self.moveSpeed, 0)
                     time.sleep(0.05)
                     ballGrabbed = self.irStatus == 1
-                    if ballGrabbed:
-                        self.move.stop()
-                        self.mb.setGrabberPosition(self.mb.GRABBER_CARRY_POSITION)
-                        self.mb.sendValues()
-                        time.sleep(0.3)
-
 
                 elif not basketReached:
                     print("Reaching basket")
@@ -214,9 +211,9 @@ class GameLogic:
 
     def checkVerticalAlignment(self, target, stopArea):
 
-        print(stopArea)
-        print(target.area)
-        print(target.area > stopArea)
+        #print(stopArea)
+        #print(target.area)
+        #print(target.area > stopArea)
         if target.area is None:
             return False
 
