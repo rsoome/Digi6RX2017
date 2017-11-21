@@ -37,7 +37,7 @@ class MovementLogic:
     def driveXY(self, speedX, speedY, omega):
         angle = math.atan2(speedX, speedY)
         speed = math.sqrt(pow(speedX, 2) + pow(speedY, 2)) + self.minDriveSpeed
-        self.drive(speed, angle, omega + self.minTurnSpeed)
+        self.drive(speed, angle, omega)
 
     def calculateSpeed(self, maxSpeed, coif):
         return (coif * maxSpeed)
