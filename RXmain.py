@@ -155,7 +155,6 @@ try:
     while True:
 
         #DEBUGGING LOOKING FOR TARGET
-        socketData.gameStarted = True
         game.lookForTarget(ball)
         #END DEBUGGING
 

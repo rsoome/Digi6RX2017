@@ -70,7 +70,8 @@ class GameLogic:
             self.imgHandler.detect(1000, 0, target.scanOrder, target)
 
     def lookForTarget(self, target):
-        if not self.socketData.gameStarted:
+        #if not self.socketData.gameStarted:
+        if False:
             print("Game ended by client.")
             return False
 
