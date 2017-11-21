@@ -139,20 +139,21 @@ class GameLogic:
                     throwTimer = Timer.Timer()
                     print("Throwing ball")
                     self.move.stop()
-                    ballThrown = self.throwBall()
-                    time.sleep(0.1)
-                    ballReached = (self.irStatus == 1)
-                    ballGrabbed = ballReached
-                    if ballGrabbed:
-                        self.mb.setGrabberPosition(self.mb.GRABBER_CARRY_POSITION)
-                    throwTimer.startTimer()
-                    while throwTimer.getTimePassed() < 1000:
-                        self.mb.readInfrared()
-                        time.sleep(0.1)
-                    ballReached = False
-                    basketReached = False
-                    ballGrabbed = False
-                    throwTimer.stopTimer()
+                    basketReached = self.throwBall()
+                    if basketReached:
+                        ballReached = (self.irStatus == 1)
+                        ballGrabbed = ballReached
+                        if ballGrabbed:
+                            self.mb.setGrabberPosition(self.mb.GRABBER_CARRY_POSITION)
+                        throwTimer.startTimer()
+                        while throwTimer.getTimePassed() < 1000:
+                            self.mb.readInfrared()
+                            time.sleep(0.1)
+                        ballReached = False
+                        basketReached = False
+                        ballGrabbed = False
+                        throwTimer.stopTimer()
+
                 else:
                     print("FIXME")
 
@@ -302,7 +303,7 @@ class GameLogic:
 
     def emptyThrower(self):
         self.mb.disableFailSafe()
-        self.mb.setThrowerSpeed(self.mb.THROWER_MINSPEED + self.mb.THROWER_MINSPEED//4)
+        self.mb.setThrowerSpeed(self.mb.THROWER_MIDSPEED)
         self.mb.sendValues()
         time.sleep(2)
         self.mb.setGrabberPosition(self.mb.GRABBER_THROW_POSITION)
