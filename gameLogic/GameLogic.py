@@ -36,11 +36,13 @@ class GameLogic:
 
     def turnTowardTarget(self, target):
         turnCoificent = (target.horizontalMidPoint - self.screenMidpoint)/float(self.screenMidpoint)
+        print("Turncoificent: " + turnCoificent)
         if target.horizontalMidPoint is not None:
             if not self.socketData.gameStarted:
                 return
             self.moveTowardTarget(target)
             turningSpeed = self.move.calculateSpeed(self.turnSpeed, turnCoificent)
+            print("Turning with speed: " + turningSpeed)
             self.move.driveXY(0,0,turningSpeed)
 
     def moveTowardTarget(self, target):
@@ -190,7 +192,7 @@ class GameLogic:
                 return False
 
         elif not self.checkVerticalAlignment(target, verticalStopBound):
-            print("Alligning")
+            print("Alligning Vertically")
             self.moveTowardTarget(target)
             return False
 
