@@ -48,6 +48,8 @@ class ManualDrive:
                 self.move.brake()
                 keyStroke = self.getKeystroke(screen)
 
+            self.move.mb.sendValues()
+
         print("Manual driving deactivated.")
         curses.endwin()
 

@@ -88,11 +88,16 @@ class GameLogic:
         ballReached = False
         basketReached = False
         ballGrabbed = False
+        self.mb.sendTimer.startTimer()
 
         while self.socketData.gameStarted:
             self.timer.startTimer()
             self.updateTargetCoordinates([self.ball, self.basket])
             self.readMb()
+
+            if self.mb.sendTimer.getTimePassed() >= 1000/self.mb.SENDFREQ:
+                self.mb.sendValues()
+                self.mb.sendTimer.reset()
 
             if self.gameState == "START":
 
@@ -142,6 +147,7 @@ class GameLogic:
             self.addFrame(self.timer.stopTimer())
             self.updateFPS()
 
+        self.mb.sendTimer.stop()
         self.move.stop()
 
     def goToTarget(self, target, verticalStopBound, speed):

@@ -1,5 +1,8 @@
 import serial
 
+from timer import Timer
+
+
 class MBcomm:
 
     def __init__(self, target, baud):
@@ -14,6 +17,9 @@ class MBcomm:
         self.GRABBER_CARRY_POSITION = self.GRABBER_MAX_POSITION - 400
         self.GRABBER_THROW_POSITION = self.GRABBER_MIN_POSITION
         self.GRABBER_OPEN_POSITION = self.GRABBER_MAX_POSITION - 100
+        self.values = dict()
+        self.sendTimer = Timer.Timer()
+        self.SENDFREQ = 120
         if not self.ser.isOpen():
             self.ser.open()
 
@@ -29,31 +35,28 @@ class MBcomm:
         return []
 
     def setMotorSpeed(self, speed0, speed1, speed2):
-        self.__sendBytes("sd" + str(speed0) + ":" + str(speed1) + ":" + str(speed2))
-        return self.waitForAnswer()
+        self.setValue("sd", str(speed0) + ":" + str(speed1) + ":" + str(speed2))
 
     def getMotorSpeed(self):
-        self.__sendBytes("sg")
+        self.setValue("sg", "")
 
     def readInfrared(self):
-        self.__sendBytes("i")
-        return self.waitForAnswer()
+        self.setValue("i", "")
 
     def enableFailSafe(self):
-        self.__sendBytes("f1")
+        self.setValue("f1","")
 
     def disableFailSafe(self):
-        self.__sendBytes("f0")
+        self.setValue("f0", "")
 
     def sendRFMessage(self, msg):
-        self.__sendBytes("rf" + msg + "\n")
+        self.setValue("rf", msg + "\n")
 
     def setThrowerSpeed(self, speed):
-        self.__sendBytes("d" + str(speed))
-        return self.waitForAnswer()
+        self.setValue("d", str(speed))
 
     def enableFailDeadly(self):     #DON'T EVER USE THIS: IT WAS FUNNY UNTIL IT ACTUALLY FAILED DEADLY
-        self.__sendBytes("fd")
+        self.setValue("fd", "")
 
     def closeSerial(self):
         if self.ser.isOpen():
@@ -69,8 +72,16 @@ class MBcomm:
         return msg
 
     def setGrabberPosition(self, pos):
-        self.__sendBytes("ss" + str(pos))
-        return self.waitForAnswer()
+        self.setValue("ss", str(pos))
 
     def clearMBbuf(self):
-        self.__sendBytes("cb")
+        self.setValue("cb", "")
+
+    def setValue(self, node, value):
+        self.values[node] = value
+
+    def sendValues(self):
+        if len(self.values) > 0:
+            for key in self.values:
+                self.__sendBytes(key + self.values[key])
+            self.values = dict()
