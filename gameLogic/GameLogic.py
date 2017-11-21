@@ -106,12 +106,12 @@ class GameLogic:
 
                 if self.irStatus == 1:
                     irConfirmations += 1
-                    if irConfirmations >= 10:
+                    if irConfirmations >= 50:
                         ballReached = True
                         ballGrabbed = True
                 else:
                     irConfirmations -= 1
-                    if irConfirmations <= -10:
+                    if irConfirmations <= -50:
                         ballReached = False
                         ballGrabbed = False
                         irConfirmations = 0
