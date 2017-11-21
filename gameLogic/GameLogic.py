@@ -106,12 +106,15 @@ class GameLogic:
 
                 if self.irStatus == 1:
                     irConfirmations += 1
-                    if irConfirmations >= 100:
+                    if irConfirmations >= 10:
                         ballReached = True
                         ballGrabbed = True
                 else:
-                    ballGrabbed = False
-                    irConfirmations = 0
+                    irConfirmations -= 1
+                    if irConfirmations <= -10:
+                        ballReached = False
+                        ballGrabbed = False
+                        irConfirmations = 0
 
                 if ballGrabbed:
                     self.mb.setGrabberPosition(self.mb.GRABBER_CARRY_POSITION)
@@ -123,7 +126,7 @@ class GameLogic:
 
                 elif ballReached and not ballGrabbed:
                     print("Reaching ball")
-                    self.move.driveXY(0, self.moveSpeed, 0)
+                    self.move.driveXY(0, self.moveSpeed//4, 0)
                     time.sleep(0.05)
                     ballGrabbed = self.irStatus == 1
 
@@ -301,10 +304,10 @@ class GameLogic:
         self.mb.disableFailSafe()
         self.mb.setThrowerSpeed(self.mb.THROWER_MINSPEED + self.mb.THROWER_MINSPEED//4)
         self.mb.sendValues()
-        time.sleep(1)
+        time.sleep(2)
         self.mb.setGrabberPosition(self.mb.GRABBER_THROW_POSITION)
         self.mb.sendValues()
-        time.sleep(1)
+        time.sleep(2)
         self.mb.enableFailSafe()
         self.mb.setGrabberPosition(self.mb.GRABBER_OPEN_POSITION)
         self.mb.setThrowerSpeed(self.mb.THROWER_STOP)
