@@ -67,12 +67,14 @@ class WindowHandler:
             if keyStroke & 0xFF == ord('b'):
                 self.textColor = (0, 0, 255)
                 self.values["ballSelected"] = True
-                self.values["resetBall"] = True
+                if cv2.waitKey(100) == ord('r'):
+                    self.values["resetBall"] = True
 
             if keyStroke & 0xFF == ord('k'):
                 self.textColor = (255, 255, 0)
                 self.values["basketSelected"] = True
-                self.values["resetBasket"] = True
+                if cv2.waitKey(100) == ord('r'):
+                    self.values["resetBasket"] = True
 
             if keyStroke & 0xFF == ord('m'):
                 self.values["manualDrive"] = True
