@@ -162,4 +162,4 @@ class ImageHandler:
             else:
                 self.findObject(0, 0, target)
         else:
-            print("Target has no mask.")
+            ("Target has no mask.")

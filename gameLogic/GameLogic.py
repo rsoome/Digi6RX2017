@@ -152,7 +152,7 @@ class GameLogic:
         self.move.stop()
 
     def goToTarget(self, target, verticalStopBound, speed):
-
+        print(target.area)
         if target.verticalMidPoint == None or target.horizontalMidPoint == None:
             turnTimer = Timer.Timer()
             turnTimer.startTimer()

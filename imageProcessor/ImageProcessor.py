@@ -52,6 +52,6 @@ class ImageProcessor:
 
             # Write the found coordinates into the given object and release the cancellation token
             self.obj.setBounds([self.horizontalLowerBound + x, self.horizontalLowerBound + x + w],
-                               [self.verticalLowerBound + y, self.verticalLowerBound + y + h])
+                               [self.verticalLowerBound + y, self.verticalLowerBound + y + h], w*h)
             #print(self.obj.verticalBounds)
             self.cancellationLock.release()
