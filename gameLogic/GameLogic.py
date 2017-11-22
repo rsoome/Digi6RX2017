@@ -128,6 +128,7 @@ class GameLogic:
                     time.sleep(0.1)
                     ballGrabbed = self.irStatus == 1
                     if ballGrabbed:
+                        self.move.stop()
                         self.mb.setGrabberPosition(self.mb.GRABBER_CARRY_POSITION)
                         self.mb.setThrowerSpeed(self.mb.THROWER_MINSPEED)
                     else:
