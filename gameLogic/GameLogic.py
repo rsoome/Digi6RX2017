@@ -117,6 +117,7 @@ class GameLogic:
 
                 if not ballReached:
                     print("Going to ball")
+                    print(self.ball.horizontalMidPoint)
                     self.mb.setGrabberPosition(self.mb.GRABBER_OPEN_POSITION)
                     ballReached = self.goToTarget(self.ball, self.ballStopBound, self.moveSpeed)
 
@@ -287,7 +288,7 @@ class GameLogic:
         self.mb.setGrabberPosition(self.mb.GRABBER_OPEN_POSITION)
         self.mb.sendValues()
         print("throwing irStatus " + str(self.irStatus))
-        return self.irStatus == 0
+        return True
 
     def addFrame(self, elapsed):
         if elapsed > 0:
