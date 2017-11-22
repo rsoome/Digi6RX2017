@@ -129,9 +129,9 @@ class GameLogic:
 
                 elif ballReached and not ballGrabbed:
                     print("Reaching ball")
-                    self.move.driveXY(0, self.moveSpeed//10, 0)
-                    for i in range(self.IRCONFIRMATIONSNEEDED):
-                        ballGrabbed = self.irStatus == 1
+                    self.move.driveXY(0, self.moveSpeed//50, 0)
+                    time.sleep(0.1)
+                    ballGrabbed = self.irStatus == 1
 
                 elif not basketReached:
                     print("Reaching basket")
