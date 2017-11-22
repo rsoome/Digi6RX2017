@@ -30,11 +30,9 @@ class FrameCapturer:
         self.height, self.width, channels = self.capturedFrame.shape
 
         self.filteredImg = cv2.cvtColor(self.capturedFrame, colorScheme)  # Pane pilt etteantud värviskeemi
-        cv2.ellipse(self.filteredImg,(self.width/2, self.height), (180, 80),
-                    180, 180, 0, (255,255,255), -1)
+        cv2.ellipse(self.filteredImg,(self.width//2, self.height), (180, 80), 18, 18, 0, (255, 255, 255), -1)
         self.bw = cv2.cvtColor(self.capturedFrame, cv2.COLOR_BGR2GRAY)
-        cv2.ellipse(self.bw, (self.width/2, self.height), (180, 80),
-                    180, 180, 0, (255, 255, 255), -1)
+        cv2.ellipse(self.bw, (self.width // 2, self.height), (180, 80), 18, 18, 0, (255, 255, 255), -1)
 
     def releaseCapture(self):
         # When everything done, release the capture
