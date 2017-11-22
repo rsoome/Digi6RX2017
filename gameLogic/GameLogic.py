@@ -42,7 +42,7 @@ class GameLogic:
         if target.horizontalMidPoint is not None:
             if not self.socketData.gameStarted:
                 return False
-            turningSpeed = self.move.calculateSpeed(self.turnSpeed/3, turnCoificent)
+            turningSpeed = self.move.calculateSpeed(self.turnSpeed, turnCoificent)
             print("Turning with speed: " + str(turningSpeed))
             self.move.driveXY(0,0,turningSpeed)
             return True
