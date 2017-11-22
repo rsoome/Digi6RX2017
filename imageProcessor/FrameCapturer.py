@@ -17,11 +17,11 @@ class FrameCapturer:
     def capture(self, colorScheme):
         # Capture frame-by-frame
         ret, self.capturedFrame = self.cap.read()
-        self.height, self.width, channels = self.capturedFrame.shape
         # Check whether the frame exists.
         if not ret:
             print("Cannot read the frame")
             return
+        self.height, self.width, channels = self.capturedFrame.shape
 
         self.filteredImg = cv2.cvtColor(self.capturedFrame, colorScheme)  # Pane pilt etteantud värviskeemi
         self.bw = cv2.cvtColor(self.capturedFrame, cv2.COLOR_BGR2GRAY)
