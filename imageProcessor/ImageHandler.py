@@ -1,3 +1,5 @@
+import time
+
 from imageProcessor import ImageProcessor
 import numpy as np
 import cv2
@@ -172,3 +174,4 @@ class ImageHandler:
         self.frame.capture(cv2.COLOR_BGR2HSV)
         for obj in self.objects:
             self.detect(obj)
+            time.sleep(0.1)
