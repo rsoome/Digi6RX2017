@@ -14,11 +14,10 @@ class ImageHandler:
         self.objects = objects
         self.imageMinArea = imageMinArea
         self.socketData = socketData
+        self.FRAMEUPDATEPERIOD = 1 / 120
 
     def generateMask(self, targetObject):
         if self.frame.filteredImg is not None:
-            print(targetObject.hsvLowerRange)
-            print(targetObject.hsvUpperRange)
             thresh = cv2.inRange(self.frame.filteredImg, targetObject.hsvLowerRange, targetObject.hsvUpperRange)
             targetObject.mask = thresh
         else:
@@ -178,4 +177,4 @@ class ImageHandler:
             self.frame.capture(cv2.COLOR_BGR2HSV)
             for obj in self.objects:
                 self.detect(obj)
-                time.sleep(0.1)
+                time.sleep(self.FRAMEUPDATEPERIOD)
