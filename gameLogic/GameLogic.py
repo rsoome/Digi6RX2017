@@ -235,35 +235,35 @@ class GameLogic:
                 if cmd == "PING":
                     print("Sending ACK")
 
-        def readMb(self):
-            mbMsg = self.mb.readBytes()
+    def readMb(self):
+        mbMsg = self.mb.readBytes()
 
-            if len(mbMsg) > 0:
-                self.handleMbMessage(mbMsg)
+        if len(mbMsg) > 0:
+            self.handleMbMessage(mbMsg)
 
-        def throwBall(self):
-            if not self.checkHorizontalAlginment(self.basket) or not self.checkVerticalAlignment(self.basket, self.basketVerticalStopBound):
-                return False
-            self.mb.setThrowerSpeed(self.mb.THROWER_MIDSPEED)
-            time.sleep(0.5)
-            self.mb.setThrowerSpeed(self.mb.THROWER_MAXSPEED)
-            time.sleep(0.5)
-            self.mb.setGrabberPosition(self.mb.GRABBER_THROW_POSITION)
-            time.sleep(0.5)
-            self.mb.setThrowerSpeed(self.mb.THROWER_STOP)
-            self.mb.setGrabberPosition(self.mb.GRABBER_OPEN_POSITION)
-            print("throwing irStatus " + str(self.irStatus))
-            return True
+    def throwBall(self):
+        if not self.checkHorizontalAlginment(self.basket) or not self.checkVerticalAlignment(self.basket, self.basketVerticalStopBound):
+            return False
+        self.mb.setThrowerSpeed(self.mb.THROWER_MIDSPEED)
+        time.sleep(0.5)
+        self.mb.setThrowerSpeed(self.mb.THROWER_MAXSPEED)
+        time.sleep(0.5)
+        self.mb.setGrabberPosition(self.mb.GRABBER_THROW_POSITION)
+        time.sleep(0.5)
+        self.mb.setThrowerSpeed(self.mb.THROWER_STOP)
+        self.mb.setGrabberPosition(self.mb.GRABBER_OPEN_POSITION)
+        print("throwing irStatus " + str(self.irStatus))
+        return True
 
-        def addFrame(self, elapsed):
-            if elapsed > 0:
-                self.framesCaptured += 1
-                self.totalTimeElapsed += elapsed
+    def addFrame(self, elapsed):
+        if elapsed > 0:
+            self.framesCaptured += 1
+            self.totalTimeElapsed += elapsed
 
-        def updateFPS(self):
-            if self.framesCaptured >= 60:
-                self.fps = (round(self.framesCaptured / (self.totalTimeElapsed / 1000), 0))
-                self.framesCaptured = 0
-                self.totalTimeElapsed = 0
+    def updateFPS(self):
+        if self.framesCaptured >= 60:
+            self.fps = (round(self.framesCaptured / (self.totalTimeElapsed / 1000), 0))
+            self.framesCaptured = 0
+            self.totalTimeElapsed = 0
 
-            self.socketData.fps = self.fps
+        self.socketData.fps = self.fps
