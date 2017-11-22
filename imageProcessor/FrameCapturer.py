@@ -12,8 +12,8 @@ class FrameCapturer:
         self.height = None
         self.width = None
         self.bw = None
-        self.triangle1 = [shapeCoordinates1[0], shapeCoordinates1[1], (shapeCoordinates1[0][0], shapeCoordinates1[1][1])]
-        self.triangle2 = [shapeCoordinates2[0], shapeCoordinates2[1], (shapeCoordinates1[0][0], shapeCoordinates2[1][1])]
+        self.triangle1 = np.array([shapeCoordinates1[0], shapeCoordinates1[1], (shapeCoordinates1[0][0], shapeCoordinates1[1][1])])
+        self.triangle2 = np.array([shapeCoordinates2[0], shapeCoordinates2[1], (shapeCoordinates1[0][0], shapeCoordinates2[1][1])])
 
     # Captures an image and returns the original frame and a filtered image.
     # colorScheme - the filter to be applied
