@@ -177,7 +177,7 @@ try:
         timer.startTimer()
 
         game.readMb()
-        if frameCapture.capturedFrame == None:
+        if frameCapture.capturedFrame is not None:
             frameCapture.capture(cv2.COLOR_BGR2HSV)  # Võta kaamerast pilt
             frame = frameCapture.capturedFrame
 
