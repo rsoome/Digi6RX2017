@@ -79,3 +79,7 @@ class SettingsHandler:
             self.values["opponentBasket"] = None
         if not "deltaFromMidPoint" in self.values:
             self.values["deltaFromMidPoint"] = 100
+        if not "shapeCoordinates1" in self.values:
+            self.values["shapeCoordinates1"] = [(95,477), (261,419)]
+        if not "shapeCoordinates2" in self.values:
+            self.values["shapeCoordinates2"] = [(528,477), (364,419)]

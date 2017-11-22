@@ -78,7 +78,8 @@ mb = MBcomm.MBcomm(settings.getValue("mbLocation"), 115200)
 
 move = MovementLogic.MovementLogic(mb)
 
-frameCapture = FrameCapturer.FrameCapturer(int(settings.getValue("camID")))
+frameCapture = FrameCapturer.FrameCapturer(int(settings.getValue("camID")), settings.getValue("shapeCoordinates1"),
+                                           settings.getValue("shapeCoordinates2"))
 
 imgHandler = ImageHandler.ImageHandler(bool(settings.getValue("multiThreading")), frameCapture,
                                        [ball, basket, blackLine], settings.getValue("minImgArea"), socketData)
