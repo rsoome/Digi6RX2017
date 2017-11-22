@@ -178,3 +178,4 @@ class ImageHandler:
             for obj in self.objects:
                 self.detect(obj)
                 time.sleep(self.FRAMEUPDATEPERIOD)
+

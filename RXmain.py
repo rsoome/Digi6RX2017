@@ -96,7 +96,7 @@ timer = Timer.Timer()
 t = threading.Thread(target=socketHandler.initServ)
 t.start()
 
-imgHandlerThread = threading.Thread(target=imgHandler.run())
+imgHandlerThread = threading.Thread(target=imgHandler.run)
 imgHandlerThread.start()
 
 
