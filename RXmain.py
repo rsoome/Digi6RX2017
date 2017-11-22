@@ -3,6 +3,8 @@
 import cv2
 import sys
 
+import time
+
 from settings import SettingsHandler
 from target import Target
 from  movementLogic import MovementLogic
@@ -151,6 +153,7 @@ def socketDataCheck():
 try:
     mb.sendTimer.startTimer()
     while True:
+        game.lookForTarget(ball)
         mb.setGrabberPosition(mb.GRABBER_OPEN_POSITION)
 
         if mb.sendingTime():
@@ -187,6 +190,12 @@ try:
         socketHandler.updateData()
 
     print("Exit.")
+    mb.setThrowerSpeed(mb.THROWER_MINSPEED)
+    time.sleep(0.5)
+    mb.setGrabberPosition(mb.GRABBER_THROW_POSITION)
+    time.sleep(0.5)
+    mb.setGrabberPosition(mb.GRABBER_OPEN_POSITION)
+    mb.setThrowerSpeed(mb.THROWER_STOP)
     closeConnections()
 
 except KeyboardInterrupt:
