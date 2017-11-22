@@ -44,7 +44,7 @@ class GameLogic:
                 return False
             turningSpeed = self.move.calculateSpeed(self.turnSpeed, turnCoificent)
             print("Turning with speed: " + str(turningSpeed))
-            self.move.driveXY(0,0,turningSpeed)
+            self.move.rotate(turningSpeed)
             return True
 
     def moveTowardTarget(self, target):
@@ -76,7 +76,7 @@ class GameLogic:
             return False
 
         #print(target.horizontalMidPoint)
-        self.move.driveXY(0,0,-self.turnSpeed/2)
+        self.move.rotate(self.turnSpeed//2)
         if self.mb.sendingTime:
             self.mb.sendValues()
 

@@ -32,7 +32,7 @@ class MovementLogic:
                               int(self.wheelSpeedToMainboardUnits*(speed*(math.cos(math.radians(90 - 300 + angle)))
                                   + omega*self.wheelDistance)),
                               int(self.wheelSpeedToMainboardUnits*(speed*(math.cos(math.radians(90 - 60 + angle))))
-                                - omega*self.wheelDistance))
+                                + omega*self.wheelDistance))
 
     def driveXY(self, speedX, speedY, omega):
         angle = math.atan2(speedX, speedY)
