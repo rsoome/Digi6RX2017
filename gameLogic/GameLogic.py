@@ -33,6 +33,7 @@ class GameLogic:
         self.totalTimeElapsed = 0
         self.fps = 0
         self.timer = Timer.Timer()
+        self.IRCONFIRMATIONSNEEDED = 100
 
     def turnTowardTarget(self, target):
         turnCoificent = (target.horizontalMidPoint - self.screenMidpoint)/float(self.screenMidpoint)
@@ -108,12 +109,12 @@ class GameLogic:
 
                 if self.irStatus == 1:
                     irConfirmations += 1
-                    if irConfirmations >= 50:
+                    if irConfirmations >= self.IRCONFIRMATIONSNEEDED:
                         ballReached = True
                         ballGrabbed = True
                 else:
                     irConfirmations -= 1
-                    if irConfirmations <= -50:
+                    if irConfirmations <= -self.IRCONFIRMATIONSNEEDED:
                         ballReached = False
                         ballGrabbed = False
                         irConfirmations = 0
