@@ -35,10 +35,10 @@ def closeConnections():
     try:
         mb.setThrowerSpeed(mb.THROWER_MINSPEED)
         mb.sendValues()
-        time.sleep(0.5)
+        time.sleep(1)
         mb.setGrabberPosition(mb.GRABBER_THROW_POSITION)
         mb.sendValues()
-        time.sleep(0.5)
+        time.sleep(1)
         mb.setGrabberPosition(mb.GRABBER_OPEN_POSITION)
         mb.setThrowerSpeed(mb.THROWER_STOP)
         mb.sendValues()
