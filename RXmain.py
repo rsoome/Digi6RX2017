@@ -56,7 +56,7 @@ if opponent != "magneta" and opponent != "blue":
     sys.exit(0)
 
 ball = Target.Target(None, None, "ball", settings.getValue("ballHSVLower"), settings.getValue("ballHSVUpper"),
-                     settings.getValue("ballScanOrder"), settings.getValue("objectMInSize"))
+                     settings.getValue("ballScanOrder"), settings.getValue("objectMinSize"))
 
 basket = Target.Target(None, None, "basket", settings.getValue(opponent + "BasketHSVLower"),
                        settings.getValue(opponent + "BasketHSVUpper"),
