@@ -34,10 +34,10 @@ class FrameCapturer:
                     90, 90, 180, (255,255,255), -1)
         self.filteredImg = cv2.cvtColor(self.capturedFrame, colorScheme)  # Pane pilt etteantud värviskeemi
         cv2.ellipse(self.filteredImg, (self.shapeCoordinates2[0][0], self.shapeCoordinates2[1][1]), (160, 100),
-                    90, 90, 180, (255, 255, 255), -1)
+                    90, 90, 0, (255, 255, 255), -1)
         self.bw = cv2.cvtColor(self.capturedFrame, cv2.COLOR_BGR2GRAY)
         cv2.ellipse(self.bw, (self.shapeCoordinates1[1][0], self.shapeCoordinates1[0][1]), (160, 100),
-                    -0, 0, 90, (255, 255, 255), -1)
+                    0, 90, 180, (255, 255, 255), -1)
         self.filteredImg = cv2.cvtColor(self.capturedFrame, colorScheme)  # Pane pilt etteantud värviskeemi
         cv2.ellipse(self.bw, (self.shapeCoordinates2[1][0], self.shapeCoordinates2[0][1]), (160, 100),
                     0, 90, 0, (255, 255, 255), -1)
