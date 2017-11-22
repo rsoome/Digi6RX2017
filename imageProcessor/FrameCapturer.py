@@ -4,6 +4,7 @@ import numpy as np
 class FrameCapturer:
 
     def __init__(self, camID):
+        self.camID = camID
         self.cap = cv2.VideoCapture(camID)
         self.cap.set(cv2.CAP_PROP_FPS, 120)
         self.capturedFrame = None
@@ -20,6 +21,7 @@ class FrameCapturer:
         # Check whether the frame exists.
         if not ret:
             print("Cannot read the frame")
+            self.cap = cv2.VideoCapture(self.camID)
             return
         self.height, self.width, channels = self.capturedFrame.shape
 
