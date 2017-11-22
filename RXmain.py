@@ -153,7 +153,13 @@ def socketDataCheck():
 try:
     mb.sendTimer.startTimer()
     while True:
+
+        #DEBUGGING LOOKING FOR TARGET
+        socketData.gameStarted = True
         game.lookForTarget(ball)
+        #END DEBUGGING
+
+
         mb.setGrabberPosition(mb.GRABBER_OPEN_POSITION)
 
         if mb.sendingTime():
