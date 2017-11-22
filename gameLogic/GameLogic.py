@@ -132,6 +132,12 @@ class GameLogic:
                     self.move.driveXY(0, self.moveSpeed//50, 0)
                     time.sleep(0.1)
                     ballGrabbed = self.irStatus == 1
+                    if ballGrabbed:
+                        self.mb.setGrabberPosition(self.mb.GRABBER_CARRY_POSITION)
+                    else:
+                        self.mb.setGrabberPosition(self.mb.GRABBER_OPEN_POSITION)
+                    self.mb.sendValues()
+                    self.mb.sendTimer.reset()
 
                 elif not basketReached:
                     print("Reaching basket")
