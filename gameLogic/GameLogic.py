@@ -122,7 +122,7 @@ class GameLogic:
                     ballReached = self.goToTarget(self.ball, self.ballStopBound, self.moveSpeed)
 
                 elif ballReached and not ballGrabbed:
-                    ballReached = self.checkVerticalAlignment(self.ball) and self.checkHorizontalAlginment(self.ball)
+                    ballReached = self.checkVerticalAlignment(self.ball, self.ballStopBound) and self.checkHorizontalAlginment(self.ball)
                     print("Reaching ball")
                     self.move.driveXY(0, self.moveSpeed//50, 0)
                     time.sleep(0.1)
