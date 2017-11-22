@@ -182,6 +182,7 @@ class GameLogic:
                 if turnTimer.getTimePassed() >= 1000:
                     break
 
+            self.mb.sendTimer.reset()
             turnTimer.stopTimer()
 
             if not targetFound:

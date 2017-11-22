@@ -1,4 +1,5 @@
 import serial
+import time
 
 from timer import Timer
 
@@ -89,6 +90,7 @@ class MBcomm:
             for key in self.values:
                 print(key + self.values[key])
                 self.__sendBytes(key + self.values[key])
+                time.sleep(0.05)
             print("------")
             self.values = dict()
 
