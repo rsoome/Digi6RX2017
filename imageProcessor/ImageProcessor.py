@@ -34,6 +34,8 @@ class ImageProcessor:
         # Find the biggest blob
         c = max(cnts, key=cv2.contourArea)
         x, y, w, h = cv2.boundingRect(c)
+        print(object.id + "'s minSize" + str(self.obj.minSize))
+        print("Current size: " + str(w*h))
 
         # If the rectangle surrounding the biggest blob is big enough, try to write it's coordinates into the object given
         if w * h >= self.obj.minSize:
