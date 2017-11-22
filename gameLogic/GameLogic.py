@@ -32,7 +32,7 @@ class GameLogic:
         self.totalTimeElapsed = 0
         self.fps = 0
         self.timer = Timer.Timer()
-        self.IRCONFIRMATIONSNEEDED = 100
+        self.IRCONFIRMATIONSNEEDED = 200
 
     def turnTowardTarget(self, target):
         if target.horizontalMidPoint == None:
@@ -76,7 +76,7 @@ class GameLogic:
             return False
 
         #print(target.horizontalMidPoint)
-        self.move.driveXY(0,0,self.turnSpeed)
+        self.move.driveXY(0,0,-self.turnSpeed/2)
         if self.mb.sendingTime:
             self.mb.sendValues()
 
@@ -91,9 +91,9 @@ class GameLogic:
         ballGrabbed = False
         self.mb.sendTimer.startTimer()
         irConfirmations = 0
+        self.timer.startTimer()
 
         while self.socketData.gameStarted:
-            self.timer.startTimer()
             self.readMb()
 
             if self.mb.sendingTime():
@@ -122,20 +122,21 @@ class GameLogic:
                     self.mb.setGrabberPosition(self.mb.GRABBER_OPEN_POSITION)
                     ballReached = self.goToTarget(self.ball, self.ballStopBound, self.moveSpeed)
 
-                elif ballReached and not ballGrabbed:
+                elif not ballGrabbed:
                     ballReached = self.checkVerticalAlignment(self.ball, self.ballStopBound) and self.checkHorizontalAlginment(self.ball)
-                    print("Reaching ball")
-                    self.move.driveXY(0, self.moveSpeed//50, 0)
-                    time.sleep(0.1)
-                    ballGrabbed = self.irStatus == 1
-                    if ballGrabbed:
-                        self.move.stop()
-                        self.mb.setGrabberPosition(self.mb.GRABBER_CARRY_POSITION)
-                        self.mb.setThrowerSpeed(self.mb.THROWER_MINSPEED)
-                    else:
-                        self.mb.setGrabberPosition(self.mb.GRABBER_OPEN_POSITION)
-                        self.mb.setThrowerSpeed(self.mb.THROWER_STOP)
-                    self.mb.sendValues()
+                    if ballReached:
+                        print("Reaching ball")
+                        self.move.driveXY(0, self.moveSpeed//50, 0)
+                        time.sleep(0.1)
+                        ballGrabbed = self.irStatus == 1
+                        if ballGrabbed:
+                            self.move.stop()
+                            self.mb.setGrabberPosition(self.mb.GRABBER_CARRY_POSITION)
+                            self.mb.setThrowerSpeed(self.mb.THROWER_MINSPEED)
+                        else:
+                            self.mb.setGrabberPosition(self.mb.GRABBER_OPEN_POSITION)
+                            self.mb.setThrowerSpeed(self.mb.THROWER_STOP)
+                        self.mb.sendValues()
 
                 elif not basketReached:
                     print("Reaching basket")
@@ -151,25 +152,28 @@ class GameLogic:
                         ballGrabbed = ballReached
                         if ballGrabbed:
                             self.mb.setGrabberPosition(self.mb.GRABBER_CARRY_POSITION)
-                        throwTimer.startTimer()
-                        while throwTimer.getTimePassed() < 1000:
-                            self.mb.readInfrared()
-                            time.sleep(0.1)
+                        #throwTimer.startTimer()
+                        #while throwTimer.getTimePassed() < 1000:
+                        #    self.mb.readInfrared()
+                        #    time.sleep(0.1)
                         ballReached = False
                         basketReached = False
                         ballGrabbed = False
-                        throwTimer.stopTimer()
+                        #throwTimer.stopTimer()
 
                 else:
-                    print("FIXME")
+                    ballReached = False
+                    basketReached = False
+                    ballGrabbed = False
 
             if self.gameState == "STOP":
                 self.emptyThrower()
                 self.move.stop()
 
-            self.addFrame(self.timer.stopTimer())
+            self.addFrame(self.timer.reset())
             self.updateFPS()
 
+        self.timer.stopTimer()
         self.mb.sendTimer.stopTimer()
         self.move.stop()
 
