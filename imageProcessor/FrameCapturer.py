@@ -30,21 +30,11 @@ class FrameCapturer:
         self.height, self.width, channels = self.capturedFrame.shape
 
         self.filteredImg = cv2.cvtColor(self.capturedFrame, colorScheme)  # Pane pilt etteantud värviskeemi
-        cv2.ellipse(self.filteredImg,(self.shapeCoordinates1[0][0], self.shapeCoordinates1[1][1]), (180, 80),
-                    180, 90, 0, (255,255,255), -1)
-        self.filteredImg = cv2.cvtColor(self.capturedFrame, colorScheme)  # Pane pilt etteantud värviskeemi
-        cv2.ellipse(self.filteredImg, (self.shapeCoordinates2[0][0], self.shapeCoordinates2[1][1]), (180, 80),
-                    180, 90, 180, (255, 255, 255), -1)
-        cv2.rectangle(self.filteredImg, (self.shapeCoordinates1[1][0], self.shapeCoordinates1[1][1] // 2),
-                      (self.shapeCoordinates2[0][0], self.shapeCoordinates1[0][1] // 2), (255, 255, 255), -1)
+        cv2.ellipse(self.filteredImg,(self.width/2, self.height), (180, 80),
+                    180, 180, 0, (255,255,255), -1)
         self.bw = cv2.cvtColor(self.capturedFrame, cv2.COLOR_BGR2GRAY)
-        cv2.ellipse(self.bw, (self.shapeCoordinates1[1][0], self.shapeCoordinates1[0][1]), (180, 80),
-                    180, 90, 0, (255, 255, 255), -1)
-        cv2.rectangle(self.bw,(self.shapeCoordinates1[1][0],self.shapeCoordinates1[1][1]//2),
-                      (self.shapeCoordinates2[1][0], self.shapeCoordinates1[0][1]), (255,255,255), -1)
-        self.filteredImg = cv2.cvtColor(self.capturedFrame, colorScheme)  # Pane pilt etteantud värviskeemi
-        cv2.ellipse(self.bw, (self.shapeCoordinates2[1][0], self.shapeCoordinates1[1][1]), (180, 80),
-                    180, 90, 180, (255, 255, 255), -1)
+        cv2.ellipse(self.bw, (self.width/2, self.height), (180, 80),
+                    180, 180, 0, (255, 255, 255), -1)
 
     def releaseCapture(self):
         # When everything done, release the capture
