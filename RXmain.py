@@ -33,7 +33,14 @@ def closeConnections():
         print(e)
 
     try:
-        mb.ser.close()
+        mb.setThrowerSpeed(mb.THROWER_MINSPEED)
+        time.sleep(0.5)
+        mb.setGrabberPosition(mb.GRABBER_THROW_POSITION)
+        time.sleep(0.5)
+        mb.setGrabberPosition(mb.GRABBER_OPEN_POSITION)
+        mb.setThrowerSpeed(mb.THROWER_STOP)
+        mb.closeSerial()
+
     except Exception as e:
         print(e)
 
@@ -41,8 +48,6 @@ def closeConnections():
         frameCapture.releaseCapture()
     except Exception as e:
         print(e)
-
-    mb.closeSerial()
 
 print("Running on Python " + sys.version)
 
@@ -196,12 +201,6 @@ try:
         socketHandler.updateData()
 
     print("Exit.")
-    mb.setThrowerSpeed(mb.THROWER_MINSPEED)
-    time.sleep(0.5)
-    mb.setGrabberPosition(mb.GRABBER_THROW_POSITION)
-    time.sleep(0.5)
-    mb.setGrabberPosition(mb.GRABBER_OPEN_POSITION)
-    mb.setThrowerSpeed(mb.THROWER_STOP)
     closeConnections()
 
 except KeyboardInterrupt:

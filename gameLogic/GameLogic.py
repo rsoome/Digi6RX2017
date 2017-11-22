@@ -136,7 +136,7 @@ class GameLogic:
                     basketReached = False
                     throwTimer.startTimer()
                     while throwTimer.getTimePassed() < 1000:
-                        self.handleMbMessage(self.mb.readInfrared())
+                        self.mb.readInfrared()
                         time.sleep(0.1)
                     throwTimer.stopTimer()
 
@@ -208,7 +208,7 @@ class GameLogic:
         return True
 
     def handleMbMessage(self, msg):
-        print(msg)
+        print("Message from mainboard: " + str(msg))
         if msg != None:
             sendingNode = msg[0]
 
