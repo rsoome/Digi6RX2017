@@ -20,7 +20,7 @@ class MBcomm:
         self.GRABBER_OPEN_POSITION = self.GRABBER_MAX_POSITION - 100
         self.values = dict()
         self.sendTimer = Timer.Timer()
-        self.SENDFREQ = 120
+        self.SENDFREQ = 240
         if not self.ser.isOpen():
             self.ser.open()
 
