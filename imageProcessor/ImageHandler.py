@@ -16,6 +16,8 @@ class ImageHandler:
 
     def generateMask(self, targetObject):
         if self.frame.filteredImg is not None:
+            print(targetObject.hsvLowerRange)
+            print(targetObject.hsvUpperRange)
             thresh = cv2.inRange(self.frame.filteredImg, targetObject.hsvLowerRange, targetObject.hsvUpperRange)
             targetObject.mask = thresh
         else:
