@@ -8,11 +8,12 @@ import threading
 
 class ImageHandler:
 
-    def __init__(self, multiThreading, frame, objects, imageMinArea):
+    def __init__(self, multiThreading, frame, objects, imageMinArea, socketData):
         self.multiThreading = multiThreading
         self.frame = frame
         self.objects = objects
         self.imageMinArea = imageMinArea
+        self.socketData = socketData
 
     def generateMask(self, targetObject):
         if self.frame.filteredImg is not None:
@@ -173,7 +174,8 @@ class ImageHandler:
             print("Target has no mask.")
 
     def run(self):
-        self.frame.capture(cv2.COLOR_BGR2HSV)
-        for obj in self.objects:
-            self.detect(obj)
-            time.sleep(0.1)
+        while not self.socketData.stop:
+            self.frame.capture(cv2.COLOR_BGR2HSV)
+            for obj in self.objects:
+                self.detect(obj)
+                time.sleep(0.1)

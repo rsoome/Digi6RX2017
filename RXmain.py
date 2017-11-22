@@ -81,7 +81,7 @@ move = MovementLogic.MovementLogic(mb)
 frameCapture = FrameCapturer.FrameCapturer(int(settings.getValue("camID")))
 
 imgHandler = ImageHandler.ImageHandler(bool(settings.getValue("multiThreading")), frameCapture,
-                                       [ball, basket, blackLine], settings.getValue("minImgArea"))
+                                       [ball, basket, blackLine], settings.getValue("minImgArea"), socketData)
 
 ref = RefereeHandler.RefereeHandler(robotID, fieldID, mb)
 
