@@ -202,7 +202,6 @@ class GameLogic:
             self.turnTowardTarget(target)
             return False
 
-        self.move.stop()
         return True
 
     def initializeValues(self):
@@ -229,7 +228,7 @@ class GameLogic:
         if target.area is None:
             return False
 
-        if target.verticalMidPoint < verticalStopBound:
+        if target.verticalMidPoint >= verticalStopBound:
             return False
         print("Vertically alligned.")
         return True
@@ -288,7 +287,7 @@ class GameLogic:
         self.mb.setGrabberPosition(self.mb.GRABBER_OPEN_POSITION)
         self.mb.sendValues()
         print("throwing irStatus " + str(self.irStatus))
-        return True
+        return self.irStatus == 0
 
     def addFrame(self, elapsed):
         if elapsed > 0:
@@ -311,12 +310,12 @@ class GameLogic:
         self.mb.setThrowerSpeed(self.mb.THROWER_MIDSPEED)
         self.mb.sendValues()
         time.sleep(0.5)
-        self.mb.setThrowerSpeed(self.mb.THROWER_MAXSPEED)
-        self.mb.sendValues()
-        time.sleep(2)
+        #self.mb.setThrowerSpeed(self.mb.THROWER_MAXSPEED)
+        #self.mb.sendValues()
+        #time.sleep(0.5)
         self.mb.setGrabberPosition(self.mb.GRABBER_THROW_POSITION)
         self.mb.sendValues()
-        time.sleep(2)
+        time.sleep(0.5)
         self.mb.enableFailSafe()
         self.mb.setGrabberPosition(self.mb.GRABBER_OPEN_POSITION)
         self.mb.setThrowerSpeed(self.mb.THROWER_STOP)
