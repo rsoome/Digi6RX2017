@@ -13,9 +13,12 @@ class ImageHandler:
         self.imageMinArea = imageMinArea
 
     def generateMask(self, targetObject):
-        thresh = cv2.inRange(self.frame.filteredImg, targetObject.hsvLowerRange, targetObject.hsvUpperRange)
-        im2, contours, hierarchy = cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
-        targetObject.mask = thresh
+        if self.frame.capturedFram != None:
+            thresh = cv2.inRange(self.frame.filteredImg, targetObject.hsvLowerRange, targetObject.hsvUpperRange)
+            im2, contours, hierarchy = cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
+            targetObject.mask = thresh
+        else:
+            print("No frame captured.")
 	
 
     # Creates an imageP
