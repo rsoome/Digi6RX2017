@@ -93,6 +93,7 @@ class MBcomm:
                 time.sleep(0.05)
             #print("------")
             self.values = dict()
+            self.sendTimer.reset()
 
     def sendingTime(self):
         if self.sendTimer.getTimePassed() >= 1000/self.SENDFREQ:

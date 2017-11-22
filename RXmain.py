@@ -134,6 +134,7 @@ def socketDataCheck():
         game.run()
         socketData.gameStarted = False
         print("Game mode deactivated")
+        game.emptyThrower()
     if socketData.updateConf:
         print("Updating conf.")
         settings.writeFromDictToFile()

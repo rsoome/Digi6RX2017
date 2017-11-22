@@ -41,7 +41,6 @@ class GameLogic:
         if target.horizontalMidPoint is not None:
             if not self.socketData.gameStarted:
                 return
-            self.moveTowardTarget(target)
             turningSpeed = self.move.calculateSpeed(self.turnSpeed, turnCoificent)
             print("Turning with speed: " + str(turningSpeed))
             self.move.driveXY(0,0,turningSpeed)
@@ -103,7 +102,6 @@ class GameLogic:
 
             if self.mb.sendingTime():
                 self.mb.sendValues()
-                self.mb.sendTimer.reset()
 
             if self.gameState == "START":
 
@@ -137,7 +135,6 @@ class GameLogic:
                     else:
                         self.mb.setGrabberPosition(self.mb.GRABBER_OPEN_POSITION)
                     self.mb.sendValues()
-                    self.mb.sendTimer.reset()
 
                 elif not basketReached:
                     print("Reaching basket")
@@ -182,13 +179,11 @@ class GameLogic:
             turnTimer = Timer.Timer()
             turnTimer.startTimer()
             targetFound = self.lookForTarget(target)
-            self.mb.sendTimer.reset()
             while not targetFound:
                 targetFound = self.lookForTarget(target)
                 if turnTimer.getTimePassed() >= 1000:
                     break
 
-            self.mb.sendTimer.reset()
             turnTimer.stopTimer()
 
             if not targetFound:
