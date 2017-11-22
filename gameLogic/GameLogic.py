@@ -48,25 +48,26 @@ class GameLogic:
             return True
 
     def moveTowardTarget(self, target):
-        if target.horizontalMidPoint is not None:
+        horizontalMidPoint = target.horizontalMidPoint
+        verticalMidPoint = target.verticalMidPoint
+        if horizontalMidPoint is None:
+            return
 
-            if target.verticalMidPoint is None:
-                return
+        if verticalMidPoint is None:
+            return
 
-            if not self.socketData.gameStarted:
-                return
+        if not self.socketData.gameStarted:
+            return
 
-            #print("Verticalmidpoint: " + str(target.verticalMidPoint))
-            #print("Jagamine: " + str(1 - float(target.verticalMidPoint)/self.frame.height))
-            #print("moveSpeed" + str(self.moveSpeed))
-            #print("CalculateSpeed: " + str(self.move.calculateSpeed(self.moveSpeed, 1 - float(target.verticalMidPoint)/self.frame.height)))
-            self.move.driveXY(0,
+        #print("Verticalmidpoint: " + str(target.verticalMidPoint))
+        print("Jagamine: " + str(1 - float(target.verticalMidPoint)/self.frame.height))
+        #print("moveSpeed" + str(self.moveSpeed))
+        #print("CalculateSpeed: " + str(self.move.calculateSpeed(self.moveSpeed, 1 - float(target.verticalMidPoint)/self.frame.height)))
+        self.move.driveXY(0,
 
-                              self.move.calculateSpeed(self.moveSpeed, 1 - float(target.verticalMidPoint)/self.frame.height),
-                              #  0)
-                              self.move.calculateSpeed(self.turnSpeed,
-                                                       (target.horizontalMidPoint - self.screenMidpoint) / float(self.screenMidpoint))
-                              )
+                        self.move.calculateSpeed(self.moveSpeed, 1 - float(verticalMidPoint)/self.frame.height),
+                        self.move.calculateSpeed(self.turnSpeed,
+                                        (horizontalMidPoint - self.screenMidpoint) / float(self.screenMidpoint)))
 
     def lookForTarget(self, target):
         #if not self.socketData.gameStarted:
