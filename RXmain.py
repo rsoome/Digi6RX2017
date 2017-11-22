@@ -106,7 +106,7 @@ imgHandlerThread.start()
 def updateTargetsTresholds():
     targetID = selectedTarget.id
     if targetID == "basket":
-        targetID = opponent + "B" + targetID[2:]
+        targetID = opponent + "B" + targetID[1:]
     print("Updating " + targetID + "'s thresholds.")
     for frameX in range(socketData.mouseX - 5, socketData.mouseX):
         for frameY in range(socketData.mouseY - 5, socketData.mouseY):
