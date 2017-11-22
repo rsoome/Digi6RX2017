@@ -12,8 +12,10 @@ class FrameCapturer:
         self.height = None
         self.width = None
         self.bw = None
-        self.triangle1 = np.array([shapeCoordinates1[0], shapeCoordinates1[1], (shapeCoordinates1[0][0], shapeCoordinates1[1][1])], dtype=np.int32)
-        self.triangle2 = np.array([shapeCoordinates2[0], shapeCoordinates2[1], (shapeCoordinates1[0][0], shapeCoordinates2[1][1])], dtype=np.int32)
+        self.shapeCoordinates1 = shapeCoordinates1
+        self.shapeCoordinates2 = shapeCoordinates2
+        #self.triangle1 = np.array([shapeCoordinates1[0], shapeCoordinates1[1], (shapeCoordinates1[0][0], shapeCoordinates1[1][1])], dtype=np.int32)
+        #self.triangle2 = np.array([shapeCoordinates2[0], shapeCoordinates2[1], (shapeCoordinates1[0][0], shapeCoordinates2[1][1])], dtype=np.int32)
 
     # Captures an image and returns the original frame and a filtered image.
     # colorScheme - the filter to be applied
@@ -28,9 +30,17 @@ class FrameCapturer:
         self.height, self.width, channels = self.capturedFrame.shape
 
         self.filteredImg = cv2.cvtColor(self.capturedFrame, colorScheme)  # Pane pilt etteantud värviskeemi
-        cv2.polylines(self.filteredImg, self.triangle1, True, (255,255,255))
-        cv2.polylines(self.filteredImg, self.triangle1, True, (255, 255, 255))
+        cv2.ellipse(self.filteredImg,(self.shapeCoordinates1[0][0], self.shapeCoordinates1[1][1]), (80, 50),
+                    90, 0, 90, (255,255,255), -1)
+        self.filteredImg = cv2.cvtColor(self.capturedFrame, colorScheme)  # Pane pilt etteantud värviskeemi
+        cv2.ellipse(self.filteredImg, (self.shapeCoordinates2[0][0], self.shapeCoordinates2[1][1]), (80, 50),
+                    90, 0, 90, (255, 255, 255), -1)
         self.bw = cv2.cvtColor(self.capturedFrame, cv2.COLOR_BGR2GRAY)
+        cv2.ellipse(self.bw, (self.shapeCoordinates1[0][0], self.shapeCoordinates1[1][1]), (80, 50),
+                    90, 0, 90, (255, 255, 255), -1)
+        self.filteredImg = cv2.cvtColor(self.capturedFrame, colorScheme)  # Pane pilt etteantud värviskeemi
+        cv2.ellipse(self.bw, (self.shapeCoordinates2[0][0], self.shapeCoordinates2[1][1]), (80, 50),
+                    90, 0, 90, (255, 255, 255), -1)
 
     def releaseCapture(self):
         # When everything done, release the capture
