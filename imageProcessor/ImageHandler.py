@@ -13,7 +13,7 @@ class ImageHandler:
         self.imageMinArea = imageMinArea
 
     def generateMask(self, targetObject):
-        if self.frame.capturedFram != None:
+        if self.frame.capturedFrame != None:
             thresh = cv2.inRange(self.frame.filteredImg, targetObject.hsvLowerRange, targetObject.hsvUpperRange)
             im2, contours, hierarchy = cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
             targetObject.mask = thresh
