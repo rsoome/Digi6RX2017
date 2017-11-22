@@ -35,14 +35,17 @@ class GameLogic:
         self.IRCONFIRMATIONSNEEDED = 100
 
     def turnTowardTarget(self, target):
+        if target.horizontalMidPoint == None:
+            return False
         turnCoificent = (target.horizontalMidPoint - self.screenMidpoint)/float(self.screenMidpoint)
         print("Turncoificent: " + str(turnCoificent))
         if target.horizontalMidPoint is not None:
             if not self.socketData.gameStarted:
-                return
+                return False
             turningSpeed = self.move.calculateSpeed(self.turnSpeed, turnCoificent)
             print("Turning with speed: " + str(turningSpeed))
             self.move.driveXY(0,0,turningSpeed)
+            return True
 
     def moveTowardTarget(self, target):
         if target.horizontalMidPoint is not None:
