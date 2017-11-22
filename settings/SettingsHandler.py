@@ -53,14 +53,20 @@ class SettingsHandler:
             self.values["blueBasketHSVLower"] = [255, 255, 255]
         if not "blueBasketHSVHigher" in self.values:
             self.values["blueBasketHSVUpper"] = [0, 0, 0]
+        if not "blackLineHSVLower" in self.values:
+            self.values["blackLineHSVLower"] = [5, 5, 5]
+        if not "blackLineHSVHigher" in self.values:
+            self.values["lackLineHSVUpper"] = [0, 0, 0]
         if not "mbLocation = " in self.values:
             self.values["mbLocation"] = "/dev/ttyACM0"
         if not "ballScanOrder" in self.values:
             self.values["ballScanOrder"] = [1, 0, 2, 4, 3, 5, 7, 6, 8]
         if not "basketScanOrder" in self.values:
             self.values["basketScanOrder"] = [7, 6, 8, 4, 3, 5, 1, 0, 2]
+        if not "blackLineScanOrder" in self.values:
+            self.values["basketScanOrder"] = [7, 6, 8, 4, 3, 5, 1, 0, 2]
         if not "objectMinSize" in self.values:
-            self.values["objectMinSize"] = 1000
+            self.values["objectMinSize"] = 50
         if not "minImgArea" in self.values:
             self.values["minImgArea"] = 0
         if not "ID" in self.values:

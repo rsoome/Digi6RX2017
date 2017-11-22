@@ -8,14 +8,13 @@ from timer import Timer
 # TODO: Implement
 class GameLogic:
 
-    def __init__(self, move, deltaFromMidPoint, moveSpeed, turnSpeed, imgHandler, frame, socketData, ref, fieldID,
-                 robotID, mb, ball, basket, defaultGameState):
+    def __init__(self, move, deltaFromMidPoint, moveSpeed, turnSpeed, frame, socketData, ref, fieldID, robotID, mb,
+                 ball, basket, defaultGameState):
         self.frameWidth = None
         self.move = move
         self.deltaFromMidPoint = deltaFromMidPoint
         self.moveSpeed = moveSpeed
         self.turnSpeed = turnSpeed
-        self.imgHandler = imgHandler
         self.frame = frame
         self.initializeValues()
         self.socketData = socketData
@@ -66,11 +65,6 @@ class GameLogic:
                                                        (target.horizontalMidPoint - self.screenMidpoint) / float(self.screenMidpoint))
                               )
 
-    def updateTargetCoordinates(self, targets):
-        self.frame.capture(cv2.COLOR_BGR2HSV)
-        for target in targets:
-            self.imgHandler.detect(1000, 0, target.scanOrder, target)
-
     def lookForTarget(self, target):
         #if not self.socketData.gameStarted:
         if False:
@@ -82,7 +76,6 @@ class GameLogic:
         if self.mb.sendingTime:
             self.mb.sendValues()
 
-        self.updateTargetCoordinates([target])
         if target.horizontalMidPoint is not None:
             return True
 
@@ -97,7 +90,6 @@ class GameLogic:
 
         while self.socketData.gameStarted:
             self.timer.startTimer()
-            self.updateTargetCoordinates([self.ball, self.basket])
             self.readMb()
 
             if self.mb.sendingTime():
@@ -132,8 +124,10 @@ class GameLogic:
                     ballGrabbed = self.irStatus == 1
                     if ballGrabbed:
                         self.mb.setGrabberPosition(self.mb.GRABBER_CARRY_POSITION)
+                        self.mb.setThrowerSpeed(self.mb.THROWER_MINSPEED)
                     else:
                         self.mb.setGrabberPosition(self.mb.GRABBER_OPEN_POSITION)
+                        self.mb.setThrowerSpeed(self.mb.THROWER_STOP)
                     self.mb.sendValues()
 
                 elif not basketReached:
@@ -279,10 +273,10 @@ class GameLogic:
         self.mb.setThrowerSpeed(self.mb.THROWER_MIDSPEED)
         self.mb.disableFailSafe()
         self.mb.sendValues()
-        time.sleep(1)
+        time.sleep(0.5)
         self.mb.setThrowerSpeed(self.mb.THROWER_MAXSPEED)
         self.mb.sendValues()
-        time.sleep(1)
+        time.sleep(1.3)
         self.mb.setGrabberPosition(self.mb.GRABBER_THROW_POSITION)
         self.mb.sendValues()
         time.sleep(1)
@@ -310,7 +304,10 @@ class GameLogic:
         self.mb.disableFailSafe()
         self.mb.setThrowerSpeed(self.mb.THROWER_MINSPEED)
         self.mb.sendValues()
-        time.sleep(2)
+        time.sleep(0.5)
+        self.mb.setThrowerSpeed(self.mb.THROWER_MIDSPEED)
+        self.mb.sendValues()
+        time.sleep(0.5)
         self.mb.setThrowerSpeed(self.mb.THROWER_MAXSPEED)
         self.mb.sendValues()
         time.sleep(2)

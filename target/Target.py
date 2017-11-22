@@ -7,7 +7,7 @@ from timer import Timer
 
 class Target:
 
-    def __init__(self, hBounds, vBounds, targetID, lowerRange, upperRange, scanOrder):
+    def __init__(self, hBounds, vBounds, targetID, lowerRange, upperRange, scanOrder, minSize):
         self.setBounds(hBounds, vBounds, None)
         self.setThresholds(lowerRange, upperRange)
         print(lowerRange)
@@ -17,6 +17,7 @@ class Target:
         self.contours = None
         self.scanOrder = scanOrder
         self.timer = Timer.Timer()
+        self.minSize = minSize
 
     def getBounds(self):
         return self.horizontalBounds, self.verticalBounds

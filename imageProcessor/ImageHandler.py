@@ -6,9 +6,11 @@ import threading
 
 class ImageHandler:
 
-    def __init__(self, multiThreading, frame):
+    def __init__(self, multiThreading, frame, objects, imageMinArea):
         self.multiThreading = multiThreading
         self.frame = frame
+        self.objects = objects
+        self.imageMinArea = imageMinArea
 
     def generateMask(self, targetObject):
         thresh = cv2.inRange(self.frame.filteredImg, targetObject.hsvLowerRange, targetObject.hsvUpperRange)
@@ -147,19 +149,24 @@ class ImageHandler:
     # divided recursively by the multi threaded function. If not specified or less then 0, no no recursive calls shall be done.
     # scanOrder - the order by which the image is fed to threads by multi threaded object finding function. More information
     # in findObjectMultithreaded() description.
-    def detect(self, objectMinSize, imageMinArea, scanOrder, target):
+    def detect(self, target):
         self.generateMask(target)
         if target.mask is not None:
             properties = target.mask.shape
             height = properties[0]
             width = properties[1]
 
-            if imageMinArea < 1:
+            if self.imageMinArea < 1:
                 imageMinArea = height * width + 1
 
             if self.multiThreading:
-                self.findObjectMultithreaded(0, height, 0, width, objectMinSize, imageMinArea, scanOrder, target)
+                self.findObjectMultithreaded(0, height, 0, width, target.minSize, imageMinArea, target.scanOrder, target)
             else:
                 self.findObject(0, 0, target)
         else:
-            ("Target has no mask.")
+            print("Target has no mask.")
+
+    def run(self):
+        self.frame.capture(cv2.COLOR_BGR2HSV)
+        for obj in self.objects:
+            self.detect(obj)

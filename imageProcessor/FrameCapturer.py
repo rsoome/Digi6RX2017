@@ -11,8 +11,6 @@ class FrameCapturer:
         self.height = None
         self.width = None
         self.bw = None
-        # cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1080)
-        # cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
 
     # Captures an image and returns the original frame and a filtered image.
     # colorScheme - the filter to be applied

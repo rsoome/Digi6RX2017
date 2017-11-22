@@ -56,10 +56,15 @@ if opponent != "magneta" and opponent != "blue":
     sys.exit(0)
 
 ball = Target.Target(None, None, "ball", settings.getValue("ballHSVLower"), settings.getValue("ballHSVUpper"),
-                     settings.getValue("ballScanOrder"))
+                     settings.getValue("ballScanOrder"), settings.getValue("objectMInSize"))
 
 basket = Target.Target(None, None, "basket", settings.getValue(opponent + "BasketHSVLower"),
-                       settings.getValue(opponent + "BasketHSVUpper"), settings.getValue("basketScanOrder"))
+                       settings.getValue(opponent + "BasketHSVUpper"),
+                       settings.getValue("basketScanOrder"), settings.getValue("objectMinSize"))
+
+blackLine = Target.Target(None, None, "blackLine", settings.getValue("blackLineHSVLower"),
+                          settings.getValue("blackLineHSVUpper"),
+                          settings.getValue("lineScanOrder"), settings.getValue("objectMinSize"))
 
 robotID = settings.getValue("ID")
 fieldID = settings.getValue("fieldID")
@@ -75,13 +80,14 @@ move = MovementLogic.MovementLogic(mb)
 
 frameCapture = FrameCapturer.FrameCapturer(int(settings.getValue("camID")))
 
-imgHandler = ImageHandler.ImageHandler(bool(settings.getValue("multiThreading")), frameCapture)
+imgHandler = ImageHandler.ImageHandler(bool(settings.getValue("multiThreading")), frameCapture,
+                                       [ball, basket, blackLine], settings.getValue("minImgArea"))
 
 ref = RefereeHandler.RefereeHandler(robotID, fieldID, mb)
 
-game = GameLogic.GameLogic(move, settings.getValue("deltaFromMidPoint"), settings.getValue("driveSpeed"), settings.getValue("turnSpeed"),
-                           imgHandler, frameCapture, socketData, ref, fieldID, robotID, mb, ball, basket,
-                           settings.getValue("defaultGameState"))
+game = GameLogic.GameLogic(move, settings.getValue("deltaFromMidPoint"), settings.getValue("driveSpeed"),
+                           settings.getValue("turnSpeed"), frameCapture, socketData, ref, fieldID, robotID, mb, ball,
+                           basket, settings.getValue("defaultGameState"))
 
 socketHandler = SocketHandler.SocketHandler(socketData, ball, basket, 0, frameCapture)
 
@@ -89,6 +95,9 @@ timer = Timer.Timer()
 
 t = threading.Thread(target=socketHandler.initServ)
 t.start()
+
+imgHandlerThread = threading.Thread(target=imgHandler.run())
+imgHandlerThread.start()
 
 
 def updateTargetsTresholds():
@@ -168,21 +177,16 @@ try:
         timer.startTimer()
 
         game.readMb()
-        frameCapture.capture(cv2.COLOR_BGR2HSV)  # Võta kaamerast pilt
-        frame = frameCapture.capturedFrame
+        if frameCapture.capturedFrame == None:
+            frameCapture.capture(cv2.COLOR_BGR2HSV)  # Võta kaamerast pilt
+            frame = frameCapture.capturedFrame
 
-        if frame is None:  # Kontroll, kas pilt on olemas
-            socketData.stop = True
-            while not socketData.socketClosed:
-                pass
-            print("Capture fucntion failed")
-            break
-
-        imgHandler.detect(int(settings.getValue("objectMinSize")), int(settings.getValue("minImgArea")),
-                          settings.getValue("ballScanOrder"), ball)
-
-        imgHandler.detect(int(settings.getValue("objectMinSize")), int(settings.getValue("minImgArea")),
-                          settings.getValue("basketScanOrder"), basket)
+            if frame is None:  # Kontroll, kas pilt on olemas
+                socketData.stop = True
+                while not socketData.socketClosed:
+                    pass
+                print("Capture fucntion failed")
+                break
 
         socketDataCheck()
 
