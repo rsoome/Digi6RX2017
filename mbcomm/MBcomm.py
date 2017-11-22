@@ -86,12 +86,12 @@ class MBcomm:
 
     def sendValues(self):
         if len(self.values) > 0:
-            print("-----")
+            #print("-----")
             for key in self.values:
-                print(key + self.values[key])
+                #print(key + self.values[key])
                 self.__sendBytes(key + self.values[key])
                 time.sleep(0.05)
-            print("------")
+            #print("------")
             self.values = dict()
 
     def sendingTime(self):
