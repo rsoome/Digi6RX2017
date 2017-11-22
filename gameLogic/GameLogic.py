@@ -229,7 +229,7 @@ class GameLogic:
         if target.area is None:
             return False
 
-        if target.verticalMidPoint >= verticalStopBound:
+        if target.verticalMidPoint < verticalStopBound:
             return False
         print("Vertically alligned.")
         return True
