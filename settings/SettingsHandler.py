@@ -56,7 +56,7 @@ class SettingsHandler:
         if not "blackLineHSVLower" in self.values:
             self.values["blackLineHSVLower"] = [5, 5, 5]
         if not "blackLineHSVHigher" in self.values:
-            self.values["lackLineHSVUpper"] = [0, 0, 0]
+            self.values["blackLineHSVUpper"] = [0, 0, 0]
         if not "mbLocation = " in self.values:
             self.values["mbLocation"] = "/dev/ttyACM0"
         if not "ballScanOrder" in self.values:
