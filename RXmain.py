@@ -33,15 +33,7 @@ def closeConnections():
         print(e)
 
     try:
-        mb.setThrowerSpeed(mb.THROWER_MINSPEED)
-        mb.sendValues()
-        time.sleep(1)
-        mb.setGrabberPosition(mb.GRABBER_THROW_POSITION)
-        mb.sendValues()
-        time.sleep(1)
-        mb.setGrabberPosition(mb.GRABBER_OPEN_POSITION)
-        mb.setThrowerSpeed(mb.THROWER_STOP)
-        mb.sendValues()
+        game.emptyThrower()
         mb.closeSerial()
 
     except Exception as e:

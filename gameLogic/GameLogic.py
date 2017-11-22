@@ -142,6 +142,7 @@ class GameLogic:
                     throwTimer.stopTimer()
 
             if self.gameState == "STOP":
+                self.emptyThrower()
                 self.move.stop()
 
             self.addFrame(self.timer.stopTimer())
@@ -270,3 +271,14 @@ class GameLogic:
             self.totalTimeElapsed = 0
 
         self.socketData.fps = self.fps
+
+    def emptyThrower(self):
+        self.mb.setThrowerSpeed(self.mb.THROWER_MINSPEED)
+        self.mb.sendValues()
+        time.sleep(1)
+        self.mb.setGrabberPosition(self.mb.GRABBER_THROW_POSITION)
+        self.mb.sendValues()
+        time.sleep(1)
+        self.mb.setGrabberPosition(self.mb.GRABBER_OPEN_POSITION)
+        self.mb.setThrowerSpeed(self.mb.THROWER_STOP)
+        self.mb.sendValues()
