@@ -165,6 +165,8 @@ try:
     mb.sendTimer.startTimer()
     while True:
 
+        move.driveXY(0, 0, 3)
+
         #DEBUGGING LOOKING FOR TARGET
         #game.lookForTarget(ball)
         #END DEBUGGING
