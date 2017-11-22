@@ -12,10 +12,6 @@ class FrameCapturer:
         self.height = None
         self.width = None
         self.bw = None
-        self.shapeCoordinates1 = shapeCoordinates1
-        self.shapeCoordinates2 = shapeCoordinates2
-        #self.triangle1 = np.array([shapeCoordinates1[0], shapeCoordinates1[1], (shapeCoordinates1[0][0], shapeCoordinates1[1][1])], dtype=np.int32)
-        #self.triangle2 = np.array([shapeCoordinates2[0], shapeCoordinates2[1], (shapeCoordinates1[0][0], shapeCoordinates2[1][1])], dtype=np.int32)
 
     # Captures an image and returns the original frame and a filtered image.
     # colorScheme - the filter to be applied
@@ -29,7 +25,7 @@ class FrameCapturer:
             return
         self.height, self.width, channels = self.capturedFrame.shape
 
-        cv2.ellipse(self.capturedFrame, ((self.width // 2 - 10), self.height), ((self.width // 3), (self.height // 10)), 180, 180, 0,
+        cv2.ellipse(self.capturedFrame, ((self.width // 2 - 10), self.height), ((self.width // 3), (self.height // 9)), 180, 180, 0,
                     (255, 255, 255), -1)
         self.filteredImg = cv2.cvtColor(self.capturedFrame, colorScheme)  # Pane pilt etteantud värviskeemi
         self.bw = cv2.cvtColor(self.capturedFrame, cv2.COLOR_BGR2GRAY)

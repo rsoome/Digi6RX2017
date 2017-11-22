@@ -44,6 +44,8 @@ def closeConnections():
     except Exception as e:
         print(e)
 
+
+
 print("Running on Python " + sys.version)
 
 settings = SettingsHandler.SettingsHandler("conf")
@@ -102,15 +104,18 @@ imgHandlerThread.start()
 
 
 def updateTargetsTresholds():
-    print("Updating " + str(selectedTarget.id) + "'s thresholds.")
+    targetID = selectedTarget.id
+    if targetID == "basket":
+        targetID = opponent + "B" + targetID[2:]
+    print("Updating " + targetID + "'s thresholds.")
     for frameX in range(socketData.mouseX - 5, socketData.mouseX):
         for frameY in range(socketData.mouseY - 5, socketData.mouseY):
             if frameY != -1 and frameX != -1:
                 ranges = selectedTarget.updateThresholds(frameCapture.filteredImg[frameY][frameX])
     print("New lower values: " + str(selectedTarget.hsvLowerRange))
     print("New upper values: " + str(selectedTarget.hsvUpperRange))
-    settings.setValue(selectedTarget.id + "HSVLower", selectedTarget.hsvLowerRange.tolist())
-    settings.setValue(selectedTarget.id + "HSVUpper", selectedTarget.hsvUpperRange.tolist())
+    settings.setValue(targetID + "HSVLower", selectedTarget.hsvLowerRange.tolist())
+    settings.setValue(targetID + "HSVUpper", selectedTarget.hsvUpperRange.tolist())
     socketData.updateThresholds = False
     socketData.mouseX = -1
     socketData.mouseY = -1
@@ -142,6 +147,7 @@ def socketDataCheck():
     if socketData.gameStarted:
         print("Game mode activated")
         game.run()
+
         socketData.gameStarted = False
         print("Game mode deactivated")
         game.emptyThrower()
@@ -206,7 +212,7 @@ try:
     closeConnections()
 
 except KeyboardInterrupt:
-    print("Canceled by user with keyboard interrupt")
+    print("Cancelled by user with keyboard interrupt")
 
     closeConnections()
 
