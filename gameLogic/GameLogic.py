@@ -140,7 +140,6 @@ class GameLogic:
                     basketReached = self.goToTarget(self.basket, self.basketStopBound, self.moveSpeed)
 
                 elif (self.irStatus == 1):
-                    self.move.stop()
                     throwTimer = Timer.Timer()
                     print("Throwing ball")
                     self.move.stop()
@@ -190,7 +189,6 @@ class GameLogic:
                 for i in range(2000):
                     #print(i)
                     self.move.driveXY(0, self.moveSpeed//4, 0)
-                    self.move.stop()
                 return False
 
         elif not self.checkVerticalAlignment(target, verticalStopBound):
@@ -200,7 +198,6 @@ class GameLogic:
 
         elif not self.checkHorizontalAlginment(target):
             print("Alligning horizontally.")
-            self.move.stop()
             self.turnTowardTarget(target)
             return False
 
