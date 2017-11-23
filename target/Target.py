@@ -70,7 +70,7 @@ class Target:
             return None
 
         #return self.verticalBounds[1]
-        if self.verticalBounds[1] <= 30:
+        if self.verticalBounds[1] <= 284:
             return -0.1701*self.verticalBounds[1] + 77.502
 
         return 101513*pow(self.verticalBounds[1], -1.414)
