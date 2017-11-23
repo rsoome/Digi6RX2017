@@ -120,6 +120,10 @@ class GameLogic:
                     print(self.ball.horizontalMidPoint)
                     self.thrower.grabberOpen()
                     ballReached = self.goToTarget(self.ball, self.ballStopBound, self.moveSpeed)
+                    if ballReached:
+                        self.move.stop()
+                        self.mb.sendValues()
+                        time.sleep(5)
 
                 elif not ballGrabbed:
                     ballReached = self.checkVerticalAlignment(self.ball, self.ballStopBound) and self.checkHorizontalAlginment(self.ball)
