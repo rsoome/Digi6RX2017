@@ -95,6 +95,7 @@ class GameLogic:
 
         while self.socketData.gameStarted:
             self.readMb()
+            print(self.irStatus)
 
             if self.mb.sendingTime():
                 self.mb.sendValues()
