@@ -69,4 +69,4 @@ class Target:
         if self.verticalBounds is None:
             return None
 
-        return pow(329.85*self.e, -0.009*self.verticalBounds[1])
+        return 329.85*pow(self.e, -0.009*self.verticalBounds[1])
