@@ -123,7 +123,7 @@ class GameLogic:
                     if ballReached:
                         self.move.stop()
                         self.mb.sendValues()
-                        time.sleep(5)
+                        #time.sleep(5)
 
                 elif not ballGrabbed:
                     ballReached = self.checkVerticalAlignment(self.ball, self.ballStopBound) and self.checkHorizontalAlginment(self.ball)
@@ -209,7 +209,7 @@ class GameLogic:
             print("Alligning horizontally.")
             self.turnTowardTarget(target)
             return False
-
+        time.sleep(5)
         return True
 
     def initializeValues(self):
