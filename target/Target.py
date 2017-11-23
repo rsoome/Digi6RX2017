@@ -70,4 +70,4 @@ class Target:
 
         x = 1
         c = 1
-        return self.verticalBounds[0] * x + c
+        return self.verticalBounds[1] * x + c
