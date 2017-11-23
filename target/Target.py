@@ -76,4 +76,4 @@ class Target:
         if self.verticalBounds[1] >= 118:
             return 16717*pow(self.verticalBounds[1], -1.511)
 
-        return 84471*pow(self.verticalBounds, -1.373)
+        return 84471*pow(self.verticalBounds[1], -1.373)
