@@ -7,8 +7,8 @@ class Thrower:
 
     def __init__(self, mb):
         self.mb = mb
-        self.grabber = Grabber.Grabber()
-        self.throwingMotor = ThrowingMotor.ThrowingMotor()
+        self.grabber = Grabber.Grabber(mb)
+        self.throwingMotor = ThrowingMotor.ThrowingMotor(mb)
 
     def calculateThrowingSpeed(self, distance):
 
