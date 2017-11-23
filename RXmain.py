@@ -111,6 +111,8 @@ def updateTargetsTresholds():
     if targetID == "basket":
         targetID = opponent + "B" + targetID[1:]
     print("Updating " + targetID + "'s thresholds.")
+    frameX = socketData.mouseX
+    frameY = socketData.mouseY
     if frameY != -1 and frameX != -1:
         ranges = selectedTarget.updateThresholds(frameCapture.filteredImg[frameY][frameX])
     print("New lower values: " + str(selectedTarget.hsvLowerRange))
