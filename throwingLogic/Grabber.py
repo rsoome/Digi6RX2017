@@ -4,7 +4,7 @@ class Grabber:
         self.mb = mb
         self.MAX_POSITION = 2350
         self.MIN_POSITION = 550
-        self.CARRY_POSITION = self.MAX_POSITION - 200
+        self.CARRY_POSITION = 1900
         self.THROW_POSITION = self.MIN_POSITION
         self.OPEN_POSITION = self.MAX_POSITION - 100
 
