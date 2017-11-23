@@ -33,7 +33,6 @@ class GameLogic:
         self.totalTimeElapsed = 0
         self.fps = 0
         self.timer = Timer.Timer()
-        self.IRCONFIRMATIONSNEEDED = 200
 
     def turnTowardTarget(self, target):
         if target.horizontalMidPoint == None:
@@ -103,17 +102,14 @@ class GameLogic:
             if self.gameState == "START":
 
                 if self.irStatus == 1:
-                    irConfirmations += 1
-                    if irConfirmations >= self.IRCONFIRMATIONSNEEDED:
+                    time.sleep(1)
+                    self.readMb()
+                    if self.irStatus == 1:
                         ballReached = True
                         ballGrabbed = True
-                else:
-                    irConfirmations -= 1
-                    ballReached = True
-                    if irConfirmations <= -self.IRCONFIRMATIONSNEEDED:
-                        ballReached = False
-                        ballGrabbed = False
-                        irConfirmations = 0
+            else:
+                ballReached = False
+                ballGrabbed = False
 
                 if ballGrabbed:
                     self.thrower.grabberCarry()
