@@ -19,7 +19,7 @@ class GameLogic:
         self.initializeValues()
         self.socketData = socketData
         self.thrower = thrower
-        self.ballStopBound = frame.height + 80
+        self.ballStopBound = frame.height + 80 + 30 ##Add self mask height
         self.basketStopBound = 0
         self.gameState = defaultGameState
         self.irStatus = 0
@@ -144,7 +144,6 @@ class GameLogic:
                     basketReached = self.goToTarget(self.basket, self.basketStopBound, self.moveSpeed)
 
                 elif (self.irStatus == 1):
-                    throwTimer = Timer.Timer()
                     print("Throwing ball")
                     self.move.stop()
                     basketReached = self.throwBall(self.basket.getDistance())
@@ -153,14 +152,9 @@ class GameLogic:
                         ballGrabbed = ballReached
                         if ballGrabbed:
                             self.thrower.grabberCarry()
-                        #throwTimer.startTimer()
-                        #while throwTimer.getTimePassed() < 1000:
-                        #    self.mb.readInfrared()
-                        #    time.sleep(0.1)
                         ballReached = False
                         basketReached = False
                         ballGrabbed = False
-                        #throwTimer.stopTimer()
 
                 else:
                     ballReached = False
@@ -168,7 +162,7 @@ class GameLogic:
                     ballGrabbed = False
 
             if self.gameState == "STOP":
-                self.emptyThrower()
+                self.thrower.emptyThrower()
                 self.move.stop()
 
             self.addFrame(self.timer.reset())

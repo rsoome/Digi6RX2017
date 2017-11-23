@@ -25,7 +25,7 @@ class FrameCapturer:
             return
         self.height, self.width, channels = self.capturedFrame.shape
 
-        cv2.ellipse(self.capturedFrame, ((self.width // 2 - 10), self.height), ((self.width // 3), (self.height // 9)), 180, 180, 0,
+        cv2.ellipse(self.capturedFrame, ((self.width // 2 - 10), self.height), ((self.width // 3), (30)), 180, 180, 0,
                     (255, 255, 255), -1)
         self.filteredImg = cv2.cvtColor(self.capturedFrame, colorScheme)  # Pane pilt etteantud värviskeemi
         self.bw = cv2.cvtColor(self.capturedFrame, cv2.COLOR_BGR2GRAY)
