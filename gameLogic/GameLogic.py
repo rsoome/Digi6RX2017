@@ -206,14 +206,12 @@ class GameLogic:
         elif not self.checkVerticalAlignment(target, verticalStopBound):
             print("Alligning Vertically")
             self.moveTowardTarget(target)
-            self.move.stop()
             self.mb.sendValues()
             return False
 
         elif not self.checkHorizontalAlginment(target):
             print("Alligning horizontally.")
             self.turnTowardTarget(target)
-            self.move.stop()
             self.mb.sendValues()
             return False
 
