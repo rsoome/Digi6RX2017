@@ -107,9 +107,9 @@ class GameLogic:
                     if self.irStatus == 1:
                         ballReached = True
                         ballGrabbed = True
-            else:
-                ballReached = False
-                ballGrabbed = False
+                else:
+                    ballReached = False
+                    ballGrabbed = False
 
                 if ballGrabbed:
                     self.thrower.grabberCarry()
