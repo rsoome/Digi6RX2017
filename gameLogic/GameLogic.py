@@ -90,7 +90,6 @@ class GameLogic:
         basketReached = False
         ballGrabbed = False
         self.mb.sendTimer.startTimer()
-        irConfirmations = 0
         self.timer.startTimer()
 
         while self.socketData.gameStarted:

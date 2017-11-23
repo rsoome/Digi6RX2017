@@ -15,16 +15,21 @@ class Thrower:
         return 0.0004*distance + 0.4155 * distance + 150
 
     def throw(self, distance):
+        print("Disabling failsafe.")
         self.mb.disableFailSafe()
+        print("Warming thrower.")
         self.throwingMotor.setSpeed(self.throwingMotor.MID_SPEED)
         self.mb.sendValues()
-        time.sleep(0.5)
+        time.sleep(1)
+        print("Setting throw speed.")
         self.mb.setThrowerSpeed(self.calculateThrowingSpeed(distance))
         self.mb.sendValues()
-        time.sleep(0.8)
+        time.sleep(1)
+        print("Throwing.")
         self.grabberThrow()
         self.mb.sendValues()
         time.sleep(0.8)
+        print("Enabling failsafe and stopping motor.")
         self.mb.enableFailSafe()
         self.throwingMotor.setSpeed(self.throwingMotor.STOP_SPEED)
         self.grabberOpen()
