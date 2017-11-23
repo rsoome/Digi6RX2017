@@ -147,7 +147,7 @@ class GameLogic:
                     throwTimer = Timer.Timer()
                     print("Throwing ball")
                     self.move.stop()
-                    basketReached = self.throwBall()
+                    basketReached = self.throwBall(self.basket.getDistance())
                     if basketReached:
                         ballReached = (self.irStatus == 1)
                         ballGrabbed = ballReached
