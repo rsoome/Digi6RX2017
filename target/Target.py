@@ -63,3 +63,11 @@ class Target:
             self.verticalMidPoint = vBounds[0] + (vBounds[1] - vBounds[0]) // 2
         else:
             self.verticalMidPoint = None
+
+    def getDistance(self):
+        if self.verticalBounds is None:
+            return None
+
+        x = 1
+        c = 1
+        return self.verticalBounds[0] * x + c

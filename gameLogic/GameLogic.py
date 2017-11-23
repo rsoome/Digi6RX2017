@@ -9,7 +9,7 @@ from timer import Timer
 class GameLogic:
 
     def __init__(self, move, deltaFromMidPoint, moveSpeed, turnSpeed, frame, socketData, ref, fieldID, robotID, mb,
-                 ball, basket, defaultGameState):
+                 ball, basket, defaultGameState, thrower):
         self.frameWidth = None
         self.move = move
         self.deltaFromMidPoint = deltaFromMidPoint
@@ -18,6 +18,7 @@ class GameLogic:
         self.frame = frame
         self.initializeValues()
         self.socketData = socketData
+        self.thrower = thrower
         self.ballStopBound = frame.height + 80
         self.basketStopBound = 0
         self.gameState = defaultGameState
@@ -114,12 +115,12 @@ class GameLogic:
                         irConfirmations = 0
 
                 if ballGrabbed:
-                    self.mb.setGrabberPosition(self.mb.GRABBER_CARRY_POSITION)
+                    self.thrower.grabberCarry()
 
                 if not ballReached:
                     print("Going to ball")
                     print(self.ball.horizontalMidPoint)
-                    self.mb.setGrabberPosition(self.mb.GRABBER_OPEN_POSITION)
+                    self.thrower.grabberOpen()
                     ballReached = self.goToTarget(self.ball, self.ballStopBound, self.moveSpeed)
 
                 elif not ballGrabbed:
@@ -131,11 +132,11 @@ class GameLogic:
                         ballGrabbed = self.irStatus == 1
                         if ballGrabbed:
                             self.move.stop()
-                            self.mb.setGrabberPosition(self.mb.GRABBER_CARRY_POSITION)
-                            self.mb.setThrowerSpeed(self.mb.THROWER_MINSPEED)
+                            self.thrower.grabberCarry()
+                            self.thrower.startMotor()
                         else:
-                            self.mb.setGrabberPosition(self.mb.GRABBER_OPEN_POSITION)
-                            self.mb.setThrowerSpeed(self.mb.THROWER_STOP)
+                            self.thrower.grabberOpen()
+                            self.thrower.stopMotor()
                         self.mb.sendValues()
 
                 elif not basketReached:
@@ -151,7 +152,7 @@ class GameLogic:
                         ballReached = (self.irStatus == 1)
                         ballGrabbed = ballReached
                         if ballGrabbed:
-                            self.mb.setGrabberPosition(self.mb.GRABBER_CARRY_POSITION)
+                            self.thrower.grabberCarry()
                         #throwTimer.startTimer()
                         #while throwTimer.getTimePassed() < 1000:
                         #    self.mb.readInfrared()
@@ -277,20 +278,8 @@ class GameLogic:
     def throwBall(self):
         if not self.checkHorizontalAlginment(self.basket) or not self.checkVerticalAlignment(self.basket, self.basketStopBound):
             return False
-        self.mb.setThrowerSpeed(self.mb.THROWER_MIDSPEED)
-        self.mb.disableFailSafe()
-        self.mb.sendValues()
-        time.sleep(0.5)
-        self.mb.setThrowerSpeed(self.mb.THROWER_MAXSPEED)
-        self.mb.sendValues()
-        time.sleep(1.3)
-        self.mb.setGrabberPosition(self.mb.GRABBER_THROW_POSITION)
-        self.mb.sendValues()
-        time.sleep(1)
-        self.mb.enableFailSafe()
-        self.mb.setThrowerSpeed(self.mb.THROWER_STOP)
-        self.mb.setGrabberPosition(self.mb.GRABBER_OPEN_POSITION)
-        self.mb.sendValues()
+
+        self.thrower.throw()
         print("throwing irStatus " + str(self.irStatus))
         return True
 
@@ -306,22 +295,3 @@ class GameLogic:
             self.totalTimeElapsed = 0
 
         self.socketData.fps = self.fps
-
-    def emptyThrower(self):
-        self.mb.disableFailSafe()
-        self.mb.setThrowerSpeed(self.mb.THROWER_MINSPEED)
-        self.mb.sendValues()
-        time.sleep(0.5)
-        self.mb.setThrowerSpeed(self.mb.THROWER_MIDSPEED)
-        self.mb.sendValues()
-        time.sleep(0.5)
-        #self.mb.setThrowerSpeed(self.mb.THROWER_MAXSPEED)
-        #self.mb.sendValues()
-        #time.sleep(0.5)
-        self.mb.setGrabberPosition(self.mb.GRABBER_THROW_POSITION)
-        self.mb.sendValues()
-        time.sleep(0.5)
-        self.mb.enableFailSafe()
-        self.mb.setGrabberPosition(self.mb.GRABBER_OPEN_POSITION)
-        self.mb.setThrowerSpeed(self.mb.THROWER_STOP)
-        self.mb.sendValues()

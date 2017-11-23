@@ -8,16 +8,6 @@ class MBcomm:
 
     def __init__(self, target, baud):
         self.ser = serial.Serial(port=target, baudrate=baud, timeout=0.8)
-        self.THROWER_MAXSPEED = 2000
-        self.THROWER_MINSPEED = 1200
-        self.THROWER_CONSTANT = (self.THROWER_MINSPEED + self.THROWER_MAXSPEED)
-        self.THROWER_MIDSPEED = self.THROWER_CONSTANT // 2
-        self.THROWER_STOP = 1000
-        self.GRABBER_MAX_POSITION = 2350
-        self.GRABBER_MIN_POSITION = 550
-        self.GRABBER_CARRY_POSITION = self.GRABBER_MAX_POSITION - 400
-        self.GRABBER_THROW_POSITION = self.GRABBER_MIN_POSITION
-        self.GRABBER_OPEN_POSITION = self.GRABBER_MAX_POSITION - 100
         self.values = dict()
         self.sendTimer = Timer.Timer()
         self.SENDFREQ = 240

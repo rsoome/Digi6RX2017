@@ -18,6 +18,7 @@ import threading
 from manualDrive import ManualDrive
 from refereeHandler import RefereeHandler
 from timer import Timer
+from throwingLogic import Thrower
 
 def closeConnections():
     print("Closing connections and writing new values to conf.")
@@ -33,7 +34,7 @@ def closeConnections():
         print(e)
 
     try:
-        game.emptyThrower()
+        thrower.emptyThrower()
         mb.closeSerial()
 
     except Exception as e:
@@ -88,9 +89,11 @@ imgHandler = ImageHandler.ImageHandler(bool(settings.getValue("multiThreading"))
 
 ref = RefereeHandler.RefereeHandler(robotID, fieldID, mb)
 
+thrower = Thrower.Thrower(mb)
+
 game = GameLogic.GameLogic(move, settings.getValue("deltaFromMidPoint"), settings.getValue("driveSpeed"),
                            settings.getValue("turnSpeed"), frameCapture, socketData, ref, fieldID, robotID, mb, ball,
-                           basket, settings.getValue("defaultGameState"))
+                           basket, settings.getValue("defaultGameState"), thrower)
 
 socketHandler = SocketHandler.SocketHandler(socketData, ball, basket, 0, frameCapture)
 
@@ -150,7 +153,7 @@ def socketDataCheck():
 
         socketData.gameStarted = False
         print("Game mode deactivated")
-        game.emptyThrower()
+        thrower.emptyThrower()
     if socketData.updateConf:
         print("Updating conf.")
         settings.writeFromDictToFile()
@@ -171,6 +174,7 @@ try:
     mb.sendTimer.startTimer()
     while True:
 
+        print(ball.getDistance())
         #move.driveXY(0, 0, 3)
 
         #DEBUGGING LOOKING FOR TARGET
@@ -178,7 +182,7 @@ try:
         #END DEBUGGING
 
 
-        mb.setGrabberPosition(mb.GRABBER_OPEN_POSITION)
+        thrower.grabberOpen()
 
         if mb.sendingTime():
             mb.sendValues()
