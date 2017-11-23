@@ -10,3 +10,4 @@ class Grabber:
 
     def setPosition(self, position):
         self.mb.setGrabberPosition(min(max(position, self.MIN_POSITION), self.MAX_POSITION))
+        self.mb.sendValues()

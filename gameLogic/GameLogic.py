@@ -106,14 +106,12 @@ class GameLogic:
                     time.sleep(1)
                     self.readMb()
                     if self.irStatus == 1:
+                        self.thrower.grabberCarry()
                         ballReached = True
                         ballGrabbed = True
                 else:
                     ballReached = False
                     ballGrabbed = False
-
-                if ballGrabbed:
-                    self.thrower.grabberCarry()
 
                 if not ballReached:
                     print("Going to ball")
