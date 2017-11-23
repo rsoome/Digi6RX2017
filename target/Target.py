@@ -68,6 +68,4 @@ class Target:
         if self.verticalBounds is None:
             return None
 
-        x = 1
-        c = 1
-        return self.verticalBounds[1] * x + c
+        return pow(329.85*math.e, -0.009*self.verticalBounds[1])
