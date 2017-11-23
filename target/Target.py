@@ -18,6 +18,7 @@ class Target:
         self.scanOrder = scanOrder
         self.timer = Timer.Timer()
         self.minSize = minSize
+        self.e = 2.7183
 
     def getBounds(self):
         return self.horizontalBounds, self.verticalBounds
@@ -68,4 +69,4 @@ class Target:
         if self.verticalBounds is None:
             return None
 
-        return pow(329.85*math.e, -0.009*self.verticalBounds[1])
+        return pow(329.85*self.e, -0.009*self.verticalBounds[1])
