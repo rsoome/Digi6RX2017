@@ -174,7 +174,7 @@ try:
     mb.sendTimer.startTimer()
     while True:
 
-        print(ball.getDistance())
+        #print(ball.getDistance())
         #move.driveXY(0, 0, 3)
 
         #DEBUGGING LOOKING FOR TARGET

@@ -109,6 +109,7 @@ class GameLogic:
                         ballGrabbed = True
                 else:
                     irConfirmations -= 1
+                    ballReached = True
                     if irConfirmations <= -self.IRCONFIRMATIONSNEEDED:
                         ballReached = False
                         ballGrabbed = False
@@ -275,11 +276,11 @@ class GameLogic:
         if len(mbMsg) > 0:
             self.handleMbMessage(mbMsg)
 
-    def throwBall(self):
+    def throwBall(self,distance):
         if not self.checkHorizontalAlginment(self.basket) or not self.checkVerticalAlignment(self.basket, self.basketStopBound):
             return False
 
-        self.thrower.throw()
+        self.thrower.throw(distance)
         print("throwing irStatus " + str(self.irStatus))
         return True
 
