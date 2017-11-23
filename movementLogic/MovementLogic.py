@@ -13,7 +13,7 @@ class MovementLogic:
         self.motorSpeed2 = 0.0
         self.timer = Timer.Timer()
         self.minDriveSpeed = 0.1
-        self.minTurnSpeed = 0.2
+        self.minTurnSpeed = 0.05
         self.wheelDistance = 0.13
 
         self.wheelSpeedToMainboardUnits = 18.75 * 64 / (2 * math.pi * 0.035 * 60)

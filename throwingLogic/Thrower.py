@@ -12,7 +12,7 @@ class Thrower:
 
     def calculateThrowingSpeed(self, distance):
 
-        return 1.2597*distance + 1194
+        return 1.4*distance + 1194
 
     def throw(self, distance):
         self.mb.disableFailSafe()
