@@ -199,17 +199,27 @@ class GameLogic:
                     #print(i)
                     self.move.driveXY(0, self.moveSpeed//4, 0)
                 return False
+            else:
+                self.move.stop()
+                self.mb.sendValues()
 
         elif not self.checkVerticalAlignment(target, verticalStopBound):
             print("Alligning Vertically")
             self.moveTowardTarget(target)
+            self.move.stop()
+            self.mb.sendValues()
             return False
 
         elif not self.checkHorizontalAlginment(target):
             print("Alligning horizontally.")
             self.turnTowardTarget(target)
+            self.move.stop()
+            self.mb.sendValues()
             return False
-        time.sleep(5)
+
+        print("At position.")
+        self.move.stop()
+        self.mb.sendValues()
         return True
 
     def initializeValues(self):
