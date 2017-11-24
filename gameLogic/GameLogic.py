@@ -32,6 +32,7 @@ class GameLogic:
         self.framesCaptured = 0
         self.totalTimeElapsed = 0
         self.fps = 0
+        self.basketAheadBound = 70
 
     def turnTowardTarget(self, target):
         if target.horizontalMidPoint == None:
@@ -70,7 +71,6 @@ class GameLogic:
 
     def lookForTarget(self, target):
         if not self.socketData.gameStarted:
-        #if False:
             print("Game ended by client.")
             return False
 
@@ -189,17 +189,24 @@ class GameLogic:
             if not targetFound:
                 print("Looking for " + target.id)
 
-                while not self.lookForTarget(self.basket):
-                    pass
+                if self.basket.horizntalMidPoint is not None:
 
-                driveTimer = Timer.Timer()
-                driveTimer.startTimer()
+                    driveTimer = Timer.Timer()
+                    driveTimer.startTimer()
 
-                while driveTimer.getTimePassed() < 1000:
-                    self.move.driveXY(0, self.moveSpeed//4, 0)
-                    self.mb.sendValues()
-                    time.sleep(0.05)
-                driveTimer.stopTimer()
+                    while driveTimer.getTimePassed() < 1000:
+                        self.move.driveXY(0, self.moveSpeed//2, 0)
+                        self.mb.sendValues()
+
+                        if target.horizontalMidPoint is not None:
+                            return True
+
+                        if self.basket.verticalBounds[1] >= self.basketAheadBound:
+                            self.move.rotate(self.turnSpeed)
+                            return False
+
+                        time.sleep(0.05)
+                    driveTimer.stopTimer()
 
                 return False
             else:
