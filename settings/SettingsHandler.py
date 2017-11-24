@@ -43,19 +43,19 @@ class SettingsHandler:
             self.values["multiThreading"] = True
         if not "ballHSVLower" in self.values:
             self.values["ballHSVLower"] = [255, 255, 255]
-        if not "ballHSVHigher" in self.values:
+        if not "ballHSVUpper" in self.values:
             self.values["ballHSVUpper"] = [0, 0, 0]
         if not "magnetaBasketHSVLower" in self.values:
             self.values["magnetaBasketHSVLower"] = [255, 255, 255]
-        if not "magnetaBasketHSVHigher" in self.values:
+        if not "magnetaBasketHSVUpper" in self.values:
             self.values["magnetaBasketHSVUpper"] = [0, 0, 0]
         if not "blueBasketHSVLower" in self.values:
             self.values["blueBasketHSVLower"] = [255, 255, 255]
-        if not "blueBasketHSVHigher" in self.values:
+        if not "blueBasketHSVUpper" in self.values:
             self.values["blueBasketHSVUpper"] = [0, 0, 0]
         if not "blackLineHSVLower" in self.values:
             self.values["blackLineHSVLower"] = [5, 5, 5]
-        if not "blackLineHSVHigher" in self.values:
+        if not "blackLineHSVUpper" in self.values:
             self.values["blackLineHSVUpper"] = [0, 0, 0]
         if not "mbLocation = " in self.values:
             self.values["mbLocation"] = "/dev/ttyACM0"
