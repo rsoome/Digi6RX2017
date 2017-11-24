@@ -31,13 +31,11 @@ class SocketHandler:
             self.socketData.imgDimensions = self.frame.capturedFrame.shape
             self.socketData.img = self.frame.bw
 
-        if self.ball.mask is not None:
-            self.socketData.ballDimensions = self.ball.mask.shape
-            self.socketData.ballMask = self.ball.contours
+            if self.ball.contours is not None:
+                cv2.drawContours(self.socketData.img, self.ball.contours, -1, [255, 0, 0])
 
-        if self.basket.mask is not None:
-            self.socketData.basketDimensions = self.basket.mask.shape
-            self.socketData.basketMask = self.basket.contours
+            if self.basket.contours is not None:
+                cv2.drawContours(self.socketData.img, self.basket.contours, -1, [0, 255, 0])
 
         self.socketData.ballHorizontalBounds = self.ball.horizontalBounds
         self.socketData.ballVerticalBounds = self.ball.verticalBounds

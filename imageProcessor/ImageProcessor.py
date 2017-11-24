@@ -24,8 +24,7 @@ class ImageProcessor:
     def findObjectCoordinates(self):
         # Find blobs
         image, cnts, hirearchy = cv2.findContours(self.obj.mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-        self.obj.contours = np.zeros((480, 640, 3), np.uint8)
-        cv2.drawContours(self.obj.contours, cnts, -1, [255, 0, 0])
+        self.obj.contours = cnts
 
         # If no blob is found, cancel
         if len(cnts) == 0:

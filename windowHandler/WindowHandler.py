@@ -99,37 +99,21 @@ class WindowHandler:
             self.socketHandler.sendMessage(self.values, self.socketHandler.clientSock, 1)
 
         frame = None
-        ballMask = None
-        basketMask = None
 
         if self.socketData.img is not None:
             #print("--------")
             #print(self.socketData.img)
             frame = self.socketData.img
 
-        if self.socketData.ballMask is not None:
-            ballMask = self.socketData.ballMask
-
-        if self.socketData.basketMask is not None:
-            basketMask = self.socketData.basketMask
-
         if frame is None:
             frame = np.zeros((480, 640, 3), np.uint8)
-
-        if ballMask is None:
-            ballMask = np.zeros((480, 640, 3), np.uint8)
-
-        if basketMask is None:
-            basketMask = np.zeros((480, 640, 3), np.uint8)
 
         cv2.putText(frame, "FPS: " + str(self.fps), (30, 30), cv2.FONT_HERSHEY_SIMPLEX,
                     1, self.textColor, 1)
 
 
         # Display the resulting frame
-        cv2.imshow('ball_filtered', ballMask)
         cv2.imshow('main', frame)
-        cv2.imshow('gate_filtered', basketMask)
 
     def createImageFromString(self, imgAsString):
         print(imgAsString)
