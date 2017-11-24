@@ -202,7 +202,7 @@ class GameLogic:
                 while not self.lookForTarget(self.basket):
                     pass
 
-                driveTimer = Timer.Timer
+                driveTimer = Timer.Timer()
                 driveTimer.startTimer()
 
                 while driveTimer.getTimePassed() < 1000:
