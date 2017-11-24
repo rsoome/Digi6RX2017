@@ -121,6 +121,7 @@ class SocketHandler:
                 if conn == None:
                     self.servSock.settimeout(0.1)
                     conn, addr = self.servSock.accept()
+                    time.sleep(1)
 
                     messageSent = self.sendMessage({"check": ""}, conn, 0.1)
                     if messageSent:

@@ -1,5 +1,7 @@
 import time
 
+import math
+
 from throwingLogic import ThrowingMotor
 from throwingLogic import Grabber
 
@@ -12,17 +14,17 @@ class Thrower:
 
     def calculateThrowingSpeed(self, distance):
 
-        return 0.0004*pow(distance, 2) + 0.4155 * distance + 150
+        return int(1211*pow(math.e, 0.0009*distance))
 
     def throw(self, distance):
         print("Disabling failsafe.")
         self.mb.disableFailSafe()
         print("Warming thrower.")
-        self.throwingMotor.setSpeed(self.throwingMotor.MID_SPEED)
+        self.startMotor()
         self.mb.sendValues()
         time.sleep(0.8)
         print("Setting throw speed to :" + str(self.calculateThrowingSpeed(distance)))
-        self.mb.setThrowerSpeed(self.calculateThrowingSpeed(distance))
+        self.setMotorSpeed(self.calculateThrowingSpeed(distance))
         self.mb.sendValues()
         time.sleep(0.8)
         print("Throwing.")
@@ -31,7 +33,7 @@ class Thrower:
         time.sleep(0.8)
         print("Enabling failsafe and stopping motor.")
         self.mb.enableFailSafe()
-        self.throwingMotor.setSpeed(self.throwingMotor.STOP_SPEED)
+        self.stopMotor()
         self.grabberOpen()
         self.mb.sendValues()
 
@@ -40,6 +42,9 @@ class Thrower:
 
     def stopMotor(self):
         self.throwingMotor.setSpeed(self.throwingMotor.STOP_SPEED)
+
+    def setMotorSpeed(self, speed):
+        self.throwingMotor.setSpeed(speed)
 
     def grabberOpen(self):
         self.grabber.setPosition(self.grabber.OPEN_POSITION)

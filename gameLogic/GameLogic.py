@@ -94,21 +94,24 @@ class GameLogic:
 
         while self.socketData.gameStarted:
             self.readMb()
-            print(self.irStatus)
+            #print(self.irStatus)
 
             if self.mb.sendingTime():
                 self.mb.sendValues()
 
             if self.gameState == "START":
 
-                if self.irStatus == 1:
+                if self.irStatus == 1 and not ballGrabbed:
                     time.sleep(1)
                     self.readMb()
                     if self.irStatus == 1:
+                        print("Grabbing ball")
+                        self.move.stop()
                         self.thrower.grabberCarry()
                         ballReached = True
                         ballGrabbed = True
-                else:
+                elif not ballGrabbed:
+                    self.thrower.grabberOpen()
                     ballReached = False
                     ballGrabbed = False
 

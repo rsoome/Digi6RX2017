@@ -152,7 +152,7 @@ def socketDataCheck():
         game.run()
 
         socketData.gameStarted = False
-        print("Game mode deactivated")
+        print("Game mode deactivated. Emptying thrower.")
         thrower.emptyThrower()
     if socketData.updateConf:
         print("Updating conf.")
