@@ -121,7 +121,6 @@ class GameLogic:
                     self.thrower.grabberOpen()
                     ballReached = self.goToTarget(self.ball, self.ballStopBound, self.moveSpeed)
                     if ballReached:
-                        self.move.stop()
                         self.mb.sendValues()
                         #time.sleep(5)
 

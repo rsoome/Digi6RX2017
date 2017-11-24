@@ -48,12 +48,15 @@ class Thrower:
 
     def grabberOpen(self):
         self.grabber.setPosition(self.grabber.OPEN_POSITION)
+        time.sleep(0.5)
 
     def grabberCarry(self):
         self.grabber.setPosition(self.grabber.CARRY_POSITION)
+        time.sleep(0.5)
 
     def grabberThrow(self):
         self.grabber.setPosition(self.grabber.THROW_POSITION)
+        time.sleep(0.5)
 
     def emptyThrower(self):
         self.throw(0)
