@@ -41,7 +41,7 @@ class Thrower:
         self.throwingMotor.setSpeed(self.throwingMotor.MIN_SPEED)
 
     def stopMotor(self):
-        self.throwingMotor.setSpeed(self.throwingMotor.STOP_SPEED)
+        self.throwingMotor.stop()
 
     def setMotorSpeed(self, speed):
         self.throwingMotor.setSpeed(speed)

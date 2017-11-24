@@ -93,18 +93,22 @@ class GameLogic:
         self.timer.startTimer()
         self.thrower.grabberOpen()
         self.thrower.stopMotor()
+        funcTimer = Timer.Timer()
+        funcTimer.startTimer()
 
         while self.socketData.gameStarted:
             self.readMb()
             #print(self.irStatus)
+            print("mbRead time: ", funcTimer.reset())
 
             if self.mb.sendingTime():
                 self.mb.sendValues()
+                print("mb send time: ", funcTimer.reset())
 
             if self.gameState == "START":
 
                 if self.irStatus == 1 and not ballGrabbed:
-                    time.sleep(1)
+                    time.sleep(0.5)
                     self.readMb()
                     if self.irStatus == 1:
                         print("Grabbing ball")
@@ -112,6 +116,8 @@ class GameLogic:
                         self.thrower.grabberCarry()
                         ballReached = True
                         ballGrabbed = True
+                    print("grabbing time: ", funcTimer.reset())
+
                 elif not ballGrabbed:
                     self.thrower.grabberOpen()
                     ballReached = False
@@ -124,13 +130,16 @@ class GameLogic:
                     ballReached = self.goToTarget(self.ball, self.ballStopBound, self.moveSpeed)
                     if ballReached:
                         self.mb.sendValues()
-                        #time.sleep(5)
+                    print("going to ball time: ", funcTimer.reset())
+
+
 
                 elif not ballGrabbed:
                     ballReached = self.checkVerticalAlignment(self.ball, self.ballStopBound) and self.checkHorizontalAlginment(self.ball)
                     if ballReached:
                         print("Reaching ball")
                         self.move.driveXY(0, self.moveSpeed//50, 0)
+                        self.mb.sendValues()
                         time.sleep(0.1)
                         ballGrabbed = self.irStatus == 1
                         if ballGrabbed:
@@ -141,10 +150,12 @@ class GameLogic:
                             self.thrower.grabberOpen()
                             self.thrower.stopMotor()
                         self.mb.sendValues()
+                    print("reaching ball time: ", funcTimer.reset())
 
                 elif not basketReached:
                     print("Reaching basket")
                     basketReached = self.goToTarget(self.basket, self.basketStopBound, self.moveSpeed)
+                    print("basket reaching time: ", funcTimer.reset())
 
                 elif (self.irStatus == 1):
                     print("Throwing ball")
@@ -158,6 +169,7 @@ class GameLogic:
                         ballReached = False
                         basketReached = False
                         ballGrabbed = False
+                    print("ball throwing time: ", funcTimer.reset())
 
                 else:
                     ballReached = False
