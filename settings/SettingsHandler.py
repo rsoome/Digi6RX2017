@@ -65,8 +65,12 @@ class SettingsHandler:
             self.values["basketScanOrder"] = [7, 6, 8, 4, 3, 5, 1, 0, 2]
         if not "blackLineScanOrder" in self.values:
             self.values["basketScanOrder"] = [7, 6, 8, 4, 3, 5, 1, 0, 2]
-        if not "objectMinSize" in self.values:
-            self.values["objectMinSize"] = 50
+        if not "ballMinSize" in self.values:
+            self.values["ballMinSize"] = 50
+        if not "basketMinSize" in self.values:
+            self.values["basketMinSize"] = 1000
+        if not "lineMinSize" in self.values:
+            self.values["lineMinSize"] = 50
         if not "minImgArea" in self.values:
             self.values["minImgArea"] = 0
         if not "ID" in self.values:

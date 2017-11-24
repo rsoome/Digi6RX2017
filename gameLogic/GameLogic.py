@@ -92,17 +92,13 @@ class GameLogic:
         self.mb.sendTimer.startTimer()
         self.thrower.grabberOpen()
         self.thrower.stopMotor()
-        funcTimer = Timer.Timer()
-        funcTimer.startTimer()
 
         while self.socketData.gameStarted:
             self.readMb()
             #print(self.irStatus)
-            print("mbRead time: ", funcTimer.reset())
 
             if self.mb.sendingTime():
                 self.mb.sendValues()
-                print("mb send time: ", funcTimer.reset())
 
             if self.gameState == "START":
 
@@ -115,7 +111,6 @@ class GameLogic:
                         self.thrower.grabberCarry()
                         ballReached = True
                         ballGrabbed = True
-                    print("grabbing time: ", funcTimer.reset())
 
                 elif not ballGrabbed:
                     self.thrower.grabberOpen()
@@ -126,9 +121,7 @@ class GameLogic:
                     print("Going to ball")
                     print(self.ball.horizontalMidPoint)
                     self.thrower.grabberOpen()
-                    funcTimer.reset()
                     ballReached = self.goToTarget(self.ball, self.ballStopBound, self.moveSpeed)
-                    print("going to ball time: ", funcTimer.reset())
                     if ballReached:
                         self.mb.sendValues()
 
@@ -151,12 +144,10 @@ class GameLogic:
                             self.thrower.grabberOpen()
                             self.thrower.stopMotor()
                         self.mb.sendValues()
-                    print("reaching ball time: ", funcTimer.reset())
 
                 elif not basketReached:
                     print("Reaching basket")
                     basketReached = self.goToTarget(self.basket, self.basketStopBound, self.moveSpeed)
-                    print("basket reaching time: ", funcTimer.reset())
 
                 elif (self.irStatus == 1):
                     print("Throwing ball")
@@ -170,7 +161,6 @@ class GameLogic:
                         ballReached = False
                         basketReached = False
                         ballGrabbed = False
-                    print("ball throwing time: ", funcTimer.reset())
 
                 else:
                     ballReached = False

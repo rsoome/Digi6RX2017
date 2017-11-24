@@ -59,15 +59,15 @@ if opponent != "magneta" and opponent != "blue":
     sys.exit(0)
 
 ball = Target.Target(None, None, "ball", settings.getValue("ballHSVLower"), settings.getValue("ballHSVUpper"),
-                     settings.getValue("ballScanOrder"), settings.getValue("objectMinSize"))
+                     settings.getValue("ballScanOrder"), settings.getValue("ballMinSize"))
 
 basket = Target.Target(None, None, "basket", settings.getValue(opponent + "BasketHSVLower"),
                        settings.getValue(opponent + "BasketHSVUpper"),
-                       settings.getValue("basketScanOrder"), settings.getValue("objectMinSize"))
+                       settings.getValue("basketScanOrder"), settings.getValue("basketMinSize"))
 
 blackLine = Target.Target(None, None, "blackLine", settings.getValue("blackLineHSVLower"),
                           settings.getValue("blackLineHSVUpper"),
-                          settings.getValue("lineScanOrder"), settings.getValue("objectMinSize"))
+                          settings.getValue("lineScanOrder"), settings.getValue("lineMinSize"))
 
 robotID = settings.getValue("ID")
 fieldID = settings.getValue("fieldID")
