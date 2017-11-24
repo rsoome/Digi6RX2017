@@ -8,4 +8,4 @@ class ThrowingMotor:
         self.STOP_SPEED = 500
 
     def setSpeed(self, speed):
-        self.mb.setThrowerSpeed(min(max(speed, self.MIN_SPEED), self.MAX_SPEED))
+        self.mb.setThrowerSpeed(min(max(speed, self.STOP_SPEED), self.MAX_SPEED))
