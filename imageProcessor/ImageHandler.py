@@ -167,7 +167,7 @@ class ImageHandler:
                 imageMinArea = height * width + 1
 
             if self.multiThreading:
-                self.findObjectMultithreaded(0, height, 0, width, target.minSize, imageMinArea, target.scanOrder, target)
+                self.findObjectMultithreaded(0, height, 0, width, target.minSize, self.imageMinArea, target.scanOrder, target)
             else:
                 self.findObject(0, 0, target)
         else:
