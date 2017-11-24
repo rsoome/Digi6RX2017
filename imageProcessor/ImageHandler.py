@@ -22,12 +22,13 @@ class ImageHandler:
             #print(targetObject.id, "'s hsvLower: ", targetObject.hsvLowerRange)
             #print(targetObject.id, "'s hsvUpper: ", targetObject.hsvUpperRange)
             thresh = cv2.inRange(self.frame.filteredImg, targetObject.hsvLowerRange, targetObject.hsvUpperRange)
+            print(targetObject.id, "'s mask:", thresh)
             targetObject.mask = thresh
         else:
             print("No frame captured.")
 	
 
-    # Creates an imageP
+    # Creates an imageProcessor
     # rocessor object and runs it's findObject function.
     # The funtion is meant to be ran on multiple threads processing different parts of a picture but can be used on a single
     # thread with the whole picture.
