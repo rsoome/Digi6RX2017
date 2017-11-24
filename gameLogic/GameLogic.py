@@ -60,6 +60,7 @@ class GameLogic:
 
         #print("Verticalmidpoint: " + str(target.verticalMidPoint))
         print("Jagamine: " + str(1 - float(target.verticalMidPoint)/self.frame.height))
+        print("target midpoint: " + target.horizontalMidPoint)
         #print("moveSpeed" + str(self.moveSpeed))
         #print("CalculateSpeed: " + str(self.move.calculateSpeed(self.moveSpeed, 1 - float(target.verticalMidPoint)/self.frame.height)))
         ySpeed = self.move.calculateSpeed(self.moveSpeed, 1 - float(verticalMidPoint)/self.frame.height)
@@ -75,7 +76,7 @@ class GameLogic:
             return False
 
         #print(target.horizontalMidPoint)
-        self.move.rotate(self.turnSpeed//2)
+        self.move.rotate(self.turnSpeed)
         if self.mb.sendingTime:
             self.mb.sendValues()
 
@@ -106,7 +107,7 @@ class GameLogic:
             if self.gameState == "START":
 
                 if self.irStatus == 1 and not ballGrabbed:
-                    time.sleep(0.5)
+                    time.sleep(0.1)
                     self.readMb()
                     if self.irStatus == 1:
                         print("Grabbing ball")
@@ -209,6 +210,7 @@ class GameLogic:
                     self.move.driveXY(0, self.moveSpeed//4, 0)
                     self.mb.sendValues()
                     time.sleep(0.05)
+                driveTimer.stopTimer()
 
                 return False
             else:
