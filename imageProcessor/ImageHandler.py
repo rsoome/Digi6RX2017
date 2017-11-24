@@ -161,6 +161,7 @@ class ImageHandler:
     def detect(self, target):
         self.generateMask(target)
         if target.mask is not None:
+            print("Target mask is not none.")
             properties = target.mask.shape
             height = properties[0]
             width = properties[1]

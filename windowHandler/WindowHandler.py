@@ -13,8 +13,6 @@ class WindowHandler:
         self.socketHandler = socketHandler
         self.socketData = socketData
         cv2.namedWindow('main')
-        cv2.namedWindow('ball_filtered')
-        cv2.namedWindow('gate_filtered')
         cv2.setMouseCallback('main', self.onmouse)
         self.fps = "0"
         self.textColor = (0, 0, 255)
