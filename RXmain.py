@@ -206,10 +206,6 @@ try:
         if socketData.stop:
             break
 
-        game.addFrame(timer.stopTimer())
-
-        game.updateFPS()
-
         socketHandler.updateData()
 
     print("Exit.")

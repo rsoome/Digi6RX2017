@@ -32,7 +32,6 @@ class GameLogic:
         self.framesCaptured = 0
         self.totalTimeElapsed = 0
         self.fps = 0
-        self.timer = Timer.Timer()
 
     def turnTowardTarget(self, target):
         if target.horizontalMidPoint == None:
@@ -70,8 +69,8 @@ class GameLogic:
         self.move.driveXY(0, ySpeed, turnSpeed)
 
     def lookForTarget(self, target):
-        #if not self.socketData.gameStarted:
-        if False:
+        if not self.socketData.gameStarted:
+        #if False:
             print("Game ended by client.")
             return False
 
@@ -90,7 +89,6 @@ class GameLogic:
         basketReached = False
         ballGrabbed = False
         self.mb.sendTimer.startTimer()
-        self.timer.startTimer()
         self.thrower.grabberOpen()
         self.thrower.stopMotor()
         funcTimer = Timer.Timer()
@@ -182,10 +180,6 @@ class GameLogic:
                 self.thrower.emptyThrower()
                 self.move.stop()
 
-            self.addFrame(self.timer.reset())
-            self.updateFPS()
-
-        self.timer.stopTimer()
         self.mb.sendTimer.stopTimer()
         self.move.stop()
 
@@ -204,9 +198,18 @@ class GameLogic:
 
             if not targetFound:
                 print("Looking for " + target.id)
-                for i in range(2000):
-                    #print(i)
+
+                while not self.lookForTarget(self.basket):
+                    pass
+
+                driveTimer = Timer.Timer
+                driveTimer.startTimer()
+
+                while driveTimer.getTimePassed() < 1000:
                     self.move.driveXY(0, self.moveSpeed//4, 0)
+                    self.mb.sendValues()
+                    time.sleep(0.05)
+
                 return False
             else:
                 self.move.stop()
@@ -301,16 +304,3 @@ class GameLogic:
         self.thrower.throw(distance)
         print("throwing irStatus " + str(self.irStatus))
         return True
-
-    def addFrame(self, elapsed):
-        if elapsed > 0:
-            self.framesCaptured += 1
-            self.totalTimeElapsed += elapsed
-
-    def updateFPS(self):
-        if self.framesCaptured >= 60:
-            self.fps = (round(self.framesCaptured / (self.totalTimeElapsed / 1000), 0))
-            self.framesCaptured = 0
-            self.totalTimeElapsed = 0
-
-        self.socketData.fps = self.fps

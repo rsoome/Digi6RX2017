@@ -5,6 +5,7 @@ import numpy as np
 import cv2
 from cancellationToken import CancellationToken
 import threading
+from timer import Timer
 
 class ImageHandler:
 
@@ -173,9 +174,18 @@ class ImageHandler:
             print("Target has no mask.")
 
     def run(self):
+        timer = Timer.Timer()
+        framesCaptured = 0
+        timePassed = 0
         while not self.socketData.stop:
             self.frame.capture(cv2.COLOR_BGR2HSV)
             for obj in self.objects:
                 self.detect(obj)
                 time.sleep(self.FRAMEUPDATEPERIOD)
+
+            framesCaptured += 1
+            timePassed += timer.reset()
+
+            if framesCaptured >= 60:
+                self.socketData.fps = framesCaptured/(timePassed/1000)
 
