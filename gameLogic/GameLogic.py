@@ -127,10 +127,12 @@ class GameLogic:
                     print("Going to ball")
                     print(self.ball.horizontalMidPoint)
                     self.thrower.grabberOpen()
+                    funcTimer.reset()
                     ballReached = self.goToTarget(self.ball, self.ballStopBound, self.moveSpeed)
+                    print("going to ball time: ", funcTimer.reset())
                     if ballReached:
                         self.mb.sendValues()
-                    print("going to ball time: ", funcTimer.reset())
+
 
 
 
