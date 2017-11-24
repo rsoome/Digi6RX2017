@@ -189,7 +189,7 @@ class GameLogic:
             if not targetFound:
                 print("Looking for " + target.id)
 
-                if self.basket.horizntalMidPoint is not None:
+                if self.basket.horizontalMidPoint is not None:
 
                     driveTimer = Timer.Timer()
                     driveTimer.startTimer()
