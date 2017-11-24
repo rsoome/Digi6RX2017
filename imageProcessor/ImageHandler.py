@@ -187,5 +187,7 @@ class ImageHandler:
             timePassed += timer.reset()
 
             if framesCaptured >= 60:
-                self.socketData.fps = framesCaptured/(timePassed/1000)
+                self.socketData.fps = int(framesCaptured/(timePassed/1000))
+                framesCaptured = 0
+                timePassed = 0
 
