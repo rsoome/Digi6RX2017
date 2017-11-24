@@ -34,14 +34,13 @@ class ImageHandler:
     # verticalLowerBound - image's vertical (y-axis) global lower bound of the part of the imgae being processed.
     # In case the whole picture is being processed it is to be assigned the value 0.
     # horizontalLowerBound - image's horizontal (x-axis) global lower bound of the part of the image being processed.
-    # minSize - The minimum area of the ractangle surrounding the object. Objects smaller than this are not considered valid.
+    # minSize - The minimum area of the rectangle surrounding the object. Objects smaller than this are not considered valid.
     # cancellationToken - A token that signals the parallel threads whether the object has been already found.
     # target - the object into which the found coordinates will be inserted.
     # threadID - the ID by which the parallel threads will be identified. Can be any value.
-    def createImageProcessor(self, verticalLowerBound, horizontalLowerBound, minSize, cancellationToken, target,
-                             threadID):
-        imgProc = ImageProcessor.ImageProcessor(verticalLowerBound, horizontalLowerBound, minSize, cancellationToken,
-                                                target, threadID)
+    def createImageProcessor(self, verticalLowerBound, horizontalLowerBound, cancellationToken, target, threadID):
+        imgProc = ImageProcessor.ImageProcessor(verticalLowerBound, horizontalLowerBound, cancellationToken, target,
+                                                threadID)
         imgProc.findObjectCoordinates()
 
     # Blurs the image to remove noise
@@ -58,7 +57,7 @@ class ImageHandler:
     def findObject(self, verticalLowerBound, horizontalLowerBound, obj):
         obj.resetBounds()
         c = CancellationToken.CancellationToken()
-        self.createImageProcessor(verticalLowerBound, horizontalLowerBound, 1, c, obj, "0")
+        self.createImageProcessor(verticalLowerBound, horizontalLowerBound, c, obj, "0")
 
     #TODO: CURRENTLY DOES NOT WORK, MIGHT DO MORE HARM THAN GOOD EITHER WAY
     # Divides the given image into parts recursively. Then feeds the found parts to multiple threads to be processed for
@@ -146,8 +145,7 @@ class ImageHandler:
             if horizontalBounds is not None and verticalBounds is not None:
                 return
             t = threading.Thread(target=self.createImageProcessor(verticalLowerBounds[scanOrder[i]],
-                                                                  horizontalLowerBounds[scanOrder[i]], minObjectSize,
-                                                                  cToken, obj, i))
+                                                                  horizontalLowerBounds[scanOrder[i]], cToken, obj, i))
             t.start()
 
     # Wrapper function to find coordinates of a given object
@@ -174,7 +172,6 @@ class ImageHandler:
                 self.findObject(0, 0, target)
         else:
             print("Target has no mask.")
-        print(target.id, "'s vMidPoint: ", target.verticalMidPoint)
 
     def run(self):
         timer = Timer.Timer()

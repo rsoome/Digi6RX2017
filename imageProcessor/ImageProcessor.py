@@ -11,10 +11,9 @@ class ImageProcessor:
     # cancelToken - token indicating whether the job should be cancelled
     # obejct - the object into which to write the coordinates found
     # threadID - ID of the thread
-    def __init__(self, verticalLowerBound, horizontalLowerBound, minSize, cancelToken, target, threadID):
+    def __init__(self, verticalLowerBound, horizontalLowerBound, cancelToken, target, threadID):
         self.verticalLowerBound = verticalLowerBound
         self.horizontalLowerBound = horizontalLowerBound
-        self.minSize = minSize
         self.cancelToken = cancelToken
         self.cancellationLock = threading.Lock()
         self.obj = target
@@ -28,6 +27,7 @@ class ImageProcessor:
 
         # If no blob is found, cancel
         if len(cnts) == 0:
+            print("No contours found.")
             return
 
         # Find the biggest blob
