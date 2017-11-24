@@ -161,7 +161,6 @@ class ImageHandler:
     def detect(self, target):
         self.generateMask(target)
         if target.mask is not None:
-            print("Target mask is not none.")
             properties = target.mask.shape
             height = properties[0]
             width = properties[1]
@@ -175,6 +174,7 @@ class ImageHandler:
                 self.findObject(0, 0, target)
         else:
             print("Target has no mask.")
+        print(target.id, "'s vMidPoint: ", target.verticalMidPoint)
 
     def run(self):
         timer = Timer.Timer()
