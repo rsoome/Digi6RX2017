@@ -63,11 +63,11 @@ class GameLogic:
         print("Jagamine: " + str(1 - float(target.verticalMidPoint)/self.frame.height))
         #print("moveSpeed" + str(self.moveSpeed))
         #print("CalculateSpeed: " + str(self.move.calculateSpeed(self.moveSpeed, 1 - float(target.verticalMidPoint)/self.frame.height)))
-        self.move.driveXY(0,
-
-                        self.move.calculateSpeed(self.moveSpeed, 1 - float(verticalMidPoint)/self.frame.height),
-                        self.move.calculateSpeed(self.turnSpeed,
-                                        (horizontalMidPoint - self.screenMidpoint) / float(self.screenMidpoint)))
+        ySpeed = self.move.calculateSpeed(self.moveSpeed, 1 - float(verticalMidPoint)/self.frame.height)
+        turnSpeed = self.move.calculateSpeed(self.turnSpeed, (horizontalMidPoint - self.screenMidpoint) / float(self.screenMidpoint))
+        print("ySpeed: ",ySpeed)
+        print("turnSpeed: ", turnSpeed)
+        self.move.driveXY(0, ySpeed, turnSpeed)
 
     def lookForTarget(self, target):
         #if not self.socketData.gameStarted:
@@ -91,6 +91,8 @@ class GameLogic:
         ballGrabbed = False
         self.mb.sendTimer.startTimer()
         self.timer.startTimer()
+        self.thrower.grabberOpen()
+        self.thrower.stopMotor()
 
         while self.socketData.gameStarted:
             self.readMb()
