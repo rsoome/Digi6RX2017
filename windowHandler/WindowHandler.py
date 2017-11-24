@@ -21,6 +21,7 @@ class WindowHandler:
         self.updateThresholds = False
         self.mouseX = -1
         self.mouseY = -1
+        self.keyWaitTime = 200
 
     # If the mouse is clicked, update threshholds of the selected object
     def onmouse(self, event, x, y, flags, params):  # Funktsioon, mis nupuvajutuse peale uuendab värviruumi piire
@@ -47,7 +48,7 @@ class WindowHandler:
         if cv2.waitKey(1) & 0xFF == ord('e'):
             #        time.sleep(1)
             self.values ={}
-            keyStroke = cv2.waitKey(100)
+            keyStroke = cv2.waitKey(self.keyWaitTime)
             if keyStroke & 0xFF == ord('q'):  # Nupu 'q' vajutuse peale välju programmist
                 self.values["stop"] = True
                 self.values["gameStarted"] = False
@@ -65,14 +66,19 @@ class WindowHandler:
             if keyStroke & 0xFF == ord('b'):
                 self.textColor = (0, 0, 255)
                 self.values["ballSelected"] = True
-                if cv2.waitKey(100) == ord('r'):
+                if cv2.waitKey(self.keyWaitTime) == ord('r'):
                     self.values["resetBall"] = True
 
             if keyStroke & 0xFF == ord('k'):
                 self.textColor = (255, 255, 0)
                 self.values["basketSelected"] = True
-                if cv2.waitKey(100) == ord('r'):
+                keyStroke = cv2.waitKey(self.keyWaitTime)
+                if keyStroke == ord('r'):
                     self.values["resetBasket"] = True
+                if keyStroke == ord('m'):
+                    self.values["setMagneta"] = True
+                if keyStroke == ord('b'):
+                    self.values["setBlue"] = True
 
             if keyStroke & 0xFF == ord('m'):
                 self.values["manualDrive"] = True

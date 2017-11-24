@@ -27,6 +27,8 @@ class SocketData:
         self.refreshConf = False
         self.updateConf = False
         self.clientDC = False
+        self.setMagneta = False
+        self.setBlue = False
 
     def setAll(self, ballSelected, manualDrive, gameStarted, img, ballMask, basketMask,
                fps, ballHorizontalBounds, ballVerticalBounds, basketHorizontalBounds, basketVerticalBounds):

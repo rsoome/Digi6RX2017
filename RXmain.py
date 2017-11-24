@@ -170,6 +170,20 @@ def socketDataCheck():
         ref.setIDs(robotID, fieldID)
         socketData.refreshConf = False
 
+    if socketData.setMagneta:
+        opponent = "magneta"
+        basket.hsvLowerRange = settings.getValue("magnetaBasketHSVLower")
+        basket.hsvUpperRange = settings.getValue("magnetaBasketHSVUpper")
+        socketData.setMagneta = False
+
+    if socketData.setBlue:
+        opponent = "blue"
+        basket.hsvLowerRange = settings.getValue("blueBasketHSVLower")
+        basket.hsvUpperRange = settings.getValue("blueBasketHSVUpper")
+        socketData.setBlue = False
+
+    settings.setValue("opponentBasket", opponent)
+
 
 try:
     mb.sendTimer.startTimer()

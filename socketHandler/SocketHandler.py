@@ -307,3 +307,9 @@ class SocketHandler:
             if key == "DC":
                 self.socketData.clientDC = bool(messages[key])
 
+            if key == "setMagneta":
+                self.socketData.setMagneta = bool(messages[key])
+
+            if key == "setBlue":
+                self.socketData.setBlue = bool(messages[key])
+
