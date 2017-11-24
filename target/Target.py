@@ -10,8 +10,6 @@ class Target:
     def __init__(self, hBounds, vBounds, targetID, lowerRange, upperRange, scanOrder, minSize):
         self.setBounds(hBounds, vBounds, None)
         self.setThresholds(lowerRange, upperRange)
-        print(lowerRange)
-        print(upperRange)
         self.id = targetID
         self.mask = None
         self.contours = None

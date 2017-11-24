@@ -58,6 +58,7 @@ if opponent != "magneta" and opponent != "blue":
     settings.writeFromDictToFile()
     sys.exit(0)
 
+print(settings.getValue("ballHSVLower"))
 ball = Target.Target(None, None, "ball", settings.getValue("ballHSVLower"), settings.getValue("ballHSVUpper"),
                      settings.getValue("ballScanOrder"), settings.getValue("ballMinSize"))
 
