@@ -14,7 +14,7 @@ class Thrower:
 
     def calculateThrowingSpeed(self, distance):
 
-        return -0.003*pow(distance, 2) + 2.0342 * distance + 1300
+        return -0.003*pow(distance, 2) + 2.0342 * distance + 1250
 
     def throw(self, distance):
         print("Disabling failsafe.")
