@@ -105,6 +105,7 @@ class GameLogic:
             if self.gameState == "START":
 
                 if self.irStatus == 1 and not ballGrabbed:
+                    print("Driving with speed: ", self.move.currentSpeed)
                     self.move.driveXY(0, self.move.currentSpeed, 0) #MAY NEED CHANGING
                     self.mb.sendValues()
                     time.sleep(0.1)
@@ -203,7 +204,6 @@ class GameLogic:
                     driveTimer.startTimer()
 
                     while driveTimer.getTimePassed() < 1000:
-                        print("Driving with speed: ", self.move.currentSpeed)
                         self.move.driveXY(0, self.move.currentSpeed(), 0)
                         self.mb.sendValues()
 
