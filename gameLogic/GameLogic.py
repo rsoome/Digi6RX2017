@@ -66,7 +66,7 @@ class GameLogic:
         print("screen midpoint: ", self.screenMidpoint)
         ySpeed = self.move.calculateSpeed(self.moveSpeed, 1 - float(verticalMidPoint)/self.frame.height)
         turnSpeed = self.move.calculateSpeed(self.turnSpeed, (horizontalMidPoint - self.screenMidpoint) / float(self.screenMidpoint))
-        if turnSpeed < 0.2:
+        if abs(turnSpeed) < 0.2:
             turnSpeed = 0
         print("ySpeed: ",ySpeed)
         print("turnSpeed: ", turnSpeed)
