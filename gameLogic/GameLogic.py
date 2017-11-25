@@ -203,6 +203,7 @@ class GameLogic:
                     driveTimer.startTimer()
 
                     while driveTimer.getTimePassed() < 1000:
+                        print("Driving with speed: ", self.move.currentSpeed)
                         self.move.driveXY(0, self.move.currentSpeed(), 0)
                         self.mb.sendValues()
 
