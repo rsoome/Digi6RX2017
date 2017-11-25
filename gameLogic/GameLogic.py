@@ -19,7 +19,7 @@ class GameLogic:
         self.initializeValues()
         self.socketData = socketData
         self.thrower = thrower
-        self.ballStopBound = frame.height + 80 + 30 ##Add self mask height
+        self.ballStopBound = frame.height + 100 + 30 ##Add self mask height
         self.basketStopBound = 0
         self.gameState = defaultGameState
         self.irStatus = 0
@@ -240,8 +240,10 @@ class GameLogic:
         if target.horizontalMidPoint is None:
             return False
 
-        if (target.horizontalMidPoint > (self.screenMidpoint + self.deltaFromMidPoint)
-            or target.horizontalMidPoint < (self.screenMidpoint - self.deltaFromMidPoint)):
+        if (target.horizontalMidPoint > (
+                    ((self.screenMidpoint + target.horizontalMidPoint - self.screenMidpoint) / self.screenMidpoint) * self.deltaFromMidPoint + 5)
+            or target.horizontalMidPoint < (
+                    ((self.screenMidpoint + target.horizontalMidPoint - self.screenMidpoint) / self.screenMidpoint) * self.deltaFromMidPoint - 5)):
 
             return False
 
