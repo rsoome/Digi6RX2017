@@ -50,7 +50,7 @@ class MovementLogic:
         if coif == 0:
             return 0
         returnSpeed = coif/abs(coif) * ((0.3162*math.log(abs(coif)) - 1.0766) * maxSpeed)
-        if (coif > -0.1 and returnSpeed > 0) or (coif < 0.1 and returnSpeed < 0):
+        if (coif < 0.1 and returnSpeed > 0) or (coif > -0.1 and returnSpeed < 0):
             return 0
         return returnSpeed
 
