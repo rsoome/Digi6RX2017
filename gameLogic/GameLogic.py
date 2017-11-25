@@ -263,7 +263,7 @@ class GameLogic:
     def checkVerticalAlignment(self, target, verticalStopBound):
 
         verticalMidPoint = target.verticalMidPoint
-        #print(target.id, "'s vertical midpoint at the time of checking allignment: ", verticalMidPoint)
+        print(target.id, "'s vertical midpoint at the time of checking allignment: ", verticalMidPoint)
         if verticalMidPoint is None:
             return False
 
