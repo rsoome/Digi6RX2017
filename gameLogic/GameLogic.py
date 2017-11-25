@@ -105,7 +105,7 @@ class GameLogic:
             if self.gameState == "START":
 
                 if self.irStatus == 1 and not ballGrabbed:
-                    self.move.driveXY(0, self.moveSpeed, 0) #MAY NEED CHANGING
+                    self.move.driveXY(0, self.moveSpeed//2, 0) #MAY NEED CHANGING
                     self.mb.sendValues()
                     time.sleep(0.1)
                     self.readMb()
@@ -137,11 +137,11 @@ class GameLogic:
                     if ballReached:
                         print("Getting ball")
                         ballGrabbed = self.irStatus == 1
-                        self.move.driveXY(0, self.moveSpeed, 0)
+                        self.move.driveXY(0, self.moveSpeed//2, 0)
                         self.mb.sendValues()
                         if not ballGrabbed:
                             time.sleep(0.1)
-                            
+
                         if ballGrabbed:
                             self.thrower.grabberCarry()
                             self.mb.sendValues()
