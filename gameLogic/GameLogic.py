@@ -19,7 +19,7 @@ class GameLogic:
         self.initializeValues()
         self.socketData = socketData
         self.thrower = thrower
-        self.ballStopBound = frame.height - 230 - 30 ##Add self mask height
+        self.ballStopBound = frame.height - 280
         self.basketStopBound = 0
         self.gameState = defaultGameState
         self.irStatus = 0
@@ -105,7 +105,7 @@ class GameLogic:
             if self.gameState == "START":
 
                 if self.irStatus == 1 and not ballGrabbed:
-                    self.move.driveXY(0, self.moveSpeed//2, 0)
+                    self.move.driveXY(0, self.moveSpeed, 0) #MAY NEED CHANGING
                     self.mb.sendValues()
                     time.sleep(0.1)
                     self.readMb()
@@ -135,14 +135,17 @@ class GameLogic:
                 elif not ballGrabbed:
                     ballReached = self.checkVerticalAlignment(self.ball, self.ballStopBound) and self.checkHorizontalAlginment(self.ball)
                     if ballReached:
-                        print("Reaching ball")
-                        self.move.driveXY(0, self.moveSpeed//50, 0)
-                        self.mb.sendValues()
-                        time.sleep(0.1)
+                        print("Getting ball")
                         ballGrabbed = self.irStatus == 1
+                        self.move.driveXY(0, self.moveSpeed, 0)
+                        self.mb.sendValues()
+                        if not ballGrabbed:
+                            time.sleep(0.1)
+                            
                         if ballGrabbed:
-                            self.move.stop()
                             self.thrower.grabberCarry()
+                            self.mb.sendValues()
+                            self.move.stop()
                             self.thrower.startMotor()
                         else:
                             self.thrower.grabberOpen()

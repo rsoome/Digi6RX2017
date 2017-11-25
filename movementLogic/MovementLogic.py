@@ -40,7 +40,7 @@ class MovementLogic:
         self.drive(speed, angle, omega)
 
     def calculateSpeed(self, maxSpeed, coif):
-        return (-8*pow(10, -6)*pow(coif, 2) + 0.0073*coif - 0.6257)* maxSpeed
+        return (-8*pow(10, -6)*pow(coif, 2) + 0.0019*coif + 0.08851)* maxSpeed
 
     def calculateOmega(self, maxSpeed, coif):
         return max(coif/abs(coif) * ((0.4446*math.log(abs(coif)) - 1.9015) * maxSpeed), 0)

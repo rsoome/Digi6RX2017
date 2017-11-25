@@ -30,6 +30,7 @@ class WindowHandler:
             self.updateThresholds = True
             self.mouseX = x
             self.mouseY = y
+            print("X: ", self.mouseX, "Y: ", self.mouseY)
         self.lock.release()
 
     def showImage(self):
