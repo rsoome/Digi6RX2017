@@ -220,6 +220,7 @@ class GameLogic:
             return False
 
         elif not self.checkHorizontalAlginment(target):
+            self.move.stop()
             print("Alligning horizontally.")
             self.turnTowardTarget(target)
             self.mb.sendValues()
