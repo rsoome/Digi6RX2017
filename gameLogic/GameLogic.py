@@ -193,7 +193,9 @@ class GameLogic:
             if not targetFound:
                 print("Looking for " + target.id)
 
-                if self.basket.horizontalMidPoint is not None:
+                basketHorizontalMidPoint = self.basket.horizontalMidPoint
+
+                if basketHorizontalMidPoint is not None:
 
                     driveTimer = Timer.Timer()
                     driveTimer.startTimer()
@@ -205,7 +207,7 @@ class GameLogic:
                         if target.horizontalMidPoint is not None:
                             return True
 
-                        if self.basket.verticalBounds[1] >= self.basketAheadBound:
+                        if self.basket.verticalBounds is None or self.basket.verticalBounds[1] >= self.basketAheadBound:
                             self.move.rotate(self.turnSpeed)
                             return False
 
