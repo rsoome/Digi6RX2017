@@ -64,11 +64,11 @@ class GameLogic:
             return
 
         #print("Verticalmidpoint: " + str(target.verticalMidPoint))
-        print("Jagamine: ", float(horizontalMidPoint - self.screenMidpoint) / self.screenMidpoint)
+        print("Jagamine: ", 1 - float(horizontalMidPoint - self.screenMidpoint) / self.screenMidpoint)
         print("target midpoint: ", target.horizontalMidPoint)
         print("screen midpoint: ", self.screenMidpoint)
         ySpeed = self.move.calculateSpeed(self.moveSpeed, 1 - float(verticalMidPoint)/self.frame.height)
-        turnSpeed = self.move.calculateSpeed(self.turnSpeed, (horizontalMidPoint - self.screenMidpoint) / float(self.screenMidpoint))
+        turnSpeed = self.move.calculateSpeed(self.turnSpeed, 1 - (horizontalMidPoint - self.screenMidpoint) / float(self.screenMidpoint))
         print("ySpeed: ",ySpeed)
         print("turnSpeed: ", turnSpeed)
         self.move.driveXY(0, ySpeed, turnSpeed)
@@ -248,9 +248,9 @@ class GameLogic:
             return False
 
         if (horizontalMidPoint < (self.screenMidpoint +
-                    (((self.screenMidpoint - horizontalMidPoint) / self.screenMidpoint)) * self.deltaFromMidPoint - 5)
+                    (((self.screenMidpoint - horizontalMidPoint) / self.screenMidpoint)) * self.deltaFromMidPoint - 10)
             or horizontalMidPoint > (self.screenMidpoint +
-                    (((self.screenMidpoint - horizontalMidPoint) / self.screenMidpoint)) * self.deltaFromMidPoint + 5)):
+                    (((self.screenMidpoint - horizontalMidPoint) / self.screenMidpoint)) * self.deltaFromMidPoint + 10)):
 
             print("Target not in allowed bounds: ")
             print(self.screenMidpoint + ((self.screenMidpoint - horizontalMidPoint) / self.screenMidpoint) * self.deltaFromMidPoint + 20)
