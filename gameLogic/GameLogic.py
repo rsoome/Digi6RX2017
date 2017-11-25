@@ -243,13 +243,13 @@ class GameLogic:
             return False
 
         if (target.horizontalMidPoint > (
-                    ((self.screenMidpoint + target.horizontalMidPoint - self.screenMidpoint) / self.screenMidpoint) * self.deltaFromMidPoint + 10)
+                    ((self.screenMidpoint + target.horizontalMidPoint - self.screenMidpoint) / self.screenMidpoint) * self.deltaFromMidPoint + 20)
             or target.horizontalMidPoint < (
-                    ((self.screenMidpoint + target.horizontalMidPoint - self.screenMidpoint) / self.screenMidpoint) * self.deltaFromMidPoint - 10)):
+                    ((self.screenMidpoint + target.horizontalMidPoint - self.screenMidpoint) / self.screenMidpoint) * self.deltaFromMidPoint - 20)):
 
             print("Target not in allowed bounds: ")
-            print(((self.screenMidpoint + target.horizontalMidPoint - self.screenMidpoint) / self.screenMidpoint) * self.deltaFromMidPoint + 10)
-            print(((self.screenMidpoint + target.horizontalMidPoint - self.screenMidpoint) / self.screenMidpoint) * self.deltaFromMidPoint - 10)
+            print(((self.screenMidpoint + target.horizontalMidPoint - self.screenMidpoint) / self.screenMidpoint) * self.deltaFromMidPoint + 20)
+            print(((self.screenMidpoint + target.horizontalMidPoint - self.screenMidpoint) / self.screenMidpoint) * self.deltaFromMidPoint - 20)
 
             return False
 
