@@ -65,9 +65,9 @@ class GameLogic:
         #print("target midpoint: ", target.horizontalMidPoint)
         #print("screen midpoint: ", self.screenMidpoint)
         ySpeed = self.move.calculateSpeed(self.moveSpeed, verticalMidPoint)
-        turnSpeed = self.move.calculateSpeed(self.turnSpeed, horizontalMidPoint - self.screenMidpoint)
-        if abs(turnSpeed) < 0.2:
-            turnSpeed = 0
+        turnSpeed = self.move.calculateOmega(self.turnSpeed, horizontalMidPoint - self.screenMidpoint)
+        #if abs(turnSpeed) < 0.2:
+         #   turnSpeed = 0
         #print("ySpeed: ",ySpeed)
         #print("turnSpeed: ", turnSpeed)
         self.move.driveXY(0, ySpeed, turnSpeed)
