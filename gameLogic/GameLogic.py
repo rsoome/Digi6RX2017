@@ -38,12 +38,12 @@ class GameLogic:
         horizontalMidPoint = target.horizontalMidPoint
         if horizontalMidPoint == None:
             return False
-        turnCoificent = horizontalMidPoint - self.screenMidpoint
+        turnCoificent = (horizontalMidPoint - self.screenMidpoint)/self.screenMidpoint
 
         print("Turncoificent: " + str(turnCoificent))
         if not self.socketData.gameStarted:
             return False
-        turningSpeed = self.move.calculateSpeed(self.turnSpeed, turnCoificent)
+        turningSpeed = self.turnSpeed * turnCoificent
         print("Turning with speed: " + str(turningSpeed))
         self.move.rotate(turningSpeed)
         return True
