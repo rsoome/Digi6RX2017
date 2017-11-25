@@ -37,7 +37,7 @@ class GameLogic:
     def turnTowardTarget(self, target):
         if target.horizontalMidPoint == None:
             return False
-        turnCoificent = (target.horizontalMidPoint - self.screenMidpoint)/float(self.screenMidpoint)
+        turnCoificent = (self.screenMidpoint - target.horizontalMidPoint)/float(self.screenMidpoint)
         print("Turncoificent: " + str(turnCoificent))
         if target.horizontalMidPoint is not None:
             if not self.socketData.gameStarted:
@@ -242,10 +242,10 @@ class GameLogic:
         if target.horizontalMidPoint is None:
             return False
 
-        if (target.horizontalMidPoint > (
-                    ((self.screenMidpoint + target.horizontalMidPoint - self.screenMidpoint) / self.screenMidpoint) * self.deltaFromMidPoint + 20)
-            or target.horizontalMidPoint < (
-                    ((self.screenMidpoint + target.horizontalMidPoint - self.screenMidpoint) / self.screenMidpoint) * self.deltaFromMidPoint - 20)):
+        if (target.horizontalMidPoint < (
+                    ((self.screenMidpoint + target.horizontalMidPoint - self.screenMidpoint) / self.screenMidpoint) * self.deltaFromMidPoint - 20)
+            or target.horizontalMidPoint > (
+                    ((self.screenMidpoint + target.horizontalMidPoint - self.screenMidpoint) / self.screenMidpoint) * self.deltaFromMidPoint + 20)):
 
             print("Target not in allowed bounds: ")
             print(((self.screenMidpoint + target.horizontalMidPoint - self.screenMidpoint) / self.screenMidpoint) * self.deltaFromMidPoint + 20)
