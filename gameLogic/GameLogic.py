@@ -39,9 +39,6 @@ class GameLogic:
             return False
         turnCoificent = (target.horizontalMidPoint - self.screenMidpoint)/float(self.screenMidpoint)
 
-        if turnCoificent < 0.2:
-            turnCoificent = 0
-
         print("Turncoificent: " + str(turnCoificent))
         if target.horizontalMidPoint is not None:
             if not self.socketData.gameStarted:
@@ -64,11 +61,13 @@ class GameLogic:
             return
 
         #print("Verticalmidpoint: " + str(target.verticalMidPoint))
-        print("Jagamine: ", 1 - float(horizontalMidPoint - self.screenMidpoint) / self.screenMidpoint)
+        print("Jagamine: ", float(horizontalMidPoint - self.screenMidpoint) / self.screenMidpoint)
         print("target midpoint: ", target.horizontalMidPoint)
         print("screen midpoint: ", self.screenMidpoint)
         ySpeed = self.move.calculateSpeed(self.moveSpeed, 1 - float(verticalMidPoint)/self.frame.height)
-        turnSpeed = self.move.calculateSpeed(self.turnSpeed, 1 - (horizontalMidPoint - self.screenMidpoint) / float(self.screenMidpoint))
+        turnSpeed = self.move.calculateSpeed(self.turnSpeed, (horizontalMidPoint - self.screenMidpoint) / float(self.screenMidpoint))
+        if turnSpeed < 0.2:
+            turnSpeed = 0
         print("ySpeed: ",ySpeed)
         print("turnSpeed: ", turnSpeed)
         self.move.driveXY(0, ySpeed, turnSpeed)
