@@ -105,7 +105,7 @@ class GameLogic:
             if self.gameState == "START":
 
                 if self.irStatus == 1 and not ballGrabbed:
-                    self.move.driveXY(0, self.moveSpeed//2, 0) #MAY NEED CHANGING
+                    self.move.driveXY(0, self.moveSpeed//4, 0) #MAY NEED CHANGING
                     self.mb.sendValues()
                     time.sleep(0.1)
                     self.readMb()
@@ -137,7 +137,7 @@ class GameLogic:
                     if ballReached:
                         print("Getting ball")
                         ballGrabbed = self.irStatus == 1
-                        self.move.driveXY(0, self.moveSpeed//2, 0)
+                        self.move.driveXY(0, self.moveSpeed//4, 0)
                         self.mb.sendValues()
                         if not ballGrabbed:
                             time.sleep(0.1)
@@ -250,14 +250,14 @@ class GameLogic:
             return False
 
         if (horizontalMidPoint < (self.screenMidpoint +
-                    (((self.screenMidpoint - horizontalMidPoint) / self.screenMidpoint)) * self.deltaFromMidPoint - 20)
+                    (((self.screenMidpoint - horizontalMidPoint) / self.screenMidpoint)) * self.deltaFromMidPoint - 30)
             or horizontalMidPoint > (self.screenMidpoint +
-                    (((self.screenMidpoint - horizontalMidPoint) / self.screenMidpoint)) * self.deltaFromMidPoint + 20)):
+                    (((self.screenMidpoint - horizontalMidPoint) / self.screenMidpoint)) * self.deltaFromMidPoint + 30)):
 
             print("Target not in allowed bounds: ")
-            print(self.screenMidpoint + ((self.screenMidpoint - horizontalMidPoint) / self.screenMidpoint) * self.deltaFromMidPoint + 20)
+            print(self.screenMidpoint + ((self.screenMidpoint - horizontalMidPoint) / self.screenMidpoint) * self.deltaFromMidPoint + 30)
             print(horizontalMidPoint)
-            print( self.screenMidpoint + ((self.screenMidpoint - horizontalMidPoint) / self.screenMidpoint) * self.deltaFromMidPoint - 20)
+            print( self.screenMidpoint + ((self.screenMidpoint - horizontalMidPoint) / self.screenMidpoint) * self.deltaFromMidPoint - 30)
 
             return False
 
