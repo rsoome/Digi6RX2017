@@ -60,11 +60,11 @@ class GameLogic:
             return
 
         #print("Verticalmidpoint: " + str(target.verticalMidPoint))
-        print("Jagamine: ", float(self.screenMidpoint - horizontalMidPoint) / self.screenMidpoint)
+        print("Jagamine: ", float(horizontalMidPoint - self.screenMidpoint) / self.screenMidpoint)
         print("target midpoint: ", target.horizontalMidPoint)
         print("screen midpoint: ", self.screenMidpoint)
         ySpeed = self.move.calculateSpeed(self.moveSpeed, 1 - float(verticalMidPoint)/self.frame.height)
-        turnSpeed = self.move.calculateSpeed(self.turnSpeed, (self.screenMidpoint - horizontalMidPoint) / float(self.screenMidpoint))
+        turnSpeed = self.move.calculateSpeed(self.turnSpeed, (horizontalMidPoint - self.screenMidpoint) / float(self.screenMidpoint))
         print("ySpeed: ",ySpeed)
         print("turnSpeed: ", turnSpeed)
         self.move.driveXY(0, ySpeed, turnSpeed)
