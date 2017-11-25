@@ -19,7 +19,7 @@ class GameLogic:
         self.initializeValues()
         self.socketData = socketData
         self.thrower = thrower
-        self.ballStopBound = frame.height + 100 + 30 ##Add self mask height
+        self.ballStopBound = frame.height - 50 - 30 ##Add self mask height
         self.basketStopBound = 0
         self.gameState = defaultGameState
         self.irStatus = 0
@@ -38,6 +38,10 @@ class GameLogic:
         if target.horizontalMidPoint == None:
             return False
         turnCoificent = (target.horizontalMidPoint - self.screenMidpoint)/float(self.screenMidpoint)
+        
+        if turnCoificent < 0.1:
+            turnCoificent = 0
+
         print("Turncoificent: " + str(turnCoificent))
         if target.horizontalMidPoint is not None:
             if not self.socketData.gameStarted:
@@ -249,9 +253,9 @@ class GameLogic:
                     (((self.screenMidpoint - horizontalMidPoint) / self.screenMidpoint)) * self.deltaFromMidPoint + 5)):
 
             print("Target not in allowed bounds: ")
-            print(((self.screenMidpoint - horizontalMidPoint) / self.screenMidpoint) * self.deltaFromMidPoint + 20)
+            print(self.screenMidpoint + ((self.screenMidpoint - horizontalMidPoint) / self.screenMidpoint) * self.deltaFromMidPoint + 20)
             print(horizontalMidPoint)
-            print(((self.screenMidpoint - horizontalMidPoint) / self.screenMidpoint) * self.deltaFromMidPoint - 20)
+            print( self.screenMidpoint + ((self.screenMidpoint - horizontalMidPoint) / self.screenMidpoint) * self.deltaFromMidPoint - 20)
 
             return False
 
