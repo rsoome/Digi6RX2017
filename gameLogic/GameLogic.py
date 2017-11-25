@@ -19,7 +19,7 @@ class GameLogic:
         self.initializeValues()
         self.socketData = socketData
         self.thrower = thrower
-        self.ballStopBound = frame.height - 280
+        self.ballStopBound = frame.height - 300
         self.basketStopBound = 0
         self.gameState = defaultGameState
         self.irStatus = 0
