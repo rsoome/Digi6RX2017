@@ -35,18 +35,18 @@ class GameLogic:
         self.basketAheadBound = 70
 
     def turnTowardTarget(self, target):
-        if target.horizontalMidPoint == None:
+        horizontalMidPoint = target.horizontalMidPoint
+        if horizontalMidPoint == None:
             return False
-        turnCoificent = (target.horizontalMidPoint - self.screenMidpoint)/float(self.screenMidpoint)
+        turnCoificent = horizontalMidPoint - self.screenMidpoint
 
         print("Turncoificent: " + str(turnCoificent))
-        if target.horizontalMidPoint is not None:
-            if not self.socketData.gameStarted:
-                return False
-            turningSpeed = self.move.calculateSpeed(self.turnSpeed, turnCoificent)
-            print("Turning with speed: " + str(turningSpeed))
-            self.move.rotate(turningSpeed)
-            return True
+        if not self.socketData.gameStarted:
+            return False
+        turningSpeed = self.move.calculateSpeed(self.turnSpeed, turnCoificent)
+        print("Turning with speed: " + str(turningSpeed))
+        self.move.rotate(turningSpeed)
+        return True
 
     def moveTowardTarget(self, target):
         horizontalMidPoint = target.horizontalMidPoint
@@ -64,8 +64,8 @@ class GameLogic:
         #print("Jagamine: ", float(horizontalMidPoint - self.screenMidpoint) / self.screenMidpoint)
         #print("target midpoint: ", target.horizontalMidPoint)
         #print("screen midpoint: ", self.screenMidpoint)
-        ySpeed = self.move.calculateSpeed(self.moveSpeed, 1 - float(verticalMidPoint)/self.frame.height)
-        turnSpeed = self.move.calculateSpeed(self.turnSpeed, (horizontalMidPoint - self.screenMidpoint) / float(self.screenMidpoint))
+        ySpeed = self.move.calculateSpeed(self.moveSpeed, verticalMidPoint)
+        turnSpeed = self.move.calculateSpeed(self.turnSpeed, horizontalMidPoint - self.screenMidpoint)
         if abs(turnSpeed) < 0.2:
             turnSpeed = 0
         #print("ySpeed: ",ySpeed)
