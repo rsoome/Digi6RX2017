@@ -60,11 +60,11 @@ class GameLogic:
             return
 
         #print("Verticalmidpoint: " + str(target.verticalMidPoint))
-        print("Jagamine: ", float(self.screenMidpoint - target.horizontalMidPoint) / self.screenMidpoint)
+        print("Jagamine: ", float(self.screenMidpoint - horizontalMidPoint) / self.screenMidpoint)
         print("target midpoint: ", target.horizontalMidPoint)
         print("screen midpoint: ", self.screenMidpoint)
         ySpeed = self.move.calculateSpeed(self.moveSpeed, 1 - float(verticalMidPoint)/self.frame.height)
-        turnSpeed = self.move.calculateSpeed(self.turnSpeed, (horizontalMidPoint - self.screenMidpoint) / float(self.screenMidpoint))
+        turnSpeed = self.move.calculateSpeed(self.turnSpeed, (self.screenMidpoint - horizontalMidPoint) / float(self.screenMidpoint))
         print("ySpeed: ",ySpeed)
         print("turnSpeed: ", turnSpeed)
         self.move.driveXY(0, ySpeed, turnSpeed)
@@ -244,13 +244,14 @@ class GameLogic:
             return False
 
         if (horizontalMidPoint < (
-                    ((self.screenMidpoint + horizontalMidPoint - self.screenMidpoint) / self.screenMidpoint) * self.deltaFromMidPoint - 20)
+                    ((self.screenMidpoint - horizontalMidPoint) / self.screenMidpoint) * self.deltaFromMidPoint - 20)
             or horizontalMidPoint > (
-                    ((self.screenMidpoint + horizontalMidPoint - self.screenMidpoint) / self.screenMidpoint) * self.deltaFromMidPoint + 20)):
+                    ((self.screenMidpoint - horizontalMidPoint) / self.screenMidpoint) * self.deltaFromMidPoint + 20)):
 
             print("Target not in allowed bounds: ")
-            print(((self.screenMidpoint + horizontalMidPoint - self.screenMidpoint) / self.screenMidpoint) * self.deltaFromMidPoint + 20)
-            print(((self.screenMidpoint + horizontalMidPoint - self.screenMidpoint) / self.screenMidpoint) * self.deltaFromMidPoint - 20)
+            print(((self.screenMidpoint - horizontalMidPoint) / self.screenMidpoint) * self.deltaFromMidPoint + 20)
+            print(horizontalMidPoint)
+            print(((self.screenMidpoint - horizontalMidPoint) / self.screenMidpoint) * self.deltaFromMidPoint - 20)
 
             return False
 
