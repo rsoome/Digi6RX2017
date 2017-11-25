@@ -174,15 +174,13 @@ def socketDataCheck():
     if socketData.setMagneta:
         print("Setting magneta to opponent.")
         opponent = "magneta"
-        basket.hsvLowerRange = settings.getValue("magnetaBasketHSVLower")
-        basket.hsvUpperRange = settings.getValue("magnetaBasketHSVUpper")
+        basket.setThresholds(settings.getValue("magnetaBasketHSVLower"), settings.getValue("magnetaBasketHSVUpper"))
         socketData.setMagneta = False
 
     if socketData.setBlue:
         print("Setting blue to opponent.")
         opponent = "blue"
-        basket.hsvLowerRange = settings.getValue("blueBasketHSVLower")
-        basket.hsvUpperRange = settings.getValue("blueBasketHSVUpper")
+        basket.setThresholds(settings.getValue("blueBasketHSVLower"), settings.getValue("blueBasketHSVUpper"))
         socketData.setBlue = False
 
     settings.setValue("opponentBasket", opponent)

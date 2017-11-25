@@ -8,7 +8,7 @@ from timer import Timer
 class Target:
 
     def __init__(self, hBounds, vBounds, targetID, lowerRange, upperRange, scanOrder, minSize):
-        self.setBounds(hBounds, vBounds, None)
+        self.setBounds(hBounds, vBounds)
         self.setThresholds(lowerRange, upperRange)
         self.id = targetID
         self.mask = None
@@ -49,12 +49,11 @@ class Target:
         print(self.hsvUpperRange)
 
     def resetBounds(self):
-        self.setBounds(None, None, None)
+        self.setBounds(None, None)
 
-    def setBounds(self, hBounds, vBounds, area):
+    def setBounds(self, hBounds, vBounds):
         self.horizontalBounds = hBounds
         self.verticalBounds = vBounds
-        self.area = area
 
         if hBounds != None:
             if self.horizontalMidPoint != None:
