@@ -19,7 +19,7 @@ class GameLogic:
         self.initializeValues()
         self.socketData = socketData
         self.thrower = thrower
-        self.ballStopBound = 300
+        self.ballStopBound = 405
         self.basketStopBound = 0
         self.gameState = defaultGameState
         self.irStatus = 0
@@ -150,7 +150,7 @@ class GameLogic:
                         self.mb.sendValues()
                     else:
                         ballReached = False
-                        
+
                 elif not basketReached:
                     print("Reaching basket")
                     basketReached = self.goToTarget(self.basket, self.basketStopBound, self.moveSpeed)
