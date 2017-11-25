@@ -37,7 +37,7 @@ class GameLogic:
     def turnTowardTarget(self, target):
         if target.horizontalMidPoint == None:
             return False
-        turnCoificent = (self.screenMidpoint - target.horizontalMidPoint)/float(self.screenMidpoint)
+        turnCoificent = (target.horizontalMidPoint - self.screenMidpoint)/float(self.screenMidpoint)
         print("Turncoificent: " + str(turnCoificent))
         if target.horizontalMidPoint is not None:
             if not self.socketData.gameStarted:
@@ -239,17 +239,18 @@ class GameLogic:
 
     def checkHorizontalAlginment(self, target):
 
-        if target.horizontalMidPoint is None:
+        horizontalMidPoint = target.horizontalMidPoint
+        if horizontalMidPoint is None:
             return False
 
-        if (target.horizontalMidPoint < (
-                    ((self.screenMidpoint + target.horizontalMidPoint - self.screenMidpoint) / self.screenMidpoint) * self.deltaFromMidPoint - 20)
-            or target.horizontalMidPoint > (
-                    ((self.screenMidpoint + target.horizontalMidPoint - self.screenMidpoint) / self.screenMidpoint) * self.deltaFromMidPoint + 20)):
+        if (horizontalMidPoint < (
+                    ((self.screenMidpoint + horizontalMidPoint - self.screenMidpoint) / self.screenMidpoint) * self.deltaFromMidPoint - 20)
+            or horizontalMidPoint > (
+                    ((self.screenMidpoint + horizontalMidPoint - self.screenMidpoint) / self.screenMidpoint) * self.deltaFromMidPoint + 20)):
 
             print("Target not in allowed bounds: ")
-            print(((self.screenMidpoint + target.horizontalMidPoint - self.screenMidpoint) / self.screenMidpoint) * self.deltaFromMidPoint + 20)
-            print(((self.screenMidpoint + target.horizontalMidPoint - self.screenMidpoint) / self.screenMidpoint) * self.deltaFromMidPoint - 20)
+            print(((self.screenMidpoint + horizontalMidPoint - self.screenMidpoint) / self.screenMidpoint) * self.deltaFromMidPoint + 20)
+            print(((self.screenMidpoint + horizontalMidPoint - self.screenMidpoint) / self.screenMidpoint) * self.deltaFromMidPoint - 20)
 
             return False
 
@@ -257,13 +258,11 @@ class GameLogic:
 
     def checkVerticalAlignment(self, target, verticalStopBound):
 
-        #print(stopArea)
-        #print(target.area)
-        #print(target.area > stopArea)
+        verticalMidPoint = target.verticalMidPoint
         if target.area is None:
             return False
 
-        if target.verticalMidPoint < verticalStopBound:
+        if verticalMidPoint < verticalStopBound:
             return False
         print("Vertically alligned.")
         return True
