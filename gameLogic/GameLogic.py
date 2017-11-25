@@ -38,8 +38,8 @@ class GameLogic:
         if target.horizontalMidPoint == None:
             return False
         turnCoificent = (target.horizontalMidPoint - self.screenMidpoint)/float(self.screenMidpoint)
-        
-        if turnCoificent < 0.1:
+
+        if turnCoificent < 0.2:
             turnCoificent = 0
 
         print("Turncoificent: " + str(turnCoificent))
