@@ -204,7 +204,7 @@ class GameLogic:
                     driveTimer.startTimer()
 
                     while driveTimer.getTimePassed() < 1000:
-                        self.move.driveXY(0, self.move.currentSpeed(), 0)
+                        self.move.driveXY(0, self.move.currentSpeed, 0)
                         self.mb.sendValues()
 
                         if target.horizontalMidPoint is not None:
