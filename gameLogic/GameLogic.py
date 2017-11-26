@@ -73,9 +73,6 @@ class GameLogic:
         self.move.driveXY(0, ySpeed, turnSpeed)
 
     def lookForTarget(self, target):
-        if not self.socketData.gameStarted:
-            print("Game ended by client.")
-            return False
 
         #print(target.horizontalMidPoint)
         self.move.rotate(self.turnSpeed)
