@@ -45,6 +45,9 @@ class GameLogic:
             return False
         turningSpeed = self.turnSpeed * turnCoificent
         print("Turning with speed: " + str(turningSpeed))
+        self.readMb()
+        if self.irStatus == 1:
+            return True
         self.move.rotate(turningSpeed)
         return True
 
@@ -74,6 +77,9 @@ class GameLogic:
     def lookForTarget(self, target):
 
         #print(target.horizontalMidPoint)
+        self.readMb()
+        if self.irStatus == 1:
+            return True
         self.move.rotate(self.turnSpeed)
         if self.mb.sendingTime:
             self.mb.sendValues()
