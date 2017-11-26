@@ -13,7 +13,7 @@ class MovementLogic:
         self.motorSpeed2 = 0.0
         self.timer = Timer.Timer()
         self.minDriveSpeed = 0.1
-        self.minTurnSpeed = 0.3
+        self.minTurnSpeed = 0.5
         self.wheelDistance = 0.13
         self.currentSpeed = 0
         self.currentTurnSpeed = 0

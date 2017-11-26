@@ -40,6 +40,9 @@ class Target:
             [255, 255, 255])
         self.hsvUpperRange = np.array(
             [0, 0, 0])
+        print(self.id, "'s bounds reset. New Bounds: ")
+        print(self.hsvLowerRange)
+        print(self.hsvUpperRange)
 
     def resetBounds(self):
         self.setBounds(None, None, None)
