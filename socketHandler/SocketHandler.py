@@ -45,6 +45,8 @@ class SocketHandler:
         self.socketData.ballVerticalBounds = self.ball.verticalBounds
         self.socketData.basketHorizontalBounds = self.basket.horizontalBounds
         self.socketData.basketVerticalBounds = self.basket.verticalBounds
+        self.socketData.blacklineHorizontalBounds = self.blackLine.horizontalBounds
+        self.socketData.blackLineVerticalBounds = self.blackLine.verticalBounds
 
     def updateValues(self):
         self.values["imgDimensions"] = self.socketData.imgDimensions
@@ -223,7 +225,7 @@ class SocketHandler:
             return True
 
         except socket.timeout as e:
-            return ("Sending message timed out.")
+            #return ("Sending message timed out.")
             return False
 
 
