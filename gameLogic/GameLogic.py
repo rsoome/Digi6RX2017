@@ -115,6 +115,7 @@ class GameLogic:
 
                 elif not ballGrabbed:
                     self.thrower.grabberOpen()
+                    self.thrower.stopMotor()
                     ballReached = False
                     ballGrabbed = False
 
@@ -124,10 +125,11 @@ class GameLogic:
                     self.thrower.grabberOpen()
                     ballReached = self.goToTarget(self.ball, self.ballStopBound, self.moveSpeed)
                     if ballReached:
+                        self.move.driveXY(self.move.currentSpeed)
                         self.mb.sendValues()
 
                 elif not ballGrabbed:
-                    ballReached = self.checkVerticalAlignment(self.ball, self.ballStopBound) and self.checkHorizontalAlginment(self.ball)
+                    #ballReached = self.checkVerticalAlignment(self.ball, self.ballStopBound) and self.checkHorizontalAlginment(self.ball)
                     if ballReached:
                         print("Getting ball")
                         ballGrabbed = self.irStatus == 1
