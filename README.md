@@ -1,6 +1,6 @@
 # Digi6RX2017
 
-#CURRENT BRANCH USED - line_detectionǐ
+#CURRENT BRANCH USED - line_detection
 
 Digi6's code for basketball robot  compete in Robotex of 2017
 
