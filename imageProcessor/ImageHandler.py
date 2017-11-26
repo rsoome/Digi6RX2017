@@ -22,6 +22,9 @@ class ImageHandler:
         if filteredImg is not None:
             hsvLowerRange = targetObject.hsvLowerRange
             hsvUpperRange = targetObject.hsvUpperRange
+            print("filteredImg: ", filteredImg)
+            print("hsvLowerRange, ", hsvLowerRange)
+            print("hsvUpperRange", hsvUpperRange)
             if hsvLowerRange is not None and hsvUpperRange is not None:
                 thresh = cv2.inRange(filteredImg, hsvLowerRange, hsvUpperRange)
             #print(targetObject.id, "'s mask:", thresh)
