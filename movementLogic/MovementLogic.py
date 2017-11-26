@@ -66,7 +66,10 @@ class MovementLogic:
         self.mb.sendValues()
 
     def rotate(self, speed):
-        self.driveXY(0,0,speed + self.minTurnSpeed)
+        if speed < 0:
+            self.driveXY(0,0,speed - self.minTurnSpeed)
+        if speed > 0:
+            self.driveXY(0, 0, speed + self.minTurnSpeed)
 
     def updateSpeeds(self, speeds):
         if speeds[0] == "motors" and len(speeds == 4):
