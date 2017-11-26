@@ -25,6 +25,10 @@ class Target:
     def updateThresholds(self, values):
         # Check all the received values against current values and update if necessary
         for i in range(3):
+            print("Looking at position: ", i)
+            print("Current value: " , values[i])
+            print("Value at lower: ", self.hsvLowerRange[i])
+            print("value at upper: ", self.hsvUpperRange[i])
             if values[i] < self.hsvLowerRange[i]:
                 self.hsvLowerRange[i] = values[i]  # Kui väärtus on väiksem ,uuenda alumist piiri
             if values[i] > self.hsvUpperRange[i]:
