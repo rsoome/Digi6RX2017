@@ -109,7 +109,14 @@ class GameLogic:
                     if self.irStatus == 1:
                         print("Grabbing ball")
                         self.thrower.grabberCarry()
+                        self.mb.sendValues()
+                        time.sleep(0.05)
+                        while self.basket.getDistance() < 30:
+                            self.move.driveXY(0, -self.move.currentSpeed, 0)
+                            if self.mb.sendTime():
+                                self.mb.sendValues()
                         self.move.stop()
+                        self.mb.sendValues()
                         ballReached = True
                         ballGrabbed = True
 
