@@ -109,15 +109,16 @@ class GameLogic:
 
             if self.gameState == "START":
 
-                if self.basket.verticalBounds is not None:
-                    basketBottom = self.basket.verticalBounds[1]
-                else:
-                    basketBottom = None
+                basketBounds = self.basket.verticalBounds
+                blackLineBounds = self.blackLine.verticalBounds
+                basketBottom = None
+                lineBottom = None
 
-                if self.blackLine.verticalBounds is not None:
-                    lineBottom = self.blackLine.verticalBounds[1]
-                else:
-                    basketBottom = None
+                if basketBounds is not None:
+                    basketBottom = basketBounds[1]
+
+                if blackLineBounds is not None:
+                    lineBottom = blackLineBounds[1]
 
                 if basketBottom is not None:
                     if basketBottom >= self.basketAheadBound:
