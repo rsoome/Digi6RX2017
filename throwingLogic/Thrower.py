@@ -26,7 +26,7 @@ class Thrower:
         print("Warming thrower.")
         self.startMotor()
         self.mb.sendValues()
-        time.sleep(0.8)
+        time.sleep(1)
         print("Setting throw speed to :" + str(self.calculateThrowingSpeed(distance)))
         print("Throwing at: ", distance)
         self.setMotorSpeed(self.calculateThrowingSpeed(distance))
