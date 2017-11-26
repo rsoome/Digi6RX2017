@@ -18,7 +18,7 @@ class Thrower:
             return 1390
         if distance < 85:
             return 0.0461 * pow(distance, 2) - 4.7981 * distance + 1525 #1463.8
-        return 180.81 * math.log(distance) + 625#583.45
+        return 180.81 * math.log(distance) + 600#583.45
 
     def throw(self, distance):
         print("Disabling failsafe.")

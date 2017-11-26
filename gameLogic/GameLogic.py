@@ -163,8 +163,12 @@ class GameLogic:
                     self.mb.sendValues()
 
                 elif not basketReached:
-                    print("Reaching basket")
-                    basketReached = self.goToTarget(self.basket, self.basketStopBound, self.moveSpeed)
+                    self.readMb()
+                    if self.irStatus == 1:
+                        print("Reaching basket")
+                        basketReached = self.goToTarget(self.basket, self.basketStopBound, self.moveSpeed)
+                    else:
+                        basketReached = False
 
                 elif (self.irStatus == 1):
                     print("Throwing ball")
