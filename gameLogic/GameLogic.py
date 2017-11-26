@@ -111,11 +111,11 @@ class GameLogic:
                         self.thrower.grabberCarry()
                         self.mb.sendValues()
                         time.sleep(0.05)
-                        while self.basket.getDistance() < 30:
-                            self.move.driveXY(0, -self.move.currentSpeed, 0)
-                            if self.mb.sendTime():
-                                self.mb.sendValues()
-                        self.move.stop()
+                        if self.basket.verticalBounds is not None:
+                            while self.basket.getDistance() < 30:
+                                self.move.driveXY(0, -self.move.currentSpeed, 0)
+                                if self.mb.sendTime():
+                                    self.mb.sendValues()
                         self.mb.sendValues()
                         ballReached = True
                         ballGrabbed = True
@@ -151,7 +151,6 @@ class GameLogic:
                             self.thrower.grabberCarry()
                             self.mb.sendValues()
                             time.sleep(0.05)
-                            self.move.stop()
                             self.thrower.startMotor()
                         else:
                             self.thrower.grabberOpen()
@@ -167,7 +166,6 @@ class GameLogic:
 
                 elif (self.irStatus == 1):
                     print("Throwing ball")
-                    self.move.stop()
                     basketReached = self.throwBall(self.basket.getDistance())
                     if basketReached:
                         ballReached = (self.irStatus == 1)
@@ -239,7 +237,6 @@ class GameLogic:
             return False
 
         elif not self.checkHorizontalAlginment(target):
-            self.move.stop()
             print("Alligning horizontally.")
             self.turnTowardTarget(target)
             self.mb.sendValues()
