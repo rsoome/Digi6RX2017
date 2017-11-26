@@ -4,6 +4,7 @@ class SocketData:
         self.stop = False
         self.ballSelected = True
         self.basketSelected = False
+        self.blackLineSelected = False
         self.manualDrive = False
         self.gameStarted = False
         self.img = None
@@ -17,6 +18,7 @@ class SocketData:
         self.basketVerticalBounds = None
         self.resetBall = False
         self.resetBasket = False
+        self.resetBlackLine = False
         self.manualDrive = False
         self.imgDimensions = None
         self.basketDimensions = None
@@ -29,6 +31,7 @@ class SocketData:
         self.clientDC = False
         self.setMagneta = False
         self.setBlue = False
+        self.blackLineSelected = False
 
     def setAll(self, ballSelected, manualDrive, gameStarted, img, ballMask, basketMask,
                fps, ballHorizontalBounds, ballVerticalBounds, basketHorizontalBounds, basketVerticalBounds):

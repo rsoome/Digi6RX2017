@@ -237,6 +237,7 @@ class SocketHandler:
             if key == "ballSelected":
                 self.socketData.ballSelected = messages[key]
                 self.socketData.basketSelected = not messages[key]
+                self.socketData.blackLineSelected = not messages[key]
 
             if key == "ballHorizontalBounds":
                 self.socketData.ballHorizontalBounds = messages[key]
@@ -246,7 +247,13 @@ class SocketHandler:
 
             if key == "basketSelected":
                 self.socketData.ballSelected = not messages[key]
+                self.socketData.blackLineSelected = not messages[key]
                 self.socketData.basketSelected = messages[key]
+
+            if key == "blackLineSelected":
+                self.socketData.ballSelected = not messages[key]
+                self.socketData.blackLineSelected = messages[key]
+                self.socketData.basketSelected = not messages[key]
 
             if key == "basketHorizontalBounds":
                 self.socketData.basketHorizontalBounds = messages[key]
@@ -283,6 +290,9 @@ class SocketHandler:
 
             if key == "resetBasket":
                 self.socketData.resetBasket = messages[key]
+
+            if key == "resetBlackLine":
+                self.socketData.resetBlackLine = messages[key]
 
             if key == "manualDrive":
                 self.socketData.manualDrive = messages[key]

@@ -130,8 +130,11 @@ def socketDataCheck():
         selectedTarget = None
         if socketData.ballSelected:
             selectedTarget = ball
-        else:
+        if socketData.basketSelected:
             selectedTarget = basket
+        if socketData.blackLineSelected:
+            selectedTarget = blackLine
+        print("Selected ", selectedTarget.id)
 
         updateTargetsTresholds()
     if socketData.resetBall:
@@ -144,6 +147,13 @@ def socketDataCheck():
         basket.resetBounds()
         basket.resetThreshHolds()
         socketData.resetBasket = False
+
+    if socketData.resetBlackLine:
+        print("Resetting black line.")
+        blackLine.resetBounds()
+        blackLine.resetThreshHolds()
+        socketData.resetBlackLine = False
+
     if socketData.manualDrive:
         manualDrive = ManualDrive.ManualDrive(move, int(settings.getValue("driveSpeed")),
                                               int(settings.getValue("turnSpeed")))

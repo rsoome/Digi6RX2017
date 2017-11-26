@@ -81,6 +81,12 @@ class WindowHandler:
                 if keyStroke == ord('b'):
                     self.values["setBlue"] = True
 
+            if keyStroke & 0xFF == ord('l'):
+                self.textColor = (0, 255, 255)
+                self.values["blackLineSelected"] = True
+                if cv2.waitKey(self.keyWaitTime) == ord("l"):
+                    self.values["resetBlackLine"] = True
+
             if keyStroke & 0xFF == ord('m'):
                 self.values["manualDrive"] = True
 
