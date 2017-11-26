@@ -60,16 +60,15 @@ class GameLogic:
         if not self.socketData.gameStarted:
             return
 
-        #print("Verticalmidpoint: " + str(target.verticalMidPoint))
-        #print("Jagamine: ", float(horizontalMidPoint - self.screenMidpoint) / self.screenMidpoint)
-        #print("target midpoint: ", target.horizontalMidPoint)
-        #print("screen midpoint: ", self.screenMidpoint)
+        print("Verticalmidpoint: " + str(target.verticalMidPoint))
+        print("target midpoint: ", target.horizontalMidPoint)
+        print("screen midpoint: ", self.screenMidpoint)
         ySpeed = self.move.calculateSpeed(self.moveSpeed, verticalMidPoint)
         turnSpeed = self.move.calculateOmega(self.turnSpeed, horizontalMidPoint - self.screenMidpoint)
         #if abs(turnSpeed) < 0.2:
          #   turnSpeed = 0
-        #print("ySpeed: ",ySpeed)
-        #print("turnSpeed: ", turnSpeed)
+        print("ySpeed: ",ySpeed)
+        print("turnSpeed: ", turnSpeed)
         self.move.driveXY(0, ySpeed, turnSpeed)
 
     def lookForTarget(self, target):
