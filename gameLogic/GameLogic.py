@@ -200,9 +200,9 @@ class GameLogic:
                         ballGrabbed = ballReached
                         if ballGrabbed:
                             self.thrower.grabberCarry()
-                    ballReached = False
-                    basketReached = False
-                    ballGrabbed = False
+                        ballReached = False
+                        basketReached = False
+                        ballGrabbed = False
 
                 else:
                     print("FIXME")
