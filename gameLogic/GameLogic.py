@@ -114,10 +114,12 @@ class GameLogic:
                         ballGrabbed = True
 
                 elif not ballGrabbed:
-                    self.thrower.grabberOpen()
-                    self.thrower.stopMotor()
-                    ballReached = False
-                    ballGrabbed = False
+                    self.readMb()
+                    if self.irStatus == 0:
+                        self.thrower.grabberOpen()
+                        self.thrower.stopMotor()
+                        ballReached = False
+                        ballGrabbed = False
 
                 if not ballReached:
                     print("Going to ball")
@@ -255,9 +257,6 @@ class GameLogic:
             or horizontalMidPoint > (self.screenMidpoint + self.deltaFromMidPoint)):
 
             print("Target not in allowed bounds: ")
-            print(self.screenMidpoint + ((self.screenMidpoint - horizontalMidPoint) / self.screenMidpoint) * self.deltaFromMidPoint + 30)
-            print(horizontalMidPoint)
-            print( self.screenMidpoint + ((self.screenMidpoint - horizontalMidPoint) / self.screenMidpoint) * self.deltaFromMidPoint - 30)
 
             return False
 
