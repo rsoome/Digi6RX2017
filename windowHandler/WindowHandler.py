@@ -74,11 +74,11 @@ class WindowHandler:
                 self.textColor = (255, 255, 0)
                 self.values["basketSelected"] = True
                 keyStroke = cv2.waitKey(self.keyWaitTime)
-                if keyStroke == ord('r'):
+                if keyStroke == ord('k'):
                     self.values["resetBasket"] = True
                 if keyStroke == ord('m'):
                     self.values["setMagneta"] = True
-                if keyStroke == ord('k'):
+                if keyStroke == ord('b'):
                     self.values["setBlue"] = True
 
             if keyStroke & 0xFF == ord('m'):

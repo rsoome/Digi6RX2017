@@ -22,16 +22,16 @@ class ImageHandler:
         if filteredImg is not None:
             hsvLowerRange = targetObject.hsvLowerRange
             hsvUpperRange = targetObject.hsvUpperRange
-            try:
-                if hsvLowerRange is not None and hsvUpperRange is not None:
-                    thresh = cv2.inRange(filteredImg, hsvLowerRange, hsvUpperRange)
-                    #print(targetObject.id, "'s mask:", thresh)
-                    targetObject.mask = thresh
-            except Exception as e:
-                print(e)
-                print("filteredImg: ", filteredImg)
-                print("hsvLowerRange, ", hsvLowerRange)
-                print("hsvUpperRange", hsvUpperRange)
+            #try:
+            if hsvLowerRange is not None and hsvUpperRange is not None:
+                thresh = cv2.inRange(filteredImg, hsvLowerRange, hsvUpperRange)
+                #print(targetObject.id, "'s mask:", thresh)
+                targetObject.mask = thresh
+            #except Exception as e:
+            #    print(e)
+            #    print("filteredImg: ", filteredImg)
+            #    print("hsvLowerRange, ", hsvLowerRange)
+            #    print("hsvUpperRange", hsvUpperRange)
         else:
             print("No frame captured.")
 	
