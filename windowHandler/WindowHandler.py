@@ -34,22 +34,28 @@ class WindowHandler:
         self.lock.release()
 
     def showImage(self):
-        if self.socketData.ballHorizontalBounds is not None and self.socketData.ballVerticalBounds is not None:
-            cv2.rectangle(self.socketData.img, (self.socketData.ballHorizontalBounds[0],
-                                                self.socketData.ballVerticalBounds[1]),
-                          (self.socketData.ballHorizontalBounds[1], self.socketData.ballVerticalBounds[0]),
+        ballHorizontalBounds = self.socketData.ballHorizontalBounds
+        ballVerticalBounds = self.socketData.ballVerticalBounds
+        basketHorizontalBounds = self.socketData.basketHorizontalBounds
+        basketVerticalBounds = self.socketData.basketVerticalBounds
+        blackLineHorizontalBounds = self.socketData.blacklineHorizontalBounds
+        blackLineVerticalBounds = self.socketData.blackLineVerticalBounds
+        if ballHorizontalBounds is not None and ballVerticalBounds is not None:
+            cv2.rectangle(self.socketData.img, (ballHorizontalBounds[0],
+                                                ballVerticalBounds[1]),
+                          (ballHorizontalBounds[1], ballVerticalBounds[0]),
                           (255, 0, 0), 3)
 
-        if self.socketData.basketHorizontalBounds is not None and self.socketData.basketVerticalBounds is not None:
-            cv2.rectangle(self.socketData.img, (self.socketData.basketHorizontalBounds[0],
-                                                self.socketData.basketVerticalBounds[1]),
-                          (self.socketData.basketHorizontalBounds[1], self.socketData.basketVerticalBounds[0]),
+        if basketHorizontalBounds is not None and basketVerticalBounds is not None:
+            cv2.rectangle(self.socketData.img, (basketHorizontalBounds[0],
+                                                basketVerticalBounds[1]),
+                          (basketHorizontalBounds[1], basketVerticalBounds[0]),
                           (0, 255, 0), 3)
 
-        if self.socketData.blacklineHorizontalBounds is not None and self.socketData.blackLineVerticalBounds is not None:
-            cv2.rectangle(self.socketData.img, (self.socketData.blacklineHorizontalBounds[0],
-                                                self.socketData.blackLineVerticalBounds[1]),
-                          (self.socketData.blacklineHorizontalBounds[1], self.socketData.basketVerticalBounds[0]),
+        if blackLineHorizontalBounds is not None and blackLineVerticalBounds is not None:
+            cv2.rectangle(self.socketData.img, (blackLineHorizontalBounds[0],
+                                                blackLineVerticalBounds[1]),
+                          (blackLineHorizontalBounds[1], blackLineVerticalBounds[0]),
                             (120, 120, 120), 3)
 
         if cv2.waitKey(1) & 0xFF == ord('e'):
