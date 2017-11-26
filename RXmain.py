@@ -136,10 +136,12 @@ def socketDataCheck():
 
         updateTargetsTresholds()
     if socketData.resetBall:
+        print("Resetting ball.")
         ball.resetBounds()
         ball.resetThreshHolds()
         socketData.resetBall = False
     if socketData.resetBasket:
+        print("Resetting basket.")
         basket.resetBounds()
         basket.resetThreshHolds()
         socketData.resetBasket = False
@@ -171,12 +173,14 @@ def socketDataCheck():
         socketData.refreshConf = False
 
     if socketData.setMagneta:
+        print("Setting magneta to opponent.")
         opponent = "magneta"
         basket.hsvLowerRange = settings.getValue("magnetaBasketHSVLower")
         basket.hsvUpperRange = settings.getValue("magnetaBasketHSVUpper")
         socketData.setMagneta = False
 
     if socketData.setBlue:
+        print("Setting blue to opponent.")
         opponent = "blue"
         basket.hsvLowerRange = settings.getValue("blueBasketHSVLower")
         basket.hsvUpperRange = settings.getValue("blueBasketHSVUpper")

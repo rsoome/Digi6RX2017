@@ -67,7 +67,7 @@ class WindowHandler:
             if keyStroke & 0xFF == ord('b'):
                 self.textColor = (0, 0, 255)
                 self.values["ballSelected"] = True
-                if cv2.waitKey(self.keyWaitTime) == ord('r'):
+                if cv2.waitKey(self.keyWaitTime) == ord('b'):
                     self.values["resetBall"] = True
 
             if keyStroke & 0xFF == ord('k'):
@@ -78,7 +78,7 @@ class WindowHandler:
                     self.values["resetBasket"] = True
                 if keyStroke == ord('m'):
                     self.values["setMagneta"] = True
-                if keyStroke == ord('b'):
+                if keyStroke == ord('k'):
                     self.values["setBlue"] = True
 
             if keyStroke & 0xFF == ord('m'):
