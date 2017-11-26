@@ -101,6 +101,7 @@ class GameLogic:
 
         while self.socketData.gameStarted:
             self.readMb()
+            print(self.gameState)
             #print(self.irStatus)
 
             if self.mb.sendingTime():
@@ -200,9 +201,9 @@ class GameLogic:
                         ballGrabbed = ballReached
                         if ballGrabbed:
                             self.thrower.grabberCarry()
-                        ballReached = False
-                        basketReached = False
-                        ballGrabbed = False
+                    ballReached = False
+                    basketReached = False
+                    ballGrabbed = False
 
                 else:
                     print("FIXME")
@@ -211,7 +212,7 @@ class GameLogic:
                     ballGrabbed = False
 
             if self.gameState == "STOP":
-                self.thrower.emptyThrower()
+                #self.thrower.emptyThrower()
                 self.move.stop()
 
         self.mb.sendTimer.stopTimer()
