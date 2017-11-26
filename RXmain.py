@@ -207,6 +207,8 @@ try:
         #game.lookForTarget(ball)
         #END DEBUGGING
 
+        print(blackLine.verticalMidPoint)
+
 
         thrower.grabberOpen()
 
