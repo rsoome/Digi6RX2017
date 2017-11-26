@@ -49,7 +49,7 @@ class MovementLogic:
     def calculateOmega(self, maxSpeed, coif):
         if coif == 0:
             return 0
-        returnSpeed = coif/abs(coif) * ((0.2862*math.log(abs(coif)) - 0.8493) * maxSpeed)
+        returnSpeed = coif/abs(coif) * ((0.0939*pow(math.e, 0.0037 * coif)) * maxSpeed)
         if (coif > -0.1 and returnSpeed < 0) or (coif < 0.1 and returnSpeed > 0):
             return 0
         return returnSpeed
