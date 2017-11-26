@@ -16,6 +16,8 @@ class SocketData:
         self.ballVerticalBounds = None
         self.basketHorizontalBounds = None
         self.basketVerticalBounds = None
+        self.blacklineHorizontalBounds = None
+        self.blackLineVerticalBounds = None
         self.resetBall = False
         self.resetBasket = False
         self.resetBlackLine = False

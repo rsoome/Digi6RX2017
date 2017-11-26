@@ -39,7 +39,7 @@ class SocketHandler:
                 cv2.drawContours(self.socketData.img, self.basket.contours, -1, [0, 255, 0])
 
             if self.blackLine.contours is not None:
-                cv2.drawContours(self.socketData.img, self.blackLine.contours, -1, [0,0,255])
+                cv2.drawContours(self.socketData.img, self.blackLine.contours, -1, [120,120,120])
 
         self.socketData.ballHorizontalBounds = self.ball.horizontalBounds
         self.socketData.ballVerticalBounds = self.ball.verticalBounds
@@ -58,6 +58,8 @@ class SocketHandler:
         self.values["ballVerticalBounds"] = self.socketData.ballVerticalBounds
         self.values["basketHorizontalBounds"] = self.socketData.basketHorizontalBounds
         self.values["basketVerticalBounds"] = self.socketData.basketVerticalBounds
+        self.values["blackLineHorizontalBounds"] = self.socketData.blacklineHorizontalBounds
+        self.values["blackLineVerticalBounds"] = self.socketData.blackLineVerticalBounds
 
     def listen(self, conn, t):
 
@@ -260,6 +262,12 @@ class SocketHandler:
 
             if key == "basketVerticalBounds":
                 self.socketData.basketVerticalBounds = messages[key]
+
+            if key == "blackLineVerticalBounds":
+                self.socketData.blackLineVerticalBounds = messages[key]
+
+            if key == "blackLineHorizontalBounds":
+                self.socketData.blacklineHorizontalBounds = messages[key]
 
             if key == "manualDrive":
                 self.socketData.manualDrive = messages[key]
