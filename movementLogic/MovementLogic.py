@@ -44,12 +44,15 @@ class MovementLogic:
         self.drive(speed, angle, omega)
 
     def calculateSpeed(self, maxSpeed, coif):
-        return (-8*pow(10, -6)*pow(coif, 2) + 0.0019*coif + 0.08851)* maxSpeed
+        return (-1*pow(10, -5)*pow(coif, 2) + 0.0038*coif + 0.6676)* maxSpeed
 
     def calculateOmega(self, maxSpeed, coif):
         if coif == 0:
             return 0
-        return max(coif/abs(coif) * ((0.4446*math.log(abs(coif)) - 1.9015) * maxSpeed), 0)
+        returnSpeed = coif/abs(coif) * ((0.2862*math.log(abs(coif)) - 0.8493) * maxSpeed)
+        if (coif > 0 and returnSpeed < 0) or (coif < 0 and returnSpeed > 0):
+            return 0
+        return returnSpeed
 
     def brake(self):
         print(self.motorSpeed0)
