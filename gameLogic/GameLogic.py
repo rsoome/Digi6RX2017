@@ -46,7 +46,7 @@ class GameLogic:
         turningSpeed = self.turnSpeed * turnCoificent
         print("Turning with speed: " + str(turningSpeed))
         self.readMb()
-        if self.irStatus == 1:
+        if target.id == "ball" and self.irStatus == 1:
             return True
         self.move.rotate(turningSpeed)
         return True
