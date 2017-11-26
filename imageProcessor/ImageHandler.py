@@ -27,7 +27,8 @@ class ImageHandler:
                     thresh = cv2.inRange(filteredImg, hsvLowerRange, hsvUpperRange)
                     #print(targetObject.id, "'s mask:", thresh)
                     targetObject.mask = thresh
-            except:
+            except Exception as e:
+                print(e)
                 print("filteredImg: ", filteredImg)
                 print("hsvLowerRange, ", hsvLowerRange)
                 print("hsvUpperRange", hsvUpperRange)
