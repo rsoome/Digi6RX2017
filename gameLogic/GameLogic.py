@@ -9,7 +9,7 @@ from timer import Timer
 class GameLogic:
 
     def __init__(self, move, deltaFromMidPoint, moveSpeed, turnSpeed, frame, socketData, ref, fieldID, robotID, mb,
-                 ball, basket, defaultGameState, thrower):
+                 ball, basket, defaultGameState, thrower, blackLine):
         self.frameWidth = None
         self.move = move
         self.deltaFromMidPoint = deltaFromMidPoint
@@ -32,7 +32,9 @@ class GameLogic:
         self.framesCaptured = 0
         self.totalTimeElapsed = 0
         self.fps = 0
-        self.basketAheadBound = 70
+        self.basketAheadBound = self.frame.height + 70
+        self.blackLine = blackLine
+        self.lineAheadBound = self.frame.height + 70
 
     def turnTowardTarget(self, target):
         horizontalMidPoint = target.horizontalMidPoint
@@ -106,6 +108,17 @@ class GameLogic:
 
             if self.gameState == "START":
 
+                basketBottom = self.basket.verticalBounds[1]
+                lineBottom = self.blackLine.verticalBounds[1]
+
+                if basketBottom is not None:
+                    if basketBottom >= self.basketAheadBound:
+                        self.move.rotate(self.turnSpeed)
+
+                if lineBottom is not None:
+                    if lineBottom >= self.lineAheadBound:
+                        self.move.rotate(self.turnSpeed)
+
                 if self.irStatus == 1 and not ballGrabbed:
                     #self.move.driveXY(0, self.move.currentSpeed, 0) #MAY NEED CHANGING
                     time.sleep(0.1)
@@ -150,6 +163,7 @@ class GameLogic:
                     print("Getting ball")
                     ballGrabbed = self.irStatus == 1
                     self.move.driveXY(0, self.move.currentSpeed, 0)
+                    print("I should be driving with speed: ", self.move.currentSpeed)
                     self.mb.sendValues()
 
                     if ballGrabbed:

@@ -93,9 +93,9 @@ thrower = Thrower.Thrower(mb)
 
 game = GameLogic.GameLogic(move, settings.getValue("deltaFromMidPoint"), settings.getValue("driveSpeed"),
                            settings.getValue("turnSpeed"), frameCapture, socketData, ref, fieldID, robotID, mb, ball,
-                           basket, settings.getValue("defaultGameState"), thrower)
+                           basket, settings.getValue("defaultGameState"), thrower, blackLine)
 
-socketHandler = SocketHandler.SocketHandler(socketData, ball, basket, 0, frameCapture)
+socketHandler = SocketHandler.SocketHandler(socketData, ball, basket, 0, frameCapture, blackLine)
 
 timer = Timer.Timer()
 

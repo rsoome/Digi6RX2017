@@ -14,7 +14,7 @@ import zlib
 
 class SocketHandler:
 
-    def __init__(self, socketData, ball, basket, fps, frame):
+    def __init__(self, socketData, ball, basket, fps, frame, blackLine):
         self.socketData = socketData
         self.ball = ball
         self.basket = basket
@@ -22,6 +22,7 @@ class SocketHandler:
         self.frame = frame
         self.values = dict()
         self.acknowledged = False
+        self.blackLine = blackLine
 
     def updateData(self):
 
@@ -36,6 +37,9 @@ class SocketHandler:
 
             if self.basket.contours is not None:
                 cv2.drawContours(self.socketData.img, self.basket.contours, -1, [0, 255, 0])
+
+            if self.blackLine.contours is not None:
+                cv2.drawContours(self.socketData.img, self.blackLine.contours, -1, [0,0,255])
 
         self.socketData.ballHorizontalBounds = self.ball.horizontalBounds
         self.socketData.ballVerticalBounds = self.ball.verticalBounds
