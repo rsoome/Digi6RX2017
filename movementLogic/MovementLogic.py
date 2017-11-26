@@ -21,8 +21,10 @@ class MovementLogic:
         self.wheelSpeedToMainboardUnits = 18.75 * 64 / (2 * math.pi * 0.035 * 60)
 
     def drive(self, speed, angle, omega):
-        self.currentSpeed = speed
-        self.currentTurnSpeed = omega
+        if speed != 0:
+            self.currentSpeed = speed
+        if omega != 0:
+            self.currentTurnSpeed = omega
         '''print("Omega: " + str(omega))
         print("Motor 0: " + str(self.wheelSpeedToMainboardUnits* (speed*(math.cos(math.radians(90 - 180 + angle)))
                                   + omega*self.wheelDistance)))
