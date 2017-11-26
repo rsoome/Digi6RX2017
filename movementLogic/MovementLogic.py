@@ -47,8 +47,7 @@ class MovementLogic:
         return (-8 * pow(10, -6) * pow(coif, 2) + 0.0019 * coif + 0.08851) * maxSpeed
 
     def calculateOmega(self, maxSpeed, coif):
-        return (-4*pow(10, -13) * pow(coif, 5) + 4*pow(10, -21) * pow(coif, 4) + 5*pow(10, -8) * pow(coif, 3)
-                - 2*pow(10, -16) *pow(coif, 2) + 0.0021*coif -6*pow(10, -12))
+        return (coif - 320)/320
 
     def brake(self):
         print(self.motorSpeed0)
