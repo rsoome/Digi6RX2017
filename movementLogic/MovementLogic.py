@@ -48,7 +48,7 @@ class MovementLogic:
     def calculateSpeed(self, maxSpeed, verticalMidPoint):
         coif = ((-0.000000000004 * pow(verticalMidPoint, 5)) + (0.000000004 * pow(verticalMidPoint, 4))
                 - (0.000001 * pow(verticalMidPoint, 3)) + (0.0002 * pow(verticalMidPoint, 2))
-                (- 0.0071 * verticalMidPoint) + 1.0281)
+                - (0.0071 * verticalMidPoint) + 1.0281)
 
         print("verticalMidPoint: ", verticalMidPoint)
         print("coif: ", coif)
