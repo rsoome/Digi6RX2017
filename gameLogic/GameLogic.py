@@ -140,7 +140,7 @@ class GameLogic:
                         print(self.ball.horizontalMidPoint)
                         self.thrower.grabberOpen()
                         ballReached = self.goToTarget(self.ball, self.ballStopBound, self.moveSpeed)
-                        print("ballREached: ", ballReached)
+                        print("ballReached: ", ballReached, "\n")
                         if ballReached:
                             self.move.stop()
                             self.mb.sendValues()
