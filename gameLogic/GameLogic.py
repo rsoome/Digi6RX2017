@@ -91,6 +91,7 @@ class GameLogic:
         self.mb.sendTimer.startTimer()
         self.thrower.grabberOpen()
         self.thrower.stopMotor()
+        grabbingTimer = Timer.Timer()
 
         while self.socketData.gameStarted:
             self.readMb()
@@ -109,6 +110,7 @@ class GameLogic:
                     self.readMb()
                     self.thrower.startMotor()
                     if self.irStatus == 1:
+                        grabbingTimer.stopTimer()
                         self.thrower.grabberCarry()
                         self.mb.sendValues()
                         time.sleep(0.05)
@@ -142,11 +144,17 @@ class GameLogic:
                             self.mb.sendValues()
 
                 elif ballGrabbed == False:
-                    print("Grabbing ball")
-                    ballGrabbed = self.irStatus == 1
-                    self.move.driveXY(0, self.move.currentSpeed, 0)
-                    print("I should be driving with speed: ", self.move.currentSpeed)
-                    self.mb.sendValues()
+                    if not grabbingTimer.isStartd:
+                        grabbingTimer.startTimer()
+
+                    if grabbingTimer.getTimePassed() < 500:
+                        print("Grabbing ball")
+                        ballGrabbed = self.irStatus == 1
+                        self.move.driveXY(0, self.move.currentSpeed, 0)
+                        print("I should be driving with speed: ", self.move.currentSpeed)
+                        self.mb.sendValues()
+                    else:
+                        ballReached = False
 
                 elif basketReached == False:
                     self.readMb()
