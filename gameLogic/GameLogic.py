@@ -41,7 +41,7 @@ class GameLogic:
         horizontalMidPoint = target.horizontalMidPoint
         if horizontalMidPoint == None:
             return False
-        turnCoificent = (horizontalMidPoint - self.screenMidpoint)/self.screenMidpoint
+        turnCoificent = -(horizontalMidPoint - self.screenMidpoint)/self.screenMidpoint
 
         print("Turncoificent: " + str(turnCoificent))
         if not self.socketData.gameStarted:
