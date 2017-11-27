@@ -105,8 +105,8 @@ class GameLogic:
 
                 self.checkBounds()
 
-                print("Ball reached: ", ballReached)
-                print("Ball grabbed: ", ballGrabbed)
+                #print("Ball reached: ", ballReached)
+                #print("Ball grabbed: ", ballGrabbed)
                 if self.irStatus == 1 and not ballGrabbed:
                     #self.move.driveXY(0, self.move.currentSpeed, 0) #MAY NEED CHANGING
                     time.sleep(0.1)
@@ -276,7 +276,7 @@ class GameLogic:
     def checkVerticalAlignment(self, target, verticalStopBound):
 
         verticalMidPoint = target.verticalMidPoint
-        print(target.id, "'s vertical midpoint at the time of checking allignment: ", verticalMidPoint)
+        #print(target.id, "'s vertical midpoint at the time of checking allignment: ", verticalMidPoint)
         if verticalMidPoint is None:
             return False
 
