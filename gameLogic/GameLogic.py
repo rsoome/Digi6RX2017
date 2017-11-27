@@ -230,6 +230,7 @@ class GameLogic:
                 if not targetFound:
                     basketFound = self.turnTowardTarget(self.basket)
                     while not basketFound:
+                        print("Turning toward basket")
                         basketFound = self.turnTowardTarget(self.basket)
                     self.move.driveXY(0, self.moveSpeed, 0)
             return False
