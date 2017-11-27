@@ -82,7 +82,7 @@ class GameLogic:
         self.readMb()
         if target.id == "ball" and self.irStatus == 1:
             return True
-        self.move.rotate(self.turnSpeed)
+        self.move.rotate(self.turnSpeed//2)
         if self.mb.sendingTime:
             self.mb.sendValues()
 
