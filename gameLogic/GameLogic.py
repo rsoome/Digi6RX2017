@@ -93,7 +93,7 @@ class GameLogic:
         self.thrower.stopMotor()
         grabbingTimer = Timer.Timer()
         effTimer = Timer.Timer()
-
+        effTimer.startTimer()
         while self.socketData.gameStarted:
             self.readMb()
             #print(self.irStatus)
@@ -105,6 +105,8 @@ class GameLogic:
 
                 self.checkBounds()
 
+                print("Ball reached: ", ballReached)
+                print("Ball grabbed: ", ballGrabbed)
                 if self.irStatus == 1 and not ballGrabbed:
                     #self.move.driveXY(0, self.move.currentSpeed, 0) #MAY NEED CHANGING
                     time.sleep(0.1)
@@ -187,6 +189,7 @@ class GameLogic:
             if self.gameState == "STOP":
                 #self.thrower.emptyThrower()
                 self.move.stop()
+            print("Run function completed in: ", effTimer.reset())
 
         self.mb.sendTimer.stopTimer()
         self.move.stop()
