@@ -108,30 +108,7 @@ class GameLogic:
 
             if self.gameState == "START":
 
-                basketBounds = self.basket.verticalBounds
-                blackLineBounds = self.blackLine.verticalBounds
-                basketBottom = None
-                lineBottom = None
-
-                if basketBounds is not None:
-                    basketBottom = basketBounds[1]
-
-                if blackLineBounds is not None:
-                    lineBottom = blackLineBounds[1]
-
-                if self.basket.verticalBounds is not None:
-                    basketBottom = self.basket.verticalBounds[1]
-
-                if self.blackLine.verticalBounds is not None:
-                    lineBottom = self.blackLine.verticalBounds[1]
-
-                if basketBottom is not None:
-                    if basketBottom >= self.basketAheadBound:
-                        self.move.rotate(self.turnSpeed)
-
-                if lineBottom is not None:
-                    if lineBottom >= self.lineAheadBound:
-                        self.move.rotate(self.turnSpeed)
+                self.checkBounds()
 
                 if self.irStatus == 1 and not ballGrabbed:
                     #self.move.driveXY(0, self.move.currentSpeed, 0) #MAY NEED CHANGING
@@ -160,6 +137,8 @@ class GameLogic:
                         ballReached = False
                         ballGrabbed = False
 
+                print("Ball reached: ", ballReached)
+                print("Ball grabbed: ", ballGrabbed)
                 if not ballReached:
                     self.readMb()
                     if self.irStatus == 1:
@@ -224,6 +203,26 @@ class GameLogic:
         self.mb.sendTimer.stopTimer()
         self.move.stop()
 
+    def checkBounds(self):
+        basketBounds = self.basket.verticalBounds
+        blackLineBounds = self.blackLine.verticalBounds
+        basketBottom = None
+        lineBottom = None
+        if basketBounds is not None:
+            basketBottom = basketBounds[1]
+        if blackLineBounds is not None:
+            lineBottom = blackLineBounds[1]
+        if self.basket.verticalBounds is not None:
+            basketBottom = self.basket.verticalBounds[1]
+        if self.blackLine.verticalBounds is not None:
+            lineBottom = self.blackLine.verticalBounds[1]
+        if basketBottom is not None:
+            if basketBottom >= self.basketAheadBound:
+                self.move.rotate(self.turnSpeed)
+        if lineBottom is not None:
+            if lineBottom >= self.lineAheadBound:
+                self.move.rotate(self.turnSpeed)
+
     def goToTarget(self, target, verticalStopBound, speed):
         #print(target.area)
         if target.verticalMidPoint == None or target.horizontalMidPoint == None:
@@ -279,7 +278,6 @@ class GameLogic:
             return False
 
         print("At position.")
-        self.move.stop()
         self.mb.sendValues()
         return True
 
