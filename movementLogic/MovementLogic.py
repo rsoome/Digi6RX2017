@@ -55,7 +55,7 @@ class MovementLogic:
         return coif * maxSpeed
 
     def calculateOmega(self, maxSpeed, horizontalMidPoint):
-        coif = 0.0985*pow(math.e, 0.0113 * horizontalMidPoint)
+        coif = 0.0218*pow(math.e, 0.0232 * horizontalMidPoint)
 
         if coif > 0.5:
             return maxSpeed
