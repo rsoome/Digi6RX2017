@@ -45,9 +45,18 @@ class MovementLogic:
         speed = math.sqrt(pow(speedX, 2) + pow(speedY, 2)) + self.minDriveSpeed
         self.drive(speed, angle, omega)
 
-    def calculateSpeed(self, maxSpeed, coif):
-        return (2* pow(10, -10) * pow(coif, 4) - 2 * pow(10, -7) * pow(coif, 3) + 4* pow(10, -5) * pow(coif, 2)
-                - 0.0028 * coif + 1.0108) * maxSpeed
+    def calculateSpeed(self, maxSpeed, verticalMidPoint):
+        coif = (-4 * pow(10, -12) * pow(verticalMidPoint, 4) + 4 * pow(10, -9) * pow(verticalMidPoint, 4)
+                - 1 * pow(10, -6) * pow(verticalMidPoint, 3) + 0.0002 * pow(verticalMidPoint, 2)
+                - 0.0071 * verticalMidPoint + 1.0281) * maxSpeed
+
+        if coif > 0.9:
+            return 1
+
+        if coif < 0.1 :
+            return 0.1
+
+        return coif
 
     def calculateOmega(self, maxSpeed, coif):
         if abs(coif) < 40:
