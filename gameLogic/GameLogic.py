@@ -122,7 +122,6 @@ class GameLogic:
                         ballGrabbed = True
 
                 elif not ballGrabbed:
-                    print("Grabbing ball")
                     self.readMb()
                     if self.irStatus == 0:
                         self.thrower.grabberOpen()
@@ -132,7 +131,7 @@ class GameLogic:
 
                 print("Ball reached: ", ballReached)
                 print("Ball grabbed: ", ballGrabbed)
-                if not ballReached:
+                if ballReached == False:
                     self.readMb()
                     if self.irStatus == 1:
                         ballReached = True
@@ -145,24 +144,14 @@ class GameLogic:
                             self.move.stop()
                             self.mb.sendValues()
 
-                elif not ballGrabbed:
-                    print("Getting ball")
+                elif ballGrabbed == False:
+                    print("Grabbing ball")
                     ballGrabbed = self.irStatus == 1
                     self.move.driveXY(0, self.move.currentSpeed, 0)
                     print("I should be driving with speed: ", self.move.currentSpeed)
                     self.mb.sendValues()
 
-                    if ballGrabbed:
-                        self.thrower.grabberCarry()
-                        self.mb.sendValues()
-                        time.sleep(0.05)
-                        self.thrower.startMotor()
-                    else:
-                        self.thrower.grabberOpen()
-                        self.thrower.stopMotor()
-                    self.mb.sendValues()
-
-                elif not basketReached:
+                elif basketReached == False:
                     self.readMb()
                     if self.irStatus == 1:
                         print("Reaching basket")
