@@ -1,6 +1,12 @@
 # Digi6RX2017
 
+<<<<<<< HEAD
 Digi6's code for basketball robot to compete in Robotex of 2017
+=======
+#CURRENT BRANCH USED - line_detection
+
+Digi6's code for basketball robot  compete in Robotex of 2017
+>>>>>>> 2c2a4fb5e57c2719bd6dd37549f2d127159924ad
 
 cancellationToken - thread cancellation token for multi threaded image processing. Currently not used.
 

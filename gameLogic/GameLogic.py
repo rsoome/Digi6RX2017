@@ -101,7 +101,6 @@ class GameLogic:
 
         while self.socketData.gameStarted:
             self.readMb()
-            print(self.gameState)
             #print(self.irStatus)
 
             if self.mb.sendingTime():
@@ -119,6 +118,12 @@ class GameLogic:
 
                 if blackLineBounds is not None:
                     lineBottom = blackLineBounds[1]
+
+                if self.basket.verticalBounds is not None:
+                    basketBottom = self.basket.verticalBounds[1]
+
+                if self.blackLine.verticalBounds is not None:
+                    lineBottom = self.blackLine.verticalBounds[1]
 
                 if basketBottom is not None:
                     if basketBottom >= self.basketAheadBound:

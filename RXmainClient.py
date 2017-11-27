@@ -22,6 +22,7 @@ totalTimeElapsed = 0
 fpsStatus = "0"
 socketData = SocketData.SocketData()
 socketHandler = SocketHandler.SocketHandler(socketData, None, None, None, None, None)
+socketHandler = SocketHandler.SocketHandler(socketData, None, None, None, None,None )
 window = WindowHandler.WindowHandler(socketData, socketHandler)
 hostname = "Digi6"
 
