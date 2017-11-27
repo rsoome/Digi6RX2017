@@ -8,6 +8,7 @@ from timer import Timer
 class Target:
 
     def __init__(self, hBounds, vBounds, targetID, lowerRange, upperRange, scanOrder, minSize):
+        self.targetLostTimer = Timer.Timer()
         self.horizontalBounds = None
         self.verticalBounds = None
         self.setBounds(hBounds, vBounds)
@@ -19,7 +20,6 @@ class Target:
         self.timer = Timer.Timer()
         self.minSize = minSize
         self.e = 2.7183
-        self.targetLostTimer = Timer.Timer()
         self.lastKnownVerticalBounds = None
         self.lastKnownHorizontalBounds = None
         self.lastKnownHorizontalMidPoint = None
