@@ -109,8 +109,8 @@ class GameLogic:
                     time.sleep(0.1)
                     self.readMb()
                     self.thrower.startMotor()
+                    grabbingTimer.stopTimer()
                     if self.irStatus == 1:
-                        grabbingTimer.stopTimer()
                         self.thrower.grabberCarry()
                         self.mb.sendValues()
                         time.sleep(0.05)
