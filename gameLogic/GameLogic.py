@@ -127,7 +127,7 @@ class GameLogic:
                         ballGrabbed = True
                         basketReached = False
 
-                else:
+                elif self.irStatus == 0:
                     self.thrower.grabberOpen()
                     ballGrabbed = False
 
@@ -195,7 +195,7 @@ class GameLogic:
                 #self.thrower.emptyThrower()
                 self.move.stop()
                 self.mb.sendValues()
-            #print("Run function completed in: ", effTimer.reset())
+            print("Run function completed in: ", effTimer.reset())
 
         self.mb.sendTimer.stopTimer()
         self.move.stop()
