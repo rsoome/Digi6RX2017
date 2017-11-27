@@ -128,8 +128,6 @@ class GameLogic:
                         self.thrower.stopMotor()
                         ballGrabbed = False
 
-                print("Ball reached: ", ballReached)
-                print("Ball grabbed: ", ballGrabbed)
                 if ballReached == False:
                     self.readMb()
                     if self.irStatus == 1:
@@ -139,7 +137,6 @@ class GameLogic:
                         print(self.ball.horizontalMidPoint)
                         self.thrower.grabberOpen()
                         ballReached = self.goToTarget(self.ball, self.ballStopBound, self.moveSpeed)
-                        print("ballReached: ", ballReached, "\n")
                         if ballReached:
                             self.move.stop()
                             self.mb.sendValues()
