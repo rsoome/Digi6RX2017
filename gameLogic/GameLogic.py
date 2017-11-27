@@ -127,7 +127,11 @@ class GameLogic:
                         ballGrabbed = True
                         basketReached = False
 
-                elif not ballGrabbed:
+                else:
+                    self.thrower.grabberOpen()
+                    ballGrabbed = False
+
+                if not ballGrabbed:
                     self.readMb()
                     if self.irStatus == 0:
                         self.thrower.grabberOpen()
