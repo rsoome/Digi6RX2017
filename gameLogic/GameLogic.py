@@ -52,6 +52,7 @@ class GameLogic:
         if target.id == "ball" and self.irStatus == 1:
             return True
         self.move.rotate(turningSpeed)
+        self.mb.sendValues()
         return True
 
     def moveTowardTarget(self, target):
@@ -75,9 +76,9 @@ class GameLogic:
         self.readMb()
         if target.id == "ball" and self.irStatus == 1:
             return True
+        print("Looking for target")
         self.move.rotate(1)
-        if self.mb.sendingTime:
-            self.mb.sendValues()
+        self.mb.sendValues()
 
         if target.horizontalMidPoint is not None:
             return True
@@ -98,8 +99,7 @@ class GameLogic:
             self.readMb()
             #print(self.irStatus)
 
-            if self.mb.sendingTime():
-                self.mb.sendValues()
+            self.mb.sendValues()
 
             if self.gameState == "START":
 
@@ -232,8 +232,6 @@ class GameLogic:
                     while not basketFound:
                         print("Turning toward basket")
                         basketFound = self.turnTowardTarget(self.basket)
-                        self.mb.sendValues()
-                        time.sleep(0.05)
                     self.move.driveXY(0, self.moveSpeed, 0)
             return False
 
