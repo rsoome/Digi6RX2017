@@ -45,7 +45,7 @@ class MovementLogic:
         self.drive(speed, angle, omega)
 
     def calculateSpeed(self, maxSpeed, verticalMidPoint):
-        coif = 465310 * pow(verticalMidPoint, -2.439)
+        coif = 4.6579 * pow(math.e, -0.008*verticalMidPoint)
 
         print("verticalMidPoint: ", verticalMidPoint)
         print("coif: ", coif)
