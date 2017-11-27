@@ -228,11 +228,13 @@ class GameLogic:
             else:
                 self.searchTimer.stopTimer()
                 if not targetFound:
-                    basketFound = self.lookForTarget(self.basket)
-                    while not basketFound:
+                    for i in range(10):
                         print("Turning toward basket")
-                        basketFound = self.lookForTarget(self.basket)
-                    self.move.driveXY(0, self.moveSpeed, 0)
+                        if (self.lookForTarget(self.basket)):
+                            break
+                        time.sleep(0.1)
+                    if (self.basket.verticalBounds is not None and self.basket.verticalBounds[1] > self.basketStopBound):
+                        self.move.driveXY(0, self.moveSpeed, 0)
             return False
 
         elif not self.checkVerticalAlignment(target, verticalStopBound):
