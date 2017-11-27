@@ -14,8 +14,8 @@ class MovementLogic:
         self.timer = Timer.Timer()
         self.minTurnSpeed = 0.2
         self.wheelDistance = 0.13
-        self.currentSpeed = 0
-        self.currentTurnSpeed = 0
+        self.currentSpeed = 0.1
+        self.currentTurnSpeed = 0.2
 
         self.wheelSpeedToMainboardUnits = 18.75 * 64 / (2 * math.pi * 0.035 * 60)
 
