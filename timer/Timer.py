@@ -4,14 +4,14 @@ class Timer:
 
     def __init__(self):
         self.start = None
-        self.isStartd = False
+        self.isStarted = False
 
     def startTimer(self):
-        self.isStartd = True
+        self.isStarted = True
         self.start = self.getTimeInMillis()
 
     def stopTimer(self):
-        self.isStartd = False
+        self.isStarted = False
         time = self.getTimePassed()
         self.start = None
         return time

@@ -35,6 +35,7 @@ class GameLogic:
         self.basketAheadBound = self.frame.height + 70
         self.blackLine = blackLine
         self.lineAheadBound = self.frame.height + 70
+        self.searchTimer = Timer.Timer()
 
     def turnTowardTarget(self, target):
         horizontalMidPoint = target.horizontalMidPoint
@@ -71,7 +72,6 @@ class GameLogic:
 
     def lookForTarget(self, target):
 
-        #print(target.horizontalMidPoint)
         self.readMb()
         if target.id == "ball" and self.irStatus == 1:
             return True
@@ -141,13 +141,13 @@ class GameLogic:
                         print("Going to ball")
                         print(self.ball.horizontalMidPoint)
                         self.thrower.grabberOpen()
-                        ballReached = self.goToTarget(self.ball, self.ballStopBound, self.moveSpeed)
+                        ballReached = self.goToTarget(self.ball, self.ballStopBound)
                         if ballReached:
                             self.move.stop()
                             self.mb.sendValues()
 
                 elif ballGrabbed == False:
-                    if not grabbingTimer.isStartd:
+                    if not grabbingTimer.isStarted:
                         grabbingTimer.startTimer()
 
                     if grabbingTimer.getTimePassed() < 500:
@@ -163,7 +163,7 @@ class GameLogic:
                     self.readMb()
                     if self.irStatus == 1:
                         print("Reaching basket")
-                        basketReached = self.goToTarget(self.basket, self.basketStopBound, self.moveSpeed)
+                        basketReached = self.goToTarget(self.basket, self.basketStopBound)
                     else:
                         basketReached = False
 
@@ -214,47 +214,25 @@ class GameLogic:
             if lineBottom >= self.lineAheadBound:
                 self.move.rotate(1)
 
-    def goToTarget(self, target, verticalStopBound, speed):
+    def goToTarget(self, target, verticalStopBound):
         #print(target.area)
         if target.verticalMidPoint == None or target.horizontalMidPoint == None:
-            turnTimer = Timer.Timer()
-            turnTimer.startTimer()
-            targetFound = self.lookForTarget(target)
-            while not targetFound:
+
+            targetFound = False
+
+            if not self.searchTimer.isStarted:
+                self.searchTimer.startTimer()
+
+            if self.searchTimer.getTimePassed() < 1000:
                 targetFound = self.lookForTarget(target)
-                if turnTimer.getTimePassed() >= 1000:
-                    break
-
-            turnTimer.stopTimer()
-
-            if not targetFound:
-                print("Looking for " + target.id)
-
-                basketHorizontalMidPoint = self.basket.horizontalMidPoint
-
-                if basketHorizontalMidPoint is not None:
-
-                    driveTimer = Timer.Timer()
-                    driveTimer.startTimer()
-
-                    while driveTimer.getTimePassed() < 3000:
-                        self.move.driveXY(0, self.moveSpeed//2, 0)
-                        self.mb.sendValues()
-
-                        if target.horizontalMidPoint is not None:
-                            return True
-
-                        if self.basket.verticalBounds is None or self.basket.verticalBounds[1] >= self.basketAheadBound:
-                            self.move.rotate(1)
-                            return False
-
-                        time.sleep(0.05)
-                    driveTimer.stopTimer()
-
-                return False
             else:
-                self.move.stop()
-                self.mb.sendValues()
+                self.searchTimer.stopTimer()
+                if not targetFound:
+                    basketFound = self.turnTowardTarget(self.basket)
+                    while not basketFound:
+                        basketFound = self.turnTowardTarget(self.basket)
+                    self.move.driveXY(0, self.moveSpeed, 0)
+            return False
 
         elif not self.checkVerticalAlignment(target, verticalStopBound):
             print("Alligning Vertically")
