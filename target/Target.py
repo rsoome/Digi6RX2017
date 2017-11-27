@@ -8,6 +8,8 @@ from timer import Timer
 class Target:
 
     def __init__(self, hBounds, vBounds, targetID, lowerRange, upperRange, scanOrder, minSize):
+        self.horizontalBounds = None
+        self.verticalBounds = None
         self.setBounds(hBounds, vBounds)
         self.setThresholds(lowerRange, upperRange)
         self.id = targetID
