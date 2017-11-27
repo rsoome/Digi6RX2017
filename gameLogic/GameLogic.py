@@ -224,6 +224,8 @@ class GameLogic:
         #print(target.area)
         if target.verticalMidPoint == None or target.horizontalMidPoint == None:
 
+            print("No ",  target.id, " in sight.")
+
             targetFound = False
 
             if not self.searchTimer.isStarted:
