@@ -258,6 +258,7 @@ class GameLogic:
             return False
 
         print("At position.")
+        self.move.stop()
         self.mb.sendValues()
         return True
 
