@@ -275,10 +275,9 @@ class GameLogic:
         if (horizontalMidPoint < (self.screenMidpoint - self.deltaFromMidPoint)
             or horizontalMidPoint > (self.screenMidpoint + self.deltaFromMidPoint)):
 
-            print("Target not in allowed bounds: ")
-
             return False
 
+        print("Horizontally allgined.")
         return True
 
     def checkVerticalAlignment(self, target, verticalStopBound):
