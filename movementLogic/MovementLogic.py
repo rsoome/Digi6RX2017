@@ -1,9 +1,5 @@
 import math
 
-import time
-
-from timer import Timer
-
 class MovementLogic:
 
     def __init__(self, mb):
@@ -11,7 +7,6 @@ class MovementLogic:
         self.motorSpeed0 = 0.0
         self.motorSpeed1 = 0.0
         self.motorSpeed2 = 0.0
-        self.timer = Timer.Timer()
         self.minTurnSpeed = 0.2
         self.wheelDistance = 0.13
         self.currentSpeed = 0.1
