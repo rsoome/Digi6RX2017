@@ -65,15 +65,8 @@ class GameLogic:
         if not self.socketData.gameStarted:
             return
 
-        #print("Verticalmidpoint: " + str(target.verticalMidPoint))
-        #print("target midpoint: ", target.horizontalMidPoint)
-        #print("screen midpoint: ", self.screenMidpoint)
         ySpeed = self.move.calculateSpeed(self.moveSpeed, verticalMidPoint)
         turnSpeed = self.move.calculateOmega(self.turnSpeed, horizontalMidPoint - self.screenMidpoint)
-        #if abs(turnSpeed) < 0.2:
-         #   turnSpeed = 0
-        #print("ySpeed: ",ySpeed)
-        #print("turnSpeed: ", turnSpeed)
         self.move.driveXY(0, ySpeed, turnSpeed)
 
     def lookForTarget(self, target):
@@ -116,7 +109,6 @@ class GameLogic:
                     self.readMb()
                     self.thrower.startMotor()
                     if self.irStatus == 1:
-                        print("Grabbing ball")
                         self.thrower.grabberCarry()
                         self.mb.sendValues()
                         time.sleep(0.05)
@@ -130,6 +122,7 @@ class GameLogic:
                         ballGrabbed = True
 
                 elif not ballGrabbed:
+                    print("Grabbing ball")
                     self.readMb()
                     if self.irStatus == 0:
                         self.thrower.grabberOpen()
