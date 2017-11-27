@@ -1,4 +1,4 @@
-from datetime import datetime
+import time
 
 class Timer:
 
@@ -24,7 +24,7 @@ class Timer:
         return time
 
     def getTimeInMillis(self):
-        return int(float(str(datetime.now()).split()[1].split(":")[2]) * 1000)
+        return int(round(time.time()) * 1000)
 
     def reset(self):
         time = self.stopTimer()

@@ -92,6 +92,7 @@ class GameLogic:
         self.thrower.grabberOpen()
         self.thrower.stopMotor()
         grabbingTimer = Timer.Timer()
+        effTimer = Timer.Timer()
 
         while self.socketData.gameStarted:
             self.readMb()
