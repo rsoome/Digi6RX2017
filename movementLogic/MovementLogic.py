@@ -48,18 +48,18 @@ class MovementLogic:
     def calculateSpeed(self, maxSpeed, verticalMidPoint):
         coif = (-4 * pow(10, -12) * pow(verticalMidPoint, 5) + 4 * pow(10, -9) * pow(verticalMidPoint, 4)
                 - 1 * pow(10, -6) * pow(verticalMidPoint, 3) + 0.0002 * pow(verticalMidPoint, 2)
-                - 0.0071 * verticalMidPoint + 1.0281) * maxSpeed
+                - 0.0071 * verticalMidPoint + 1.0281)
 
         print("verticalMidPoint: ", verticalMidPoint)
         print("coif: ", coif)
 
         if coif > 0.9:
-            return 1
+            return maxSpeed
 
         if coif < 0.1 :
-            return 0.1
+            return 0.1 * maxSpeed
 
-        return coif
+        return coif * maxSpeed
 
     def calculateOmega(self, maxSpeed, coif):
         if abs(coif) < 40:
