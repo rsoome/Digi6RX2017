@@ -17,6 +17,11 @@ class Target:
         self.timer = Timer.Timer()
         self.minSize = minSize
         self.e = 2.7183
+        self.targetLostTimer = Timer.Timer()
+        self.lastKnownVerticalBounds = None
+        self.lastKnownHorizontalBounds = None
+        self.lastKnownHorizontalMidPoint = None
+        self.lastKnownVerticalMidPoint = None
 
     def getBounds(self):
         return self.horizontalBounds, self.verticalBounds
@@ -52,21 +57,38 @@ class Target:
         self.setBounds(None, None)
 
     def setBounds(self, hBounds, vBounds):
+
+        if self.horizontalBounds is not None and self.targetLostTimer.getTimePassed() < 100:
+            self.lastKnownHorizontalBounds = self.horizontalBounds
+            self.lastKnownHorizontalMidPoint = self.horizontalMidPoint
+        else:
+            self.targetLostTimer.stopTimer()
+            self.lastKnownVerticalBounds = None
+            self.lastKnownHorizontalMidPoint = None
+
+        if self.verticalBounds is not None and self.targetLostTimer.getTimePassed() < 100:
+            self.lastKnownVerticalBounds = self.verticalBounds
+            self.lastKnownVerticalMidPoint = self.verticalMidPoint
+        else:
+            self.targetLostTimer.stopTimer()
+            self.lastKnownVerticalBounds = None
+            self.lastKnownVerticalMidPoint = None
+
         self.horizontalBounds = hBounds
         self.verticalBounds = vBounds
 
         if hBounds != None:
-            if self.horizontalMidPoint != None:
-                self.horizontalMidPoint = (self.horizontalMidPoint + (hBounds[0] + (hBounds[1] - hBounds[0]) // 2))//2
-            else:
-                self.horizontalMidPoint = hBounds[0] + (hBounds[1] - hBounds[0]) // 2
+            self.horizontalMidPoint = self.calculateMidPoint(hBounds)
         else:
+            if not self.targetLostTimer.isStarted:
+                self.targetLostTimer.startTimer()
             self.horizontalMidPoint = None
 
         if vBounds != None:
-            #print(self.verticalMidPoint)
-            self.verticalMidPoint = vBounds[0] + (vBounds[1] - vBounds[0]) // 2
+            self.verticalMidPoint = self.calculateMidPoint(vBounds)
         else:
+            if not self.targetLostTimer.isStarted:
+                self.targetLostTimer.startTimer()
             self.verticalMidPoint = None
 
     def getDistance(self):
@@ -84,3 +106,20 @@ class Target:
             return -2.659*self.verticalBounds[1] + 418.81
 
         return -5.875 * self.verticalBounds[1] + 659.13
+
+    def calculateMidPoint(self, bounds):
+        return bounds[0] + (bounds[1] - bounds[0])//2
+
+    def getHorizontalData(self):
+
+        if self.horizontalMidPoint is not None:
+            return self.horizontalMidPoint
+
+        return self.lastKnownHorizontalMidPoint
+
+    def getVerticalData(self):
+
+        if self.verticalMidPoint is not None:
+            return self.verticalMidPoint
+
+        return self.lastKnownVerticalMidPoint

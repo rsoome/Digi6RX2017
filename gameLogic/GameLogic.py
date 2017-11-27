@@ -38,7 +38,7 @@ class GameLogic:
         self.searchTimer = Timer.Timer()
 
     def turnTowardTarget(self, target):
-        horizontalMidPoint = target.horizontalMidPoint
+        horizontalMidPoint = target.getHorizontalData()
         if horizontalMidPoint == None:
             return False
         turnCoificent = (horizontalMidPoint - self.screenMidpoint)/self.screenMidpoint
@@ -56,8 +56,8 @@ class GameLogic:
         return True
 
     def moveTowardTarget(self, target):
-        horizontalMidPoint = target.horizontalMidPoint
-        verticalMidPoint = target.verticalMidPoint
+        horizontalMidPoint = target.getHorizontalData()
+        verticalMidPoint = target.getVerticalData()
         if horizontalMidPoint is None:
             return
 
@@ -80,7 +80,7 @@ class GameLogic:
         self.move.rotate(1)
         self.mb.sendValues()
 
-        if target.horizontalMidPoint is not None:
+        if target.getHorizontalData is not None:
             return True
 
         return False
@@ -222,7 +222,7 @@ class GameLogic:
 
     def goToTarget(self, target, verticalStopBound):
         #print(target.area)
-        if target.verticalMidPoint == None or target.horizontalMidPoint == None:
+        if target.getVerticalData() == None or target.getHorizontalData() == None:
 
             print("No ",  target.id, " in sight.")
 
@@ -268,7 +268,7 @@ class GameLogic:
 
     def checkHorizontalAlginment(self, target):
 
-        horizontalMidPoint = target.horizontalMidPoint
+        horizontalMidPoint = target.getHorizontalData()
         if horizontalMidPoint is None:
             return False
 
@@ -283,7 +283,7 @@ class GameLogic:
 
     def checkVerticalAlignment(self, target, verticalStopBound):
 
-        verticalMidPoint = target.verticalMidPoint
+        verticalMidPoint = target.getVerticalData()
         #print(target.id, "'s vertical midpoint at the time of checking allignment: ", verticalMidPoint)
         if verticalMidPoint is None:
             return False
