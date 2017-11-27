@@ -12,7 +12,6 @@ class MovementLogic:
         self.motorSpeed1 = 0.0
         self.motorSpeed2 = 0.0
         self.timer = Timer.Timer()
-        self.minDriveSpeed = 0.1
         self.minTurnSpeed = 0.2
         self.wheelDistance = 0.13
         self.currentSpeed = 0
@@ -42,18 +41,16 @@ class MovementLogic:
 
     def driveXY(self, speedX, speedY, omega):
         angle = math.atan2(speedX, speedY)
-        speed = math.sqrt(pow(speedX, 2) + pow(speedY, 2)) + self.minDriveSpeed
+        speed = math.sqrt(pow(speedX, 2) + pow(speedY, 2))
         self.drive(speed, angle, omega)
 
     def calculateSpeed(self, maxSpeed, verticalMidPoint):
-        coif = ((-0.000000000004 * pow(verticalMidPoint, 5)) + (0.000000004 * pow(verticalMidPoint, 4))
-                - (0.000001 * pow(verticalMidPoint, 3)) + (0.0002 * pow(verticalMidPoint, 2))
-                - (0.0071 * verticalMidPoint) + 1.0281)
+        coif = -0.002*verticalMidPoint + 0.9955
 
         print("verticalMidPoint: ", verticalMidPoint)
         print("coif: ", coif)
 
-        if coif > 0.9:
+        if coif > 0.5:
             return maxSpeed
 
         if coif < 0.1 :
