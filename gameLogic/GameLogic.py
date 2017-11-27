@@ -101,7 +101,6 @@ class GameLogic:
 
         while self.socketData.gameStarted:
             self.readMb()
-            print(self.gameState)
             #print(self.irStatus)
 
             if self.mb.sendingTime():

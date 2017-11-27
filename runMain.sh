@@ -22,16 +22,17 @@ EXPOSURE_DEFAULT=120
 GAIN_DEFAULT=20
 SHARPNESS_DEFAULT=0
 
-BRIGHTNESS=50
-CONTRAST=40
-SATURATION=119
-HUE=60
+BRIGHTNESS=0
+CONTRAST=45
+SATURATION=66
+HUE=22
 EXPOSURE=120
-GAIN=21
+GAIN=9
 SHARPNESS=63
+POWER_LINE_FREQUENCY=1
 
 echo "Closing Teamviewer daemon"
-sudo teamviewer --daemon stop
+#sudo teamviewer --daemon stop
 
 echo "Setting up camera."
 sudo v4l2-ctl -c gain_automatic=0
@@ -43,12 +44,13 @@ sudo v4l2-ctl -c hue=$HUE
 sudo v4l2-ctl -c exposure=$EXPOSURE
 sudo v4l2-ctl -c gain=$GAIN
 sudo v4l2-ctl -c sharpness=$SHARPNESS
+sudo v4l2-ctl -c power_line_frequency=$POWER_LINE_FREQUENCY
 
 echo "Starting robotex main"
 sudo /home/digi6/.virtualenvs/robotex/bin/python3 ./RXmain.py
 
 echo "Starting teamviewer daemon"
-sudo teamviewer --daemon start
+#sudo teamviewer --daemon start
 
 echo "Restoring camera settings"
 sudo v4l2-ctl -c gain_automatic=1
