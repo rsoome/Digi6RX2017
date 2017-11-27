@@ -50,6 +50,9 @@ class MovementLogic:
                 - 1 * pow(10, -6) * pow(verticalMidPoint, 3) + 0.0002 * pow(verticalMidPoint, 2)
                 - 0.0071 * verticalMidPoint + 1.0281) * maxSpeed
 
+        print("verticalMidPoint: ", verticalMidPoint)
+        print("coif: ", coif)
+
         if coif > 0.9:
             return 1
 
