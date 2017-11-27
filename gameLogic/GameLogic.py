@@ -126,7 +126,6 @@ class GameLogic:
                     if self.irStatus == 0:
                         self.thrower.grabberOpen()
                         self.thrower.stopMotor()
-                        ballReached = False
                         ballGrabbed = False
 
                 print("Ball reached: ", ballReached)
