@@ -228,10 +228,10 @@ class GameLogic:
             else:
                 self.searchTimer.stopTimer()
                 if not targetFound:
-                    basketFound = self.turnTowardTarget(self.basket)
+                    basketFound = self.lookForTarget(self.basket)
                     while not basketFound:
                         print("Turning toward basket")
-                        basketFound = self.turnTowardTarget(self.basket)
+                        basketFound = self.lookForTarget(self.basket)
                     self.move.driveXY(0, self.moveSpeed, 0)
             return False
 
