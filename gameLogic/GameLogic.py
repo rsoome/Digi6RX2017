@@ -111,12 +111,12 @@ class GameLogic:
                     #self.move.driveXY(0, self.move.currentSpeed, 0) #MAY NEED CHANGING
                     time.sleep(0.1)
                     self.readMb()
-                    self.thrower.startMotor()
                     grabbingTimer.stopTimer()
                     if self.irStatus == 1:
+                        self.thrower.startMotor()
                         self.thrower.grabberCarry()
-                        self.mb.sendValues()
-                        time.sleep(0.05)
+                        while not self.mb.sendValues():
+                            pass
                         if self.basket.verticalBounds is not None:
                             while self.basket.getDistance() < 30:
                                 self.move.driveXY(0, -self.move.currentSpeed, 0)
@@ -125,6 +125,7 @@ class GameLogic:
                         self.mb.sendValues()
                         ballReached = True
                         ballGrabbed = True
+                        basketReached = False
 
                 elif not ballGrabbed:
                     self.readMb()

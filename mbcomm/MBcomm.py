@@ -81,6 +81,8 @@ class MBcomm:
             #print("------")
             self.values = dict()
             self.sendTimer.reset()
+            return True
+        return False
 
     def sendingTime(self):
         if self.sendTimer.getTimePassed() >= 1000/self.SENDFREQ:
