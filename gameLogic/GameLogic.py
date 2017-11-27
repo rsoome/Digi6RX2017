@@ -190,6 +190,7 @@ class GameLogic:
             if self.gameState == "STOP":
                 #self.thrower.emptyThrower()
                 self.move.stop()
+                self.mb.sendValues()
             #print("Run function completed in: ", effTimer.reset())
 
         self.mb.sendTimer.stopTimer()
