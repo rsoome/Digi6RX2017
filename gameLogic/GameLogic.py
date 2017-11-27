@@ -45,7 +45,7 @@ class GameLogic:
         print("Turncoificent: " + str(turnCoificent))
         if not self.socketData.gameStarted:
             return False
-        turningSpeed = self.turnSpeed * turnCoificent
+        turningSpeed = 2 * turnCoificent
         print("Turning with speed: " + str(turningSpeed))
         self.readMb()
         if target.id == "ball" and self.irStatus == 1:
@@ -75,7 +75,7 @@ class GameLogic:
         self.readMb()
         if target.id == "ball" and self.irStatus == 1:
             return True
-        self.move.rotate(self.turnSpeed//2)
+        self.move.rotate(1)
         if self.mb.sendingTime:
             self.mb.sendValues()
 
@@ -205,10 +205,10 @@ class GameLogic:
             lineBottom = self.blackLine.verticalBounds[1]
         if basketBottom is not None:
             if basketBottom >= self.basketAheadBound:
-                self.move.rotate(self.turnSpeed)
+                self.move.rotate(1)
         if lineBottom is not None:
             if lineBottom >= self.lineAheadBound:
-                self.move.rotate(self.turnSpeed)
+                self.move.rotate(1)
 
     def goToTarget(self, target, verticalStopBound, speed):
         #print(target.area)
@@ -241,7 +241,7 @@ class GameLogic:
                             return True
 
                         if self.basket.verticalBounds is None or self.basket.verticalBounds[1] >= self.basketAheadBound:
-                            self.move.rotate(self.turnSpeed)
+                            self.move.rotate(1)
                             return False
 
                         time.sleep(0.05)
