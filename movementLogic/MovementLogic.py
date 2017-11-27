@@ -59,6 +59,8 @@ class MovementLogic:
 
         if coif > 0.5:
             return maxSpeed
+        if horizontalMidPoint < 320:
+            return -coif*maxSpeed
         return coif*maxSpeed
 
     def brake(self):
