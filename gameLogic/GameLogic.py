@@ -295,9 +295,7 @@ class GameLogic:
         if verticalMidPoint < verticalStopBound:
             return False
         print("Vertically alligned.")
-        while not self.move.stop():
-            print("Sending commands to mainboard")
-            time.sleep(1/self.mb.SENDFREQ)
+        self.move.stop()
         return True
 
     def handleMbMessage(self, msg):
