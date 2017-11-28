@@ -346,5 +346,10 @@ class GameLogic:
         self.move.stop()
 
         self.thrower.throw(distance)
-        print("throwing irStatus " + str(self.irStatus))
-        return True
+        for i in range(10):
+            if self.mb.sendValues:
+                return True
+            time.sleep(0.1)
+
+        print("could not send throw command to mainboard")
+        return False
