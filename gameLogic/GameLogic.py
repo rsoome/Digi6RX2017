@@ -69,6 +69,7 @@ class GameLogic:
 
         ySpeed = self.move.calculateSpeed(self.moveSpeed, verticalMidPoint)
         turnSpeed = self.move.calculateOmega(self.turnSpeed, horizontalMidPoint)
+        print("Current speed: ", ySpeed)
         self.move.driveXY(0, ySpeed, turnSpeed)
 
     def lookForTarget(self, target):
@@ -198,6 +199,7 @@ class GameLogic:
                 while not self.mb.sendValues():
                     print("Sending values to mainboard")
             print("Run function completed in: ", effTimer.reset())
+            time.sleep(1/self.mb.SENF_FREQ)
 
         self.mb.sendTimer.stopTimer()
         self.move.stop()
