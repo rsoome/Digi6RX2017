@@ -19,8 +19,8 @@ class GameLogic:
         self.initializeValues()
         self.socketData = socketData
         self.thrower = thrower
-        self.ballStopBound = 5
-        self.basketStopBound = 180
+        self.ballStopBound = 330
+        self.basketStopBound = 240
         self.gameState = defaultGameState
         self.irStatus = 0
         self.ref = ref
@@ -249,7 +249,7 @@ class GameLogic:
 
         elif not self.checkVerticalAlignment(target, verticalStopBound):
             print("Alligning Vertically")
-            print(target.id, "'s distance: ", target.getDistance())
+            print(target.id, "'s vertical midpoint", target.getVerticalData())
             self.moveTowardTarget(target)
             self.mb.sendValues()
             return False
@@ -285,15 +285,17 @@ class GameLogic:
         print("Horizontally allgined.")
         return True
 
-    def checkVerticalAlignment(self, target, stopBound):
+    def checkVerticalAlignment(self, target, verticalStopBound):
 
-        distance = target.getDistance()
+        stopBound = target.getVerticalData()
+        if target.id == "basket":
+            stopBound = target.verticalBounds[1]
         #print(target.id, "'s vertical midpoint at the time of checking allignment: ", verticalMidPoint)
-        if distance is None:
+        if stopBound is None:
             self.move.stop()
             return False
 
-        if distance > stopBound:
+        if stopBound < verticalStopBound:
             print("Target not reached.")
             return False
         print("Vertically alligned.")
