@@ -290,9 +290,11 @@ class GameLogic:
         verticalMidPoint = target.getVerticalData()
         #print(target.id, "'s vertical midpoint at the time of checking allignment: ", verticalMidPoint)
         if verticalMidPoint is None:
+            self.move.stop()
             return False
 
         if verticalMidPoint < verticalStopBound:
+            print("Target not reached.")
             return False
         print("Vertically alligned.")
         self.move.stop()
@@ -342,7 +344,7 @@ class GameLogic:
             time.sleep(0.05)
         self.move.stop()
         while not self.mb.sendValues():
-            pass
+            print("Sending values.")
 
         self.thrower.throw(distance)
         print("throwing irStatus " + str(self.irStatus))
