@@ -192,8 +192,7 @@ class GameLogic:
                 if self.irStatus == 1:
                     self.thrower.emptyThrower()
                 self.move.stop()
-                while not self.mb.sendValues():
-                    print("Sending values to mainboard")
+                
             print("Run function completed in: ", effTimer.reset())
             time.sleep(1/self.mb.SENDFREQ)
 
@@ -343,8 +342,6 @@ class GameLogic:
                 return False
             time.sleep(0.05)
         self.move.stop()
-        while not self.mb.sendValues():
-            print("Sending values.")
 
         self.thrower.throw(distance)
         print("throwing irStatus " + str(self.irStatus))
