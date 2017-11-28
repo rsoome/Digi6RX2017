@@ -105,23 +105,15 @@ class GameLogic:
 
                 self.checkBounds()
 
-                #print("Ball reached: ", ballReached)
-                #print("Ball grabbed: ", ballGrabbed)
                 if self.irStatus == 1 and not ballGrabbed:
-                    #self.move.driveXY(0, self.move.currentSpeed, 0) #MAY NEED CHANGING
+                    self.thrower.startMotor()
+                    self.thrower.grabberCarry()
+                    self.mb.sendValues()
                     time.sleep(0.1)
                     self.readMb()
                     grabbingTimer.stopTimer()
                     if self.irStatus == 1:
                         print("Ball caught")
-                        self.thrower.startMotor()
-                        self.thrower.grabberCarry()
-                        for i in range(100):
-                            if self.mb.sendValues():
-                                break
-                            else:
-                                print("Waiting for mainboard.")
-                            time.sleep(0.1)
                         if self.basket.verticalBounds is not None:
                             while self.basket.getDistance() < 30:
                                 self.move.driveXY(0, -self.move.currentSpeed, 0)
