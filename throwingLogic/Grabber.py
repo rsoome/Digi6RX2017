@@ -5,7 +5,7 @@ class Grabber:
         self.MAX_POSITION = 2350
         self.MIN_POSITION = 550
         self.CARRY_POSITION = 1850
-        self.THROW_POSITION = 800
+        self.THROW_POSITION = 700
         self.OPEN_POSITION = 2150
 
     def setPosition(self, position):
