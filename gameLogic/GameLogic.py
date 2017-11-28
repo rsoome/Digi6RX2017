@@ -192,9 +192,11 @@ class GameLogic:
                     ballGrabbed = False
 
             if self.gameState == "STOP":
-                #self.thrower.emptyThrower()
+                if self.irStatus == 1:
+                    self.thrower.emptyThrower()
                 self.move.stop()
-                self.mb.sendValues()
+                while not self.mb.sendValues():
+                    print("Sending values to mainboard")
             print("Run function completed in: ", effTimer.reset())
 
         self.mb.sendTimer.stopTimer()
