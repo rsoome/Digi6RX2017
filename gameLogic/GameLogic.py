@@ -346,15 +346,8 @@ class GameLogic:
         self.move.stop()
         self.mb.disableFailSafe()
         self.thrower.startMotor()
-        for i in range(10):
-            if self.mb.sendValues():
-                break
-            time.sleep(0.05)
+        self.mb.sendValues(True)
         self.thrower.throw(distance)
-        for i in range(10):
-            if self.mb.sendValues:
-                return True
-            time.sleep(0.1)
+        self.mb.sendValues(True)
 
-        print("could not send throw command to mainboard")
-        return False
+        return True

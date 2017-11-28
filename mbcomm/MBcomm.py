@@ -85,7 +85,12 @@ class MBcomm:
             return True
         return False
 
-    def sendingTime(self):
+    def sendingTime(self, wait=False):
+
+        if wait:
+            while self.sendTimer.getTimePassed() < 1000/self.SENDFREQ:
+                pass
+
         if self.sendTimer.getTimePassed() >= 1000/self.SENDFREQ:
             self.sendTimer.reset()
             return True
