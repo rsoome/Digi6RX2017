@@ -113,6 +113,7 @@ class GameLogic:
                     self.readMb()
                     grabbingTimer.stopTimer()
                     if self.irStatus == 1:
+                        print("Ball caught")
                         self.thrower.startMotor()
                         self.thrower.grabberCarry()
                         while not self.mb.sendValues():
