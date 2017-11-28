@@ -284,7 +284,7 @@ class GameLogic:
     def checkVerticalAlignment(self, target, verticalStopBound):
 
         stopBound = target.getVerticalData()
-        if target.id == "basket":
+        if target.id == "basket" and target.getDistance() is not None:
             stopBound = 1/target.getDistance()
         else:
             print("Basket's lower coordinate not present.")
