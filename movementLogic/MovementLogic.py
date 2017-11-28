@@ -76,7 +76,7 @@ class MovementLogic:
 
     def stop(self):
         self.mb.setMotorSpeed(0, 0, 0)
-        self.mb.sendValues()
+        return self.mb.sendValues()
 
     def rotate(self, speed):
         self.driveXY(0, 0, speed)
