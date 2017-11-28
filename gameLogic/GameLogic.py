@@ -116,8 +116,12 @@ class GameLogic:
                         print("Ball caught")
                         self.thrower.startMotor()
                         self.thrower.grabberCarry()
-                        while not self.mb.sendValues():
-                            pass
+                        for i in range(100):
+                            if self.mb.sendValues():
+                                break
+                            else:
+                                print("Waiting for mainboard.")
+                            time.sleep(0.1)
                         if self.basket.verticalBounds is not None:
                             while self.basket.getDistance() < 30:
                                 self.move.driveXY(0, -self.move.currentSpeed, 0)
