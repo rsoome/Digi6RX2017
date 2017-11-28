@@ -20,7 +20,7 @@ class GameLogic:
         self.socketData = socketData
         self.thrower = thrower
         self.ballStopBound = 330
-        self.basketStopBound = 0.0083
+        self.basketStopBound = 0.006
         self.gameState = defaultGameState
         self.irStatus = 0
         self.ref = ref
