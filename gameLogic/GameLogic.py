@@ -106,6 +106,7 @@ class GameLogic:
                 self.checkBounds()
 
                 if self.irStatus == 1 and not ballGrabbed:
+                    self.move.driveXY(0,self.move.currentSpeed, 0)
                     self.thrower.startMotor()
                     self.thrower.grabberCarry()
                     self.mb.sendValues()
