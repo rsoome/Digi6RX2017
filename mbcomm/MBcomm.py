@@ -72,7 +72,14 @@ class MBcomm:
     def setValue(self, node, value):
         self.values[node] = value
 
-    def sendValues(self):
+    def sendValues(self, wait=False):
+
+        if wait:
+            if not self.sendTimer.isStarted:
+                self.sendTimer.startTimer()
+            while self.sendTimer.getTimePassed() < 1000/self.SENDFREQ:
+                pass
+
         if len(self.values) > 0 and self.sendingTime():
             #print("-----")
             for key in self.values:
@@ -85,11 +92,7 @@ class MBcomm:
             return True
         return False
 
-    def sendingTime(self, wait=False):
-
-        if wait:
-            while self.sendTimer.getTimePassed() < 1000/self.SENDFREQ:
-                pass
+    def sendingTime(self):
 
         if self.sendTimer.getTimePassed() >= 1000/self.SENDFREQ:
             self.sendTimer.reset()
