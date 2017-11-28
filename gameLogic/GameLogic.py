@@ -46,7 +46,7 @@ class GameLogic:
         print("Turncoificent: " + str(turnCoificent))
         if not self.socketData.gameStarted:
             return False
-        turningSpeed = 2 * turnCoificent
+        turningSpeed = turnCoificent
         print("Turning with speed: " + str(turningSpeed))
         self.readMb()
         if target.id == "ball" and self.irStatus == 1:
