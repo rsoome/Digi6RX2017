@@ -60,7 +60,7 @@ class Target:
 
     def setBounds(self, hBounds, vBounds):
 
-        if self.horizontalBounds is not None and self.targetLostTimer.getTimePassed() < 100:
+        if self.horizontalBounds is not None and self.targetLostTimer.getTimePassed() < 50:
             self.lastKnownHorizontalBounds = self.horizontalBounds
             self.lastKnownHorizontalMidPoint = self.horizontalMidPoint
         else:
@@ -68,7 +68,7 @@ class Target:
             self.lastKnownVerticalBounds = None
             self.lastKnownHorizontalMidPoint = None
 
-        if self.verticalBounds is not None and self.targetLostTimer.getTimePassed() < 100:
+        if self.verticalBounds is not None and self.targetLostTimer.getTimePassed() < 50:
             self.lastKnownVerticalBounds = self.verticalBounds
             self.lastKnownVerticalMidPoint = self.verticalMidPoint
         else:
