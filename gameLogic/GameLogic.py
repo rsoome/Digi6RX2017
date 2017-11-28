@@ -276,6 +276,8 @@ class GameLogic:
             or horizontalMidPoint > (self.screenMidpoint + self.deltaFromMidPoint)):
 
             return False
+        else:
+            self.move.driveXY(0, 0.5, 0)
 
         print("Horizontally allgined.")
         return True
