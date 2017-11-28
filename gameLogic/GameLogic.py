@@ -333,12 +333,15 @@ class GameLogic:
             self.handleMbMessage(mbMsg)
 
     def throwBall(self,distance):
-        if not self.checkHorizontalAlginment(self.basket) or not self.checkVerticalAlignment(self.basket, self.basketStopBound):
-            return False
+
+        for i in range(5):
+            if not self.checkHorizontalAlginment(self.basket) or not self.checkVerticalAlignment(self.basket, self.basketStopBound):
+                return False
+            time.sleep(0.05)
         self.move.stop()
         while not self.mb.sendValues():
             pass
-        
+
         self.thrower.throw(distance)
         print("throwing irStatus " + str(self.irStatus))
         return True
