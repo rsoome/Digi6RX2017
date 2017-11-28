@@ -4,8 +4,8 @@ class Grabber:
         self.mb = mb
         self.MAX_POSITION = 2350
         self.MIN_POSITION = 550
-        self.CARRY_POSITION = 1850
-        self.THROW_POSITION = 700
+        self.CARRY_POSITION = 1950
+        self.THROW_POSITION = 800
         self.OPEN_POSITION = 2150
 
     def setPosition(self, position):
