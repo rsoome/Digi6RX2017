@@ -20,7 +20,7 @@ class GameLogic:
         self.socketData = socketData
         self.thrower = thrower
         self.ballStopBound = 330
-        self.basketStopBound = 50
+        self.basketStopBound = 120
         self.gameState = defaultGameState
         self.irStatus = 0
         self.ref = ref
@@ -285,7 +285,7 @@ class GameLogic:
 
         stopBound = target.getVerticalData()
         if target.id == "basket" and target.verticalBounds is not None:
-            stopBound = target.verticalBounds[1]
+            stopBound = target.verticalBounds[0]
         else:
             print("Basket's lower coordinate not present.")
         #print(target.id, "'s vertical midpoint at the time of checking allignment: ", verticalMidPoint)
