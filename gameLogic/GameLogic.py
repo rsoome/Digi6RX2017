@@ -349,6 +349,7 @@ class GameLogic:
         for i in range(10):
             if self.mb.sendValues():
                 break
+            time.sleep(0.05)
         self.thrower.throw(distance)
         for i in range(10):
             if self.mb.sendValues:
