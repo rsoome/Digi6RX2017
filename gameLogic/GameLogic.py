@@ -288,7 +288,7 @@ class GameLogic:
     def checkVerticalAlignment(self, target, verticalStopBound):
 
         stopBound = target.getVerticalData()
-        if target.id == "basket":
+        if target.id == "basket" and target.verticalBounds is not None:
             stopBound = target.verticalBounds[1]
         #print(target.id, "'s vertical midpoint at the time of checking allignment: ", verticalMidPoint)
         if stopBound is None:
