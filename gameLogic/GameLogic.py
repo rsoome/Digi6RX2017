@@ -68,7 +68,7 @@ class GameLogic:
             return
 
         ySpeed = self.move.calculateSpeed(self.moveSpeed, verticalMidPoint)
-        turnSpeed = self.move.calculateOmega(self.turnSpeed, horizontalMidPoint - self.screenMidpoint)
+        turnSpeed = self.move.calculateOmega(self.turnSpeed, horizontalMidPoint)
         self.move.driveXY(0, ySpeed, turnSpeed)
 
     def lookForTarget(self, target):
