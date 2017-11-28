@@ -13,7 +13,8 @@ class Thrower:
         self.throwingMotor = ThrowingMotor.ThrowingMotor(mb)
 
     def calculateThrowingSpeed(self, distance):
-
+        if distance is None:
+            return self.throwingMotor.MIN_SPEED
         if distance < 40:
             return 1390
         if distance < 85:
