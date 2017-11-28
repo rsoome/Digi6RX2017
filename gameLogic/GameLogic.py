@@ -298,7 +298,8 @@ class GameLogic:
             return False
         print("Vertically alligned.")
         self.move.stop()
-        self.mb.sendValues()
+        while not self.mb.sendValues():
+            print("Sending commands to mainboard")
         return True
 
     def handleMbMessage(self, msg):
