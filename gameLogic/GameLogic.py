@@ -90,7 +90,6 @@ class GameLogic:
         ballReached = False
         basketReached = False
         ballGrabbed = False
-        self.mb.sendTimer.startTimer()
         self.thrower.grabberOpen()
         self.thrower.stopMotor()
         grabbingTimer = Timer.Timer()
@@ -201,7 +200,6 @@ class GameLogic:
             print("Run function completed in: ", effTimer.reset())
             time.sleep(1/self.mb.SENDFREQ)
 
-        self.mb.sendTimer.stopTimer()
         self.move.stop()
 
     def checkBounds(self):

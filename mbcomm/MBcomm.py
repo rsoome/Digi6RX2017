@@ -10,6 +10,7 @@ class MBcomm:
         self.ser = serial.Serial(port=target, baudrate=baud, timeout=0.8)
         self.values = dict()
         self.sendTimer = Timer.Timer()
+        self.sendTimer.startTimer()
         self.SENDFREQ = 240
         if not self.ser.isOpen():
             self.ser.open()
