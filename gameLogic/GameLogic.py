@@ -167,6 +167,8 @@ class GameLogic:
                     if self.irStatus == 1:
                         print("Reaching basket")
                         basketReached = self.goToTarget(self.basket, self.basketStopBound)
+                        if basketReached:
+                            self.move.stop()
                     else:
                         basketReached = False
 
