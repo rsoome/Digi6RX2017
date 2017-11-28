@@ -346,8 +346,8 @@ class GameLogic:
         self.move.stop()
         self.mb.disableFailSafe()
         self.thrower.startMotor()
-        self.mb.sendValues(True)
+        self.mb.sendValues(wait = True)
         self.thrower.throw(distance)
-        self.mb.sendValues(True)
+        self.mb.sendValues(wait = True)
 
         return True
