@@ -22,12 +22,6 @@ class Thrower:
         return 180.81 * math.log(distance) + 580#180.81, 583.45
 
     def throw(self, distance):
-        print("Disabling failsafe.")
-        self.mb.disableFailSafe()
-        print("Warming thrower.")
-        self.startMotor()
-        self.mb.sendValues()
-        time.sleep(2)
         print("Setting throw speed to :" + str(self.calculateThrowingSpeed(distance)))
         print("Throwing at: ", distance)
         self.setMotorSpeed(self.calculateThrowingSpeed(distance))

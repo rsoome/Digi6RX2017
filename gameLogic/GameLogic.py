@@ -344,7 +344,11 @@ class GameLogic:
                 return False
             time.sleep(0.033)
         self.move.stop()
-
+        self.mb.disableFailSafe()
+        self.thrower.startMotor()
+        for i in range(10):
+            if self.mb.sendValues():
+                break
         self.thrower.throw(distance)
         for i in range(10):
             if self.mb.sendValues:
