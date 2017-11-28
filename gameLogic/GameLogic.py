@@ -289,7 +289,9 @@ class GameLogic:
 
         stopBound = target.getVerticalData()
         if target.id == "basket" and target.verticalBounds is not None:
-            stopBound = target.verticalBounds[1]
+            stopBound = target.verticalBounds[0]
+        else:
+            print("Basket's lower coordinae not present.")
         #print(target.id, "'s vertical midpoint at the time of checking allignment: ", verticalMidPoint)
         if stopBound is None:
             self.move.stop()
