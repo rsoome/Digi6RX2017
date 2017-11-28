@@ -20,7 +20,7 @@ class GameLogic:
         self.socketData = socketData
         self.thrower = thrower
         self.ballStopBound = 330
-        self.basketStopBound = 0.01
+        self.basketStopBound = 0.0083
         self.gameState = defaultGameState
         self.irStatus = 0
         self.ref = ref
@@ -192,7 +192,7 @@ class GameLogic:
                 if self.irStatus == 1:
                     self.thrower.emptyThrower()
                 self.move.stop()
-                
+
             print("Run function completed in: ", effTimer.reset())
             time.sleep(1/self.mb.SENDFREQ)
 
