@@ -107,7 +107,7 @@ class GameLogic:
 
                 if self.irStatus == 1:
                     self.thrower.startMotor()
-                    if ballGrabbed:
+                    if not ballGrabbed:
                         self.move.driveXY(0,self.move.currentSpeed, 0)
                         self.thrower.startMotor()
                         self.thrower.grabberCarry()
