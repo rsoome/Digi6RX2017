@@ -249,7 +249,7 @@ class GameLogic:
 
         elif not self.checkVerticalAlignment(target, verticalStopBound):
             print("Alligning Vertically")
-            print(target.id, "'s vertical midpoint", target.getVerticalData)
+            print(target.id, "'s vertical midpoint", target.getVerticalData())
             self.moveTowardTarget(target)
             self.mb.sendValues()
             return False
