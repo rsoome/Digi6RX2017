@@ -335,7 +335,10 @@ class GameLogic:
     def throwBall(self,distance):
         if not self.checkHorizontalAlginment(self.basket) or not self.checkVerticalAlignment(self.basket, self.basketStopBound):
             return False
-
+        self.move.stop()
+        while not self.mb.sendValues():
+            pass
+        
         self.thrower.throw(distance)
         print("throwing irStatus " + str(self.irStatus))
         return True
