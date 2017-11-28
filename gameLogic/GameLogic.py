@@ -199,7 +199,7 @@ class GameLogic:
                 while not self.mb.sendValues():
                     print("Sending values to mainboard")
             print("Run function completed in: ", effTimer.reset())
-            time.sleep(1/self.mb.SEND_FREQ)
+            time.sleep(1/self.mb.SENDFREQ)
 
         self.mb.sendTimer.stopTimer()
         self.move.stop()
