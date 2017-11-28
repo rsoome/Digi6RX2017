@@ -73,9 +73,6 @@ class MBcomm:
         self.values[node] = value
 
     def sendValues(self):
-        print("Values length: ", len(self.values))
-        print("sendTimer: ", self.sendTimer.getTimePassed())
-        print("sendingTime: ", self.sendingTime())
         if len(self.values) > 0 and self.sendingTime():
             #print("-----")
             for key in self.values:
