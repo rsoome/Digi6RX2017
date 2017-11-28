@@ -105,25 +105,27 @@ class GameLogic:
 
                 self.checkBounds()
 
-                if self.irStatus == 1 and not ballGrabbed:
-                    self.move.driveXY(0,self.move.currentSpeed, 0)
+                if self.irStatus == 1:
                     self.thrower.startMotor()
-                    self.thrower.grabberCarry()
-                    self.mb.sendValues()
-                    time.sleep(0.1)
-                    self.readMb()
-                    grabbingTimer.stopTimer()
-                    if self.irStatus == 1:
-                        print("Ball caught")
-                        if self.basket.verticalBounds is not None:
-                            while self.basket.getDistance() < 30:
-                                self.move.driveXY(0, -self.move.currentSpeed, 0)
-                                if self.mb.sendTime():
-                                    self.mb.sendValues()
+                    if ballGrabbed:
+                        self.move.driveXY(0,self.move.currentSpeed, 0)
+                        self.thrower.startMotor()
+                        self.thrower.grabberCarry()
                         self.mb.sendValues()
-                        ballReached = True
-                        ballGrabbed = True
-                        basketReached = False
+                        time.sleep(0.1)
+                        self.readMb()
+                        grabbingTimer.stopTimer()
+                        if self.irStatus == 1:
+                            print("Ball caught")
+                            if self.basket.verticalBounds is not None:
+                                while self.basket.getDistance() < 30:
+                                    self.move.driveXY(0, -self.move.currentSpeed, 0)
+                                    if self.mb.sendTime():
+                                        self.mb.sendValues()
+                            self.mb.sendValues()
+                            ballReached = True
+                            ballGrabbed = True
+                            basketReached = False
 
                 elif self.irStatus == 0:
                     self.thrower.grabberOpen()
