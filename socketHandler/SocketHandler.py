@@ -86,7 +86,7 @@ class SocketHandler:
             #print(data)
             if self.socketData.stop or len(data) < 1:
                 return None
-            decompressed = zlib.decompress(data, 0)
+            decompressed = data
             readData = pickle.loads(decompressed)
             return readData
 
@@ -216,7 +216,7 @@ class SocketHandler:
 
         conn.settimeout(timeout)
         pickled = pickle.dumps(msg)
-        compressed = zlib.compress(pickled, 1)
+        compressed = pickled
 
         try:
             #print(len(pickled))
