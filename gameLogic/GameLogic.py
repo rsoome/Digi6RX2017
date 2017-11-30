@@ -339,7 +339,7 @@ class GameLogic:
 
     def throwBall(self,distance):
 
-        for i in range(8):
+        for i in range(3):
             if not self.checkHorizontalAlginment(self.basket) or not self.checkVerticalAlignment(self.basket, self.basketStopBound):
                 return False
             time.sleep(0.033)
