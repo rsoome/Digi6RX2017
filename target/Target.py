@@ -114,14 +114,14 @@ class Target:
 
     def getHorizontalData(self):
 
-        if self.horizontalMidPoint is not None:
+        #if self.horizontalMidPoint is not None:
             return self.horizontalMidPoint
 
-        return self.lastKnownHorizontalMidPoint
+        #return self.lastKnownHorizontalMidPoint
 
     def getVerticalData(self):
 
-        if self.verticalMidPoint is not None:
+        #if self.verticalMidPoint is not None:
             return self.verticalMidPoint
 
-        return self.lastKnownVerticalMidPoint
+        #return self.lastKnownVerticalMidPoint
