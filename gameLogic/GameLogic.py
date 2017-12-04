@@ -343,15 +343,15 @@ class GameLogic:
         self.move.stop()
         self.mb.sendValues(wait=True)
 
-        not_alligned = 0
+        '''not_alligned = 0
         for i in range(6):
             if not self.checkHorizontalAlginment(self.basket) or not self.checkVerticalAlignment(self.basket, self.basketStopBound):
                 not_alligned += 1
             time.sleep(0.033)
 
         if not_alligned >= 3:
-            return False
-        
+            return False'''
+
         self.mb.disableFailSafe()
         self.thrower.startMotor()
         self.mb.sendValues(wait = True)
