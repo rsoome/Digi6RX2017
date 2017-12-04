@@ -90,8 +90,8 @@ class Target:
             return None
 
         #return self.verticalBounds[1]
-        if self.verticalBounds[0] <= 50:
-            return 0
+        if self.verticalBounds[1] >= 450:
+            return 0.001
         if self.verticalBounds[1] >= 284:
             return 0.0004*pow(self.verticalBounds[1], 2) + 0.4155 * self.verticalBounds[1] + 118.8
 
