@@ -265,7 +265,7 @@ class GameLogic:
             return False
 
         print("At position.")
-        self.move.driveXY(0, 0.5, 0)
+        #self.move.driveXY(0, 0.5, 0)
         return True
 
     def initializeValues(self):
