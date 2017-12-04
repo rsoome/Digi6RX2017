@@ -153,6 +153,8 @@ class GameLogic:
                         #print(self.ball.horizontalMidPoint)
                         self.thrower.grabberOpen()
                         ballReached = self.goToTarget(self.ball, self.ballStopBound)
+                        if ballReached:
+                            self.move.driveXY(0, 0.3, 0)
 
                 elif ballGrabbed == False:
                     if not grabbingTimer.isStarted:
@@ -265,7 +267,7 @@ class GameLogic:
             return False
 
         print("At position.")
-        self.move.driveXY(0, 0.3, 0)
+        #self.move.driveXY(0, 0.3, 0)
         return True
 
     def initializeValues(self):
