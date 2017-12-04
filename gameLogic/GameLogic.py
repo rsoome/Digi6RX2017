@@ -254,12 +254,13 @@ class GameLogic:
             return False
 
         elif not self.checkVerticalAlignment(target, verticalStopBound):
-            print("Alligning Vertically")
-            #print(target.id, "'s vertical midpoint", target.getVerticalData())
-            print(target.id, "'s distance: ", target.getDistance())
-            self.moveTowardTarget(target)
-            self.mb.sendValues()
-            return False
+            if verticalStopBound is not None:
+                print("Alligning Vertically")
+                #print(target.id, "'s vertical midpoint", target.getVerticalData())
+                print(target.id, "'s distance: ", target.getDistance())
+                self.moveTowardTarget(target)
+                self.mb.sendValues()
+                return False
 
         elif not self.checkHorizontalAlginment(target):
             print("Alligning horizontally.")
