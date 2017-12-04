@@ -117,13 +117,18 @@ class GameLogic:
                         grabbingTimer.stopTimer()
                         if self.irStatus == 1:
                             print("Ball caught")
-                            if self.basket.verticalBounds is not None:
-                                while self.basket.getDistance() < 30:
+                            distanceFromBasket = self.basket.getDistance
+                            if distanceFromBasket is not None:
+                                while distanceFromBasket < 30:
                                     print("Getting further from the basket.")
                                     self.move.driveXY(0, -self.move.currentSpeed, 0)
                                     self.mb.sendValues(wait=True)
-                            self.mb.sendValues(wait=True)
+                                    distanceFromBasket = self.basket.getDistance
+                                    if distanceFromBasket is None:
+                                        break
+
                             self.move.stop()
+                            self.mb.sendValues(wait=True)
                             ballReached = True
                             ballGrabbed = True
                             basketReached = False
@@ -156,9 +161,9 @@ class GameLogic:
                     if grabbingTimer.getTimePassed() < 500:
                         print("Grabbing ball")
                         ballGrabbed = self.irStatus == 1
-                        self.move.driveXY(0, self.move.currentSpeed, 0)
-                        print("I should be driving with speed: ", self.move.currentSpeed)
-                        self.mb.sendValues()
+                        #self.move.driveXY(0, self.move.currentSpeed, 0)
+                        #print("I should be driving with speed: ", self.move.currentSpeed)
+                        #self.mb.sendValues()
                     else:
                         ballReached = False
 
