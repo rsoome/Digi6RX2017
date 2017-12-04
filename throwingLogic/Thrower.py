@@ -18,8 +18,8 @@ class Thrower:
         if distance < 40:
             return 1450
         if distance < 85:
-            return 0.0461 * pow(distance, 2) - 4.7981 * distance + 1495 #1463.8
-        return 182 * math.log(distance) + 610#180.81, 583.45
+            return 0.0461 * pow(distance, 2) - 4.7981 * distance + 1505 #1463.8
+        return 183 * math.log(distance) + 615 #180.81, 583.45
 
     def throw(self, distance):
         print("Setting throw speed to :" + str(self.calculateThrowingSpeed(distance)))
