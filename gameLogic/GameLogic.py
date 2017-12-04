@@ -117,13 +117,13 @@ class GameLogic:
                         grabbingTimer.stopTimer()
                         if self.irStatus == 1:
                             print("Ball caught")
-                            distanceFromBasket = self.basket.getDistance
+                            distanceFromBasket = self.basket.getDistance()
                             if distanceFromBasket is not None:
                                 while distanceFromBasket < 30:
                                     print("Getting further from the basket.")
                                     self.move.driveXY(0, -self.move.currentSpeed, 0)
                                     self.mb.sendValues(wait=True)
-                                    distanceFromBasket = self.basket.getDistance
+                                    distanceFromBasket = self.basket.getDistance()
                                     if distanceFromBasket is None:
                                         break
 
