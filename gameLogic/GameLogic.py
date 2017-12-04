@@ -255,7 +255,8 @@ class GameLogic:
 
         elif not self.checkVerticalAlignment(target, verticalStopBound):
             print("Alligning Vertically")
-            print(target.id, "'s vertical midpoint", target.getVerticalData())
+            #print(target.id, "'s vertical midpoint", target.getVerticalData())
+            print(target.id, "'s distance: ", target.getDistance())
             self.moveTowardTarget(target)
             self.mb.sendValues()
             return False
@@ -362,7 +363,7 @@ class GameLogic:
         self.mb.disableFailSafe()
         self.thrower.startMotor()
         self.mb.sendValues(wait = True)
-        print("Basket's distance: ", self.basket.getDistance)
+        print("Basket's distance: ", self.basket.getDistance())
         print("Basket's midpoint: ", self.basket.horizontalMidPoint)
         self.thrower.throw(distance)
         self.mb.sendValues(wait = True)
