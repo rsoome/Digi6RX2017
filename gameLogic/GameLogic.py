@@ -348,7 +348,7 @@ class GameLogic:
         self.thrower.startMotor()
         self.mb.sendValues(wait = True)
         print("Basket's distance: ", self.basket.getDistance)
-        print("Basket's midpoint: ", self.basket.)
+        print("Basket's midpoint: ", self.basket.horizontalMidPoint)
         self.thrower.throw(distance)
         self.mb.sendValues(wait = True)
 
