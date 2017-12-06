@@ -30,11 +30,12 @@ class ImageProcessor:
             return
 
         # Find the biggest blob
+
         c = max(cnts, key=cv2.contourArea)
         x, y, w, h = cv2.boundingRect(c)
 
         # If the rectangle surrounding the biggest blob is big enough, try to write it's coordinates into the object given
-        if w * h >= self.obj.minSize:
+        if w * h >= self.obj.minSize and self.verticalLowerBound + y + h/2 >  440:
             # Check, whether another thread has signalled a cancellation of the job, and stop if the job is cancelled
             if self.cancelToken.isCanceled:
                 return
