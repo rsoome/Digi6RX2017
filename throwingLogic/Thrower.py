@@ -15,11 +15,16 @@ class Thrower:
     def calculateThrowingSpeed(self, distance):
         if distance is None:
             return self.throwingMotor.MIN_SPEED
-        if distance < 40:
+
+        if distance < 60:
+            return 1400
+
+        return -0.003 * pow(distance, 2) + 2.0342 * distance + 1226.6
+        '''if distance < 40:
             return 1400
         if distance < 85:
             return 0.0461 * pow(distance, 2) - 4.7981 * distance + 1510 #1463.8
-        return 181 * math.log(distance) + 625 #180.81, 583.45
+        return 181 * math.log(distance) + 625 #180.81, 583.45'''
 
     def throw(self, distance):
         print("Setting throw speed to :" + str(self.calculateThrowingSpeed(distance)))
