@@ -89,7 +89,8 @@ class Target:
         if self.verticalBounds is None:
             return None
 
-        #return self.verticalBounds[1]
+        return 602.08 * pow(math.e, -0.008*(self.verticalBounds[1] - self.verticalBounds[0]))
+        ''''#return self.verticalBounds[1]
         if self.verticalBounds[1] >= 450:
             return 0.001
         if self.verticalBounds[1] >= 284:
@@ -101,7 +102,7 @@ class Target:
         if self.verticalBounds[1] >= 70:
             return -2.659*self.verticalBounds[1] + 418.81
 
-        return -5.875 * self.verticalBounds[1] + 659.13
+        return -5.875 * self.verticalBounds[1] + 659.13'''
 
     def calculateMidPoint(self, bounds):
         return bounds[0] + (bounds[1] - bounds[0])//2
