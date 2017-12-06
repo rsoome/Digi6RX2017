@@ -89,7 +89,7 @@ class Target:
         if self.verticalBounds is None:
             return None
 
-        return 602.08 * pow(math.e, -0.008*(self.verticalBounds[1] - self.verticalBounds[0]))
+        return 602.08 * pow(math.e, -0.012*(self.verticalBounds[1] - self.verticalBounds[0]))
         ''''#return self.verticalBounds[1]
         if self.verticalBounds[1] >= 450:
             return 0.001
