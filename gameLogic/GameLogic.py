@@ -43,11 +43,11 @@ class GameLogic:
             return False
         turnCoificent = (horizontalMidPoint - self.screenMidpoint)/self.screenMidpoint
 
-        print("Turncoificent: " + str(turnCoificent))
+        #print("Turncoificent: " + str(turnCoificent))
         if not self.socketData.gameStarted:
             return False
         turningSpeed = turnCoificent
-        print("Turning with speed: " + str(turningSpeed))
+        #print("Turning with speed: " + str(turningSpeed))
         self.readMb()
         if target.id == "ball" and self.irStatus == 1:
             return True
@@ -69,7 +69,7 @@ class GameLogic:
 
         ySpeed = self.move.calculateSpeed(self.moveSpeed, verticalMidPoint)
         turnSpeed = self.move.calculateOmega(self.turnSpeed, horizontalMidPoint)
-        print("Current speed: ", ySpeed)
+        #print("Current speed: ", ySpeed)
         self.move.driveXY(0, ySpeed, turnSpeed)
 
     def lookForTarget(self, target):
@@ -203,7 +203,7 @@ class GameLogic:
                     self.thrower.emptyThrower()
                 self.move.stop()
 
-            print("Run function completed in: ", effTimer.reset())
+            #print("Run function completed in: ", effTimer.reset())
             time.sleep(1/self.mb.SENDFREQ)
 
         self.move.stop()
@@ -303,7 +303,7 @@ class GameLogic:
         if stopBound is None:
             self.move.stop()
             return False
-        print("Stop bound: ", stopBound)
+        #print("Stop bound: ", stopBound)
         if stopBound < verticalStopBound:
             print("Target not reached.")
             return False
@@ -326,7 +326,7 @@ class GameLogic:
                     self.irStatus = int(msg[1])
                 except:
                     pass
-                print("irStatus: " + str(self.irStatus))
+                #print("irStatus: " + str(self.irStatus))
 
             if sendingNode == "ref":
                 cmd = self.ref.handleCommand(msg[1])
