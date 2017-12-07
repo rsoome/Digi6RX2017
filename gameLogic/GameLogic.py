@@ -260,13 +260,13 @@ class GameLogic:
                 #print(target.id, "'s vertical midpoint", target.getVerticalData())
                 print(target.id, "'s distance: ", target.getDistance())
                 self.moveTowardTarget(target)
-                self.mb.sendValues(wait = True)
+                self.mb.sendValues()
                 return False
 
         elif not self.checkHorizontalAlginment(target):
             print("Alligning horizontally.")
             self.turnTowardTarget(target)
-            self.mb.sendValues(wait = True)
+            self.mb.sendValues()
             return False
 
         print("At position.")
