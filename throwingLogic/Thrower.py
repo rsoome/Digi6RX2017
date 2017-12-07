@@ -19,7 +19,7 @@ class Thrower:
         if distance < 45:
             return 1350
 
-        return -0.004 * pow(distance, 2) + 2.2 * distance + 1230 #-0.003; 2.0342; 1226.6
+        return -0.004 * pow(distance, 2) + 2.15 * distance + 1230 #-0.003; 2.0342; 1226.6
         '''if distance < 40:
             return 1400
         if distance < 85:

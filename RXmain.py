@@ -201,7 +201,7 @@ try:
     while True:
 
         #print(basket.getDistance())
-        #move.driveXY(0, 0, 3)
+        #move.driveXY(0, 0.5, 0)
 
         #DEBUGGING LOOKING FOR TARGET
         #game.lookForTarget(ball)
