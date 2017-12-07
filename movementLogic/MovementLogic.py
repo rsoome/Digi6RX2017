@@ -19,7 +19,7 @@ class MovementLogic:
             self.currentSpeed = speed
         if omega != 0:
             self.currentTurnSpeed = omega
-        print("Omega: ", omega)
+        #print("Omega: ", omega)
         '''print("Omega: " + str(omega))
         print("Motor 0: " + str(self.wheelSpeedToMainboardUnits* (speed*(math.cos(math.radians(90 - 180 + angle)))
                                   + omega*self.wheelDistance)))

@@ -176,6 +176,7 @@ class GameLogic:
                         basketReached = self.goToTarget(self.basket, self.basketStopBound)
                         if basketReached:
                             self.move.stop()
+                            self.mb.sendValues(wait=True)
                     else:
                         basketReached = False
 
@@ -265,7 +266,7 @@ class GameLogic:
         elif not self.checkHorizontalAlginment(target):
             print("Alligning horizontally.")
             self.turnTowardTarget(target)
-            self.mb.sendValues()
+            self.mb.sendValues(wait = True)
             return False
 
         print("At position.")
