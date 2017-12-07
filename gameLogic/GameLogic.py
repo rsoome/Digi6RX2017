@@ -176,7 +176,7 @@ class GameLogic:
                         basketReached = self.goToTarget(self.basket, self.basketStopBound)
                         if basketReached:
                             self.move.stop()
-                            self.mb.sendValues(wait=True)
+                            self.mb.sendValues()
                     else:
                         basketReached = False
 
@@ -260,7 +260,7 @@ class GameLogic:
                 #print(target.id, "'s vertical midpoint", target.getVerticalData())
                 print(target.id, "'s distance: ", target.getDistance())
                 self.moveTowardTarget(target)
-                self.mb.sendValues()
+                self.mb.sendValues(wait = True)
                 return False
 
         elif not self.checkHorizontalAlginment(target):
