@@ -154,7 +154,7 @@ class GameLogic:
                         self.thrower.grabberOpen()
                         ballReached = self.goToTarget(self.ball, self.ballStopBound)
                         if ballReached:
-                            self.move.driveXY(0, 0.3, 0)
+                            self.move.driveXY(0, 0.1, 0)
 
                 elif ballGrabbed == False:
                     if not grabbingTimer.isStarted:
